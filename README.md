@@ -48,7 +48,7 @@ reference-verification/
 
 이 스킬은 코드 실행 기능을 사용합니다. 먼저 켜 두세요.
 
-- 왼쪽 아래 **내 프로필/이름** 클릭 → **Settings(설정)** → **Capabilities(기능)** → **Code execution(코드 실행)** 을 **켜기(ON)**.
+- 왼쪽 아래 **내 프로필/이름** 클릭 → **Settings(설정)** → **Capabilities(기능)** → **클라우드 코드 실행 및 파일 생성** 을 **켜기(ON)**.
 
 **② 스킬 파일(ZIP)을 내려받습니다**
 
@@ -60,7 +60,7 @@ reference-verification/
 
 **③ 앱에 스킬을 올립니다**
 
-- 왼쪽 아래 **내 프로필/이름** → **Settings(설정)** → **Customize(맞춤설정)** → **Skills(스킬)** 로 들어갑니다.
+- **Cowork** → **Customize(맞춤설정)** → **Skills(스킬)** 로 들어갑니다.
 - **＋** 버튼 → **＋ Create skill(스킬 만들기)** → **Upload a skill(스킬 업로드)** 을 선택합니다.
 - 방금 받은 **`reference-verification-cowork.zip`** 을 고릅니다.
 - 목록에 **`reference-verification`** 이 나타나면, 옆의 **토글을 켭니다(ON)**. (꺼져 있으면 작동하지 않습니다.)
