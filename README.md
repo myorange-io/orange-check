@@ -40,23 +40,34 @@ reference-verification/
 
 ## Cowork에서 사용하기
 
-### 1) 스킬 설치
+### 1) 스킬 설치 — 데스크톱 앱만으로 (터미널 불필요)
 
-이 저장소를 받습니다.
+> 코딩·터미널을 몰라도 됩니다. **Claude 데스크톱 앱(또는 claude.ai 웹)** 안에서 클릭만으로 끝납니다. 모든 플랜(무료 포함)에서 가능합니다.
 
-```bash
-git clone https://github.com/myorange-io/reference-verification.git
-```
+**① 먼저 '코드 실행'을 켭니다 (최초 1회)**
 
-`cowork/` 폴더가 하나의 스킬입니다(`SKILL.md` + `references/`). Claude 앱에 스킬로 등록합니다.
+이 스킬은 코드 실행 기능을 사용합니다. 먼저 켜 두세요.
 
-- **Claude 앱(데스크톱/웹)**: **설정 → Capabilities/스킬** 에서 스킬을 추가합니다. 업로드가 필요한 경우 `cowork/` 폴더를 zip으로 묶어 올립니다.
-  ```bash
-  cd reference-verification && zip -r reference-verification-cowork.zip cowork
-  ```
-- **조직(myorange-io) 공용**: 워크스페이스 관리자가 스킬을 등록하면 팀원 모두가 사용할 수 있습니다.
+- 왼쪽 아래 **내 프로필/이름** 클릭 → **Settings(설정)** → **Capabilities(기능)** → **Code execution(코드 실행)** 을 **켜기(ON)**.
 
-> 메뉴 명칭은 플랜·버전에 따라 다를 수 있습니다. 핵심은 `SKILL.md`가 들어 있는 `cowork/` 폴더를 "스킬"로 인식시키는 것입니다.
+**② 스킬 파일(ZIP)을 내려받습니다**
+
+- 아래 링크를 누르면 ZIP 파일 하나가 다운로드됩니다. **압축을 풀 필요는 없습니다.**
+
+  👉 **[reference-verification-cowork.zip 내려받기](https://github.com/myorange-io/reference-verification/releases/download/v1.0.0/reference-verification-cowork.zip)**
+
+- (또는 이 저장소 위쪽의 **Releases** 를 눌러 같은 파일을 받을 수 있습니다.)
+
+**③ 앱에 스킬을 올립니다**
+
+- 왼쪽 아래 **내 프로필/이름** → **Settings(설정)** → **Customize(맞춤설정)** → **Skills(스킬)** 로 들어갑니다.
+- **＋** 버튼 → **＋ Create skill(스킬 만들기)** → **Upload a skill(스킬 업로드)** 을 선택합니다.
+- 방금 받은 **`reference-verification-cowork.zip`** 을 고릅니다.
+- 목록에 **`reference-verification`** 이 나타나면, 옆의 **토글을 켭니다(ON)**. (꺼져 있으면 작동하지 않습니다.)
+
+이제 모든 대화(채팅·프로젝트·Cowork)에서 이 스킬을 쓸 수 있습니다.
+
+> 메뉴 이름은 앱 버전에 따라 조금 다를 수 있습니다. 막히면 공식 안내를 참고하세요: **[Use skills in Claude (support.claude.com)](https://support.claude.com/en/articles/12512180-use-skills-in-claude)**
 
 ### 2) 사용
 
