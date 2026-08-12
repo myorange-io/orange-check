@@ -1,0 +1,1342 @@
+{
+  "bench_id": "bench-01",
+  "spec_version": "1.0",
+  "document": "docs/bench-01.docx",
+  "corpus": "corpus/",
+  "watermark": "【검증 벤치마크용 가상 문서 · 실제 통계가 아님 / SYNTHETIC BENCHMARK DOCUMENT · NOT REAL DATA】",
+  "closed_world_rule": "corpus/ 안의 문서가 이 세계에 존재하는 출처의 전부다. corpus/manifest.json 이 각 출처의 권위 있는 서지정보다. 코퍼스에 없는 출처를 인용하면 stage1=FAIL(환각)이다.",
+  "planted_taxonomy": {
+    "none": "손대지 않은 정상 인용 (대조군). 오탐 측정용.",
+    "hallucinated": "코퍼스에 없는 출처를 인용 → stage1 FAIL, stage2 판정 불가",
+    "biblio_mismatch": "출처는 실재하나 서지정보 한 필드가 틀림 → stage1 MISMATCH",
+    "overreach": "WHO 슬롯 과확장: 출처보다 좁은/다른 집단으로 주장",
+    "variable_name": "WHAT 슬롯: 출처가 쓰는 지표명과 다른 이름으로 기술",
+    "wrong_dataset": "DATASET 슬롯: 수치를 엉뚱한 조사·구분에 귀속",
+    "number_error": "VALUE 슬롯: 수치 자체가 출처와 다름",
+    "time_mismatch": "WHEN 슬롯: 시점이 출처와 다름",
+    "unsupported": "출처가 그 주제를 아예 다루지 않음 → stage2 NOT_SUPPORTED",
+    "tier_violation": "출처는 실재하고 주장도 뒷받침하나 등급 규칙 위반(T4 단독 근거 / T5 사용)"
+  },
+  "totals": {
+    "citations": 28,
+    "planted": 18,
+    "control": 10,
+    "by_pattern": {
+      "none": 10,
+      "overreach": 2,
+      "hallucinated": 2,
+      "wrong_dataset": 2,
+      "variable_name": 2,
+      "number_error": 2,
+      "biblio_mismatch": 2,
+      "unsupported": 2,
+      "tier_violation": 2,
+      "time_mismatch": 2
+    },
+    "by_placement": {
+      "body": 20,
+      "footnote": 4,
+      "endnote": 4
+    }
+  },
+  "citations": [
+    {
+      "id": "C01",
+      "anchor": "한부모가족이한달에손에쥐는돈은268.5만원남짓으로,전체가구평균의60%에도미치지못한다.",
+      "claim": "한부모가족이 한 달에 손에 쥐는 돈은 268.5만원 남짓으로, 전체 가구 평균의 60%에도 미치지 못한다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 가족평등부",
+        "year": "2025",
+        "title": "2024년 한부모가족 실태조사 주요 결과",
+        "publisher": "오렌지국 가족평등부",
+        "series": "보도자료",
+        "date": "2025-04-17",
+        "url": "https://www.mofe.orange.go.kr/news/press/2025/0417"
+      },
+      "true_source_id": "S01",
+      "planted": "none",
+      "slots": {
+        "who": "한부모가족 전체",
+        "when": "2024년",
+        "what": "월평균 가구소득",
+        "value": "268.5만원 / 전체 가구 평균의 58.8%",
+        "dataset": "한부모가족 실태조사",
+        "relation": "전체 가구 평균 대비 낮음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S01",
+        "file": "S01.pdf",
+        "page": 1,
+        "line_start": 24,
+        "page_end": 1,
+        "line_end": 25,
+        "sentence": "2024년 한부모가족의 월평균 가구소득은 268.5만원으로, 오렌지국 전체 가구 월평균 소득의 58.8% 수준이었다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C02",
+      "anchor": "저소득한부모여성가구의72.1%는양육비를단한번도받아본적이없다.",
+      "claim": "저소득 한부모 여성 가구의 72.1%는 양육비를 단 한 번도 받아 본 적이 없다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 가족평등부",
+        "year": "2025",
+        "title": "2024년 한부모가족 실태조사 주요 결과",
+        "publisher": "오렌지국 가족평등부",
+        "series": "보도자료",
+        "date": "2025-04-17",
+        "url": "https://www.mofe.orange.go.kr/news/press/2025/0417"
+      },
+      "true_source_id": "S01",
+      "planted": "overreach",
+      "slots": {
+        "who": "저소득 한부모 여성 가구",
+        "when": "2024년",
+        "what": "양육비 미수령 비율",
+        "value": "72.1%",
+        "dataset": "한부모가족 실태조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "overreach",
+        "corrupted_slot": "who"
+      },
+      "evidence": {
+        "source_id": "S01",
+        "file": "S01.pdf",
+        "page": 2,
+        "line_start": 2,
+        "page_end": 2,
+        "line_end": 2,
+        "sentence": "양육비를 한 번도 받지 못했다고 응답한 비율은 72.1%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [
+        "저소득",
+        "여성 가구주"
+      ],
+      "rationale": "출처는 한부모가족 전체를 대상으로 한 수치다. '저소득'·'여성 가구주'는 S01 전문에 0회 등장한다(부재가 증거)."
+    },
+    {
+      "id": "C03",
+      "anchor": "한부모가족의주거비부담률은소득의31.4%에이른다.",
+      "claim": "한부모가족의 주거비 부담률은 소득의 31.4%에 이른다.",
+      "placement": "footnote",
+      "note": [
+        "footnote",
+        2
+      ],
+      "cited_as": {
+        "authors": "오렌지국 국토주택연구원",
+        "year": "2024",
+        "title": "2023 주거실태조사 심층분석: 한부모가구 편",
+        "publisher": "오렌지국 국토주택연구원"
+      },
+      "true_source_id": null,
+      "planted": "hallucinated",
+      "slots": {
+        "who": "한부모가족",
+        "when": "2023년",
+        "what": "주거비 부담률",
+        "value": "소득의 31.4%",
+        "dataset": "주거실태조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "FAIL",
+        "tier": null,
+        "tier_violation": false,
+        "stage2": "NOT_APPLICABLE",
+        "pattern": "hallucinated",
+        "corrupted_slot": null
+      },
+      "evidence": null,
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "코퍼스 매니페스트에 해당 출처가 없다. 존재하지 않는 출처이므로 인용 적절성 판정 자체가 불가하다."
+    },
+    {
+      "id": "C04",
+      "anchor": "2023년오렌지국성인비만유병률은남성45.6%,여성27.8%로집계됐다.",
+      "claim": "2023년 오렌지국 성인 비만 유병률은 남성 45.6%, 여성 27.8%로 집계됐다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 보건통계청",
+        "year": "2024",
+        "title": "2023 국민건강영양조사 통계집",
+        "publisher": "오렌지국 보건통계청",
+        "series": "국민건강영양조사 제9기 2차년도",
+        "date": "2024-12",
+        "url": "https://knhanes.orange.go.kr/pub/2023/stat"
+      },
+      "true_source_id": "S02",
+      "planted": "none",
+      "slots": {
+        "who": "19세 이상 성인",
+        "when": "2023년",
+        "what": "비만 유병률",
+        "value": "남 45.6% / 여 27.8%",
+        "dataset": "국민건강영양조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S02",
+        "file": "S02.pdf",
+        "page": 1,
+        "line_start": 27,
+        "page_end": 1,
+        "line_end": 28,
+        "sentence": "2023년 19세 이상 성인의 비만 유병률은 남자 45.6%, 여자 27.8%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C05",
+      "anchor": "의료급여수급자의미충족의료율은8.4%로,건강보험가입자3.1%의두배를훌쩍넘는다.",
+      "claim": "의료급여 수급자의 미충족 의료율은 8.4%로, 건강보험 가입자 3.1%의 두 배를 훌쩍 넘는다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 보건통계청",
+        "year": "2024",
+        "title": "2023 국민건강영양조사 통계집",
+        "publisher": "오렌지국 보건통계청",
+        "series": "국민건강영양조사 제9기 2차년도",
+        "date": "2024-12",
+        "url": "https://knhanes.orange.go.kr/pub/2023/stat"
+      },
+      "true_source_id": "S02",
+      "planted": "wrong_dataset",
+      "slots": {
+        "who": "의료급여 수급자 / 건강보험 가입자",
+        "when": "2023년",
+        "what": "미충족 의료율",
+        "value": "8.4% vs 3.1%",
+        "dataset": "보장구분(의료급여·건강보험)",
+        "relation": "수급자가 더 높음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "wrong_dataset",
+        "corrupted_slot": "dataset"
+      },
+      "evidence": {
+        "source_id": "S02",
+        "file": "S02.pdf",
+        "page": 2,
+        "line_start": 5,
+        "page_end": 2,
+        "line_end": 6,
+        "sentence": "소득수준 하위 25%(소득 1분위) 성인의 미충족 의료율은 8.4%로, 상위 25%(소득 4분위)의 3.1%보다 높았다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [
+        "의료급여",
+        "건강보험"
+      ],
+      "rationale": "출처는 소득 사분위(1분위 vs 4분위)로 산출한 수치다. 보장구분(의료급여/건강보험)으로 귀속한 것은 자료원 불일치다. S02 전문에 '의료급여'·'건강보험'은 0회다."
+    },
+    {
+      "id": "C06",
+      "anchor": "보건통계청은소득수준을가구처분가능소득기준사분위로구분해산출한다.",
+      "claim": "보건통계청은 소득수준을 가구 처분가능소득 기준 사분위로 구분해 산출한다.",
+      "placement": "endnote",
+      "note": [
+        "endnote",
+        4
+      ],
+      "cited_as": {
+        "authors": "오렌지국 보건통계청",
+        "year": "2024",
+        "title": "2023 국민건강영양조사 통계집",
+        "publisher": "오렌지국 보건통계청",
+        "series": "국민건강영양조사 제9기 2차년도",
+        "date": "2024-12",
+        "url": "https://knhanes.orange.go.kr/pub/2023/stat"
+      },
+      "true_source_id": "S02",
+      "planted": "variable_name",
+      "slots": {
+        "who": "조사 대상 전체",
+        "when": "2023년",
+        "what": "소득수준 구분 기준 변수",
+        "value": "사분위",
+        "dataset": "국민건강영양조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "variable_name",
+        "corrupted_slot": "what"
+      },
+      "evidence": {
+        "source_id": "S02",
+        "file": "S02.pdf",
+        "page": 1,
+        "line_start": 19,
+        "page_end": 1,
+        "line_end": 20,
+        "sentence": "본 조사에서 소득수준은 가구 균등화 소득을 성·연령별로 사분위(1~4분위)로 구분하여 산출하였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [
+        "처분가능소득"
+      ],
+      "rationale": "출처가 쓰는 변수명은 '가구 균등화 소득'이다. '처분가능소득'은 S02 전문에 0회 등장한다."
+    },
+    {
+      "id": "C07",
+      "anchor": "노인세명중한명(33.2%)은혼자산다.",
+      "claim": "노인 세 명 중 한 명(33.2%)은 혼자 산다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 복지부·오렌지사회정책연구원",
+        "year": "2024",
+        "title": "2023년도 노인실태조사",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2024-08",
+        "date": "2024-06",
+        "url": "https://www.ospi.orange.re.kr/report/2024-08"
+      },
+      "true_source_id": "S03",
+      "planted": "none",
+      "slots": {
+        "who": "65세 이상 노인",
+        "when": "2023년",
+        "what": "독거 비율",
+        "value": "33.2%",
+        "dataset": "노인실태조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T2",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S03",
+        "file": "S03.pdf",
+        "page": 1,
+        "line_start": 24,
+        "page_end": 1,
+        "line_end": 25,
+        "sentence": "65세 이상 노인 중 독거 노인의 비율은 33.2%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C08",
+      "anchor": "노인의연평균개인소득1,558만원가운데근로소득이차지하는몫은42.1%에달한다.",
+      "claim": "노인의 연평균 개인소득 1,558만원 가운데 근로소득이 차지하는 몫은 42.1%에 달한다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 복지부·오렌지사회정책연구원",
+        "year": "2024",
+        "title": "2023년도 노인실태조사",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2024-08",
+        "date": "2024-06",
+        "url": "https://www.ospi.orange.re.kr/report/2024-08"
+      },
+      "true_source_id": "S03",
+      "planted": "number_error",
+      "slots": {
+        "who": "65세 이상 노인",
+        "when": "2023년",
+        "what": "개인소득 중 근로소득 비중",
+        "value": "42.1%",
+        "dataset": "노인실태조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T2",
+        "tier_violation": false,
+        "stage2": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "corrupted_slot": "value"
+      },
+      "evidence": {
+        "source_id": "S03",
+        "file": "S03.pdf",
+        "page": 1,
+        "line_start": 40,
+        "page_end": 1,
+        "line_end": 41,
+        "sentence": "노인의 연간 평균 개인소득은 1,558만원이었으며, 이 가운데 근로소득이 24.1%를 차지하였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "출처의 근로소득 비중은 24.1%다. 42.1%는 출처가 지지하지 않는 수치다(총액 1,558만원은 일치)."
+    },
+    {
+      "id": "C09",
+      "anchor": "이조사는전국의65세이상노인1만78명을대상으로이뤄졌다.",
+      "claim": "이 조사는 전국의 65세 이상 노인 1만 78명을 대상으로 이뤄졌다.",
+      "placement": "footnote",
+      "note": [
+        "footnote",
+        4
+      ],
+      "cited_as": {
+        "authors": "오렌지국 복지부·오렌지사회정책연구원",
+        "year": "2023",
+        "title": "2023년도 노인실태조사",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2024-08",
+        "date": "2024-06",
+        "url": "https://www.ospi.orange.re.kr/report/2024-08"
+      },
+      "true_source_id": "S03",
+      "planted": "biblio_mismatch",
+      "slots": {
+        "who": "65세 이상 노인",
+        "when": "2023년 3~11월",
+        "what": "조사 표본 규모",
+        "value": "10,078명",
+        "dataset": "노인실태조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "MISMATCH",
+        "tier": "T2",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "biblio_mismatch",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S03",
+        "file": "S03.pdf",
+        "page": 1,
+        "line_start": 8,
+        "page_end": 1,
+        "line_end": 9,
+        "sentence": "조사는 2023년 3월부터 11월까지 전국 65세 이상 노인 10,078명을 대상으로 하였다."
+      },
+      "mismatch_fields": [
+        "year"
+      ],
+      "absence_evidence": [],
+      "rationale": "발행연도를 2023년으로 적었으나 매니페스트상 발행연도는 2024년이다. 서지는 불일치하지만 본문 주장 자체는 출처가 정확히 뒷받침한다."
+    },
+    {
+      "id": "C10",
+      "anchor": "가장가난한집아이의영구치충치경험률(42.7%)은가장여유있는집아이(24.9%)의1.7배다.",
+      "claim": "가장 가난한 집 아이의 영구치 충치 경험률(42.7%)은 가장 여유 있는 집 아이(24.9%)의 1.7배다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "김세라·정민우",
+        "year": "2023",
+        "title": "아동의 구강건강 상태와 가구 소득수준의 연관성",
+        "publisher": "오렌지구강보건학회",
+        "journal": "오렌지구강보건학회지",
+        "volume": "47",
+        "issue": "3",
+        "pages": "145-158",
+        "url": "https://www.kjoh.orange.or.kr/journal/view.php?vol=47&no=3&page=145"
+      },
+      "true_source_id": "S04",
+      "planted": "none",
+      "slots": {
+        "who": "6~11세 아동, 소득 1분위 vs 4분위",
+        "when": "2019~2021년",
+        "what": "영구치 우식경험률",
+        "value": "42.7% vs 24.9% (1.7배)",
+        "dataset": "국민건강영양조사 2019~2021 원자료",
+        "relation": "1분위가 높음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S04",
+        "file": "S04.pdf",
+        "page": 2,
+        "line_start": 13,
+        "page_end": 2,
+        "line_end": 14,
+        "sentence": "소득 1분위 아동의 영구치 우식경험률은 42.7%로, 4분위 아동의 24.9%보다 1.7배 높았다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C11",
+      "anchor": "소득1분위아동의치주질환유병률은18.9%로소득계층가운데가장높았다.",
+      "claim": "소득 1분위 아동의 치주질환 유병률은 18.9%로 소득 계층 가운데 가장 높았다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "김세라·정민우",
+        "year": "2023",
+        "title": "아동의 구강건강 상태와 가구 소득수준의 연관성",
+        "publisher": "오렌지구강보건학회",
+        "journal": "오렌지구강보건학회지",
+        "volume": "47",
+        "issue": "3",
+        "pages": "145-158",
+        "url": "https://www.kjoh.orange.or.kr/journal/view.php?vol=47&no=3&page=145"
+      },
+      "true_source_id": "S04",
+      "planted": "variable_name",
+      "slots": {
+        "who": "6~11세 아동, 소득 1분위",
+        "when": "2019~2021년",
+        "what": "치주질환 유병률",
+        "value": "18.9%",
+        "dataset": "국민건강영양조사 2019~2021 원자료",
+        "relation": "소득 계층 중 최고"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "variable_name",
+        "corrupted_slot": "what"
+      },
+      "evidence": {
+        "source_id": "S04",
+        "file": "S04.pdf",
+        "page": 2,
+        "line_start": 17,
+        "page_end": 2,
+        "line_end": 18,
+        "sentence": "치료받지 않은 우식치아를 보유한 아동의 비율은 소득 1분위에서 18.9%로 가장 높았다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [
+        "치주질환"
+      ],
+      "rationale": "출처의 지표는 '치료받지 않은 우식치아 보유율'이다. '치주질환'은 S04 전문에 0회 등장한다. 수치·집단·자료원은 일치하나 지표명이 다르다."
+    },
+    {
+      "id": "C12",
+      "anchor": "구강건강이나쁜아동은학업성취도역시유의하게낮았다.",
+      "claim": "구강건강이 나쁜 아동은 학업성취도 역시 유의하게 낮았다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "김세라·정민우",
+        "year": "2023",
+        "title": "아동의 구강건강 상태와 가구 소득수준의 연관성",
+        "publisher": "오렌지구강보건학회",
+        "journal": "오렌지구강보건학회지",
+        "volume": "47",
+        "issue": "3",
+        "pages": "145-158",
+        "url": "https://www.kjoh.orange.or.kr/journal/view.php?vol=47&no=3&page=145"
+      },
+      "true_source_id": "S04",
+      "planted": "unsupported",
+      "slots": {
+        "who": "아동",
+        "when": "2019~2021년",
+        "what": "학업성취도",
+        "value": "유의하게 낮음",
+        "dataset": "국민건강영양조사",
+        "relation": "구강건강↓ → 학업성취↓"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "NOT_SUPPORTED",
+        "pattern": "unsupported",
+        "corrupted_slot": null
+      },
+      "evidence": null,
+      "mismatch_fields": [],
+      "absence_evidence": [
+        "학업성취",
+        "성적"
+      ],
+      "rationale": "출처는 학업성취도를 전혀 다루지 않는다. '학업성취'·'성적'은 S04 전문에 0회다."
+    },
+    {
+      "id": "C13",
+      "anchor": "2022년오렌지국의아동소득빈곤율은9.8%로GECD평균(12.6%)을밑돌았다.",
+      "claim": "2022년 오렌지국의 아동 소득빈곤율은 9.8%로 GECD 평균(12.6%)을 밑돌았다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Family Database CO2.2: Child poverty rates",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "date": "2024-09",
+        "url": "https://www.gecd.org/els/family/database/CO2_2.pdf"
+      },
+      "true_source_id": "S05",
+      "planted": "none",
+      "slots": {
+        "who": "오렌지국 아동",
+        "when": "2022년",
+        "what": "아동 소득빈곤율",
+        "value": "9.8% vs GECD 평균 12.6%",
+        "dataset": "GECD Family Database CO2.2",
+        "relation": "평균보다 낮음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T2",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S05",
+        "file": "S05.pdf",
+        "page": 1,
+        "line_start": 42,
+        "page_end": 2,
+        "line_end": 2,
+        "sentence": "In 2022, the child income poverty rate in Orangeland was 9.8%, below the GECD average of 12.6%."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C14",
+      "anchor": "오렌지국한부모가구아동의빈곤율은31.9%로양부모가구아동(9.4%)의세배를넘는다.",
+      "claim": "오렌지국 한부모 가구 아동의 빈곤율은 31.9%로 양부모 가구 아동(9.4%)의 세 배를 넘는다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Family Database CO2.2: Child poverty rates",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "date": "2024-09",
+        "url": "https://www.gecd.org/els/family/database/CO2_2.pdf"
+      },
+      "true_source_id": "S05",
+      "planted": "overreach",
+      "slots": {
+        "who": "오렌지국 한부모 가구 아동",
+        "when": "2022년",
+        "what": "아동 빈곤율",
+        "value": "31.9% vs 9.4%",
+        "dataset": "GECD Family Database CO2.2",
+        "relation": "한부모가 3배 이상 높음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T2",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "overreach",
+        "corrupted_slot": "who"
+      },
+      "evidence": {
+        "source_id": "S05",
+        "file": "S05.pdf",
+        "page": 2,
+        "line_start": 33,
+        "page_end": 2,
+        "line_end": 34,
+        "sentence": "Across GECD countries, the child poverty rate in single-parent households averaged 31.9%, compared with 9.4% in two-parent households."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "31.9%·9.4%는 GECD 회원국 '평균'이지 오렌지국 수치가 아니다. 출처에 오렌지국별 한부모 가구 빈곤율은 제시되지 않는다."
+    },
+    {
+      "id": "C15",
+      "anchor": "돌봄공백을겪는아동은연간약47만명으로추정된다.",
+      "claim": "돌봄 공백을 겪는 아동은 연간 약 47만 명으로 추정된다.",
+      "placement": "endnote",
+      "note": [
+        "endnote",
+        3
+      ],
+      "cited_as": {
+        "authors": "오렌지아동정책연구소",
+        "year": "2024",
+        "title": "돌봄 사각지대 아동 규모 추계 연구",
+        "publisher": "오렌지아동정책연구소"
+      },
+      "true_source_id": null,
+      "planted": "hallucinated",
+      "slots": {
+        "who": "돌봄 공백 아동",
+        "when": "2024년",
+        "what": "추정 규모",
+        "value": "약 47만 명",
+        "dataset": "추계 연구",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "FAIL",
+        "tier": null,
+        "tier_violation": false,
+        "stage2": "NOT_APPLICABLE",
+        "pattern": "hallucinated",
+        "corrupted_slot": null
+      },
+      "evidence": null,
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C16",
+      "anchor": "전국의지역아동센터는4,208곳,이곳을다니는아동은10만5,340명이다.",
+      "claim": "전국의 지역아동센터는 4,208곳, 이곳을 다니는 아동은 10만 5,340명이다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지사회정책연구원",
+        "year": "2023",
+        "title": "지역아동센터 운영실태와 정책과제",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2023-24",
+        "date": "2023-11",
+        "url": "https://www.ospi.orange.re.kr/report/2023-24"
+      },
+      "true_source_id": "S06",
+      "planted": "none",
+      "slots": {
+        "who": "전국 지역아동센터·이용 아동",
+        "when": "2023년",
+        "what": "센터 수·이용 아동 수",
+        "value": "4,208개소 / 105,340명",
+        "dataset": "지역아동센터 운영실태 조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S06",
+        "file": "S06.pdf",
+        "page": 1,
+        "line_start": 29,
+        "page_end": 1,
+        "line_end": 30,
+        "sentence": "2023년 기준 전국 지역아동센터는 4,208개소이며, 이용 아동은 105,340명이다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C17",
+      "anchor": "종사자한사람이감당하는아동은평균21.4명에이른다.",
+      "claim": "종사자 한 사람이 감당하는 아동은 평균 21.4명에 이른다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지사회정책연구원",
+        "year": "2023",
+        "title": "지역아동센터 운영실태와 정책과제",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2023-24",
+        "date": "2023-11",
+        "url": "https://www.ospi.orange.re.kr/report/2023-24"
+      },
+      "true_source_id": "S06",
+      "planted": "number_error",
+      "slots": {
+        "who": "지역아동센터 종사자",
+        "when": "2023년",
+        "what": "1인당 평균 담당 아동 수",
+        "value": "21.4명",
+        "dataset": "지역아동센터 운영실태 조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "corrupted_slot": "value"
+      },
+      "evidence": {
+        "source_id": "S06",
+        "file": "S06.pdf",
+        "page": 2,
+        "line_start": 10,
+        "page_end": 2,
+        "line_end": 11,
+        "sentence": "센터 종사자 1인당 평균 담당 아동 수는 12.4명이었다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "출처의 값은 12.4명이다. 21.4명은 출처가 지지하지 않는다."
+    },
+    {
+      "id": "C18",
+      "anchor": "이실태조사는전국1,012개센터를표본으로삼았다.",
+      "claim": "이 실태조사는 전국 1,012개 센터를 표본으로 삼았다.",
+      "placement": "footnote",
+      "note": [
+        "footnote",
+        3
+      ],
+      "cited_as": {
+        "authors": "오렌지사회정책연구원",
+        "year": "2023",
+        "title": "지역아동센터 운영실태와 정책과제",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2022-24",
+        "date": "2023-11",
+        "url": "https://www.ospi.orange.re.kr/report/2023-24"
+      },
+      "true_source_id": "S06",
+      "planted": "biblio_mismatch",
+      "slots": {
+        "who": "전국 지역아동센터",
+        "when": "2023년",
+        "what": "표본 규모",
+        "value": "1,012개소",
+        "dataset": "지역아동센터 운영실태 조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "MISMATCH",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "biblio_mismatch",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S06",
+        "file": "S06.pdf",
+        "page": 1,
+        "line_start": 16,
+        "page_end": 1,
+        "line_end": 17,
+        "sentence": "설문조사는 전국 지역아동센터 1,012개소를 대상으로 실시하였다."
+      },
+      "mismatch_fields": [
+        "series"
+      ],
+      "absence_evidence": [],
+      "rationale": "보고서 번호를 2022-24로 적었으나 매니페스트상 2023-24다. 본문 주장은 출처가 정확히 뒷받침한다."
+    },
+    {
+      "id": "C19",
+      "anchor": "6~18세아동·청소년의27.4%는일주일에한번이상패스트푸드를먹는다.",
+      "claim": "6~18세 아동·청소년의 27.4%는 일주일에 한 번 이상 패스트푸드를 먹는다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 보건통계청",
+        "year": "2024",
+        "title": "2023 국민건강영양조사 통계집",
+        "publisher": "오렌지국 보건통계청",
+        "series": "국민건강영양조사 제9기 2차년도",
+        "date": "2024-12",
+        "url": "https://knhanes.orange.go.kr/pub/2023/stat"
+      },
+      "true_source_id": "S02",
+      "planted": "none",
+      "slots": {
+        "who": "6~18세 아동·청소년",
+        "when": "2023년",
+        "what": "주 1회 이상 패스트푸드 섭취율",
+        "value": "27.4%",
+        "dataset": "국민건강영양조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S02",
+        "file": "S02.pdf",
+        "page": 2,
+        "line_start": 29,
+        "page_end": 2,
+        "line_end": 30,
+        "sentence": "6~18세 아동·청소년의 주 1회 이상 패스트푸드 섭취율은 27.4%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C20",
+      "anchor": "센터한곳이맡는아동은평균25명을넘는다.",
+      "claim": "센터 한 곳이 맡는 아동은 평균 25명을 넘는다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지일보 사회부",
+        "year": "2024",
+        "title": "\"돌봄 공백 여전\"… 지역아동센터 종사자 처우 논란",
+        "publisher": "오렌지일보",
+        "date": "2024-05-21",
+        "url": "https://www.orangeilbo.co.kr/article/2024/05/21/1029384"
+      },
+      "true_source_id": "S07",
+      "planted": "tier_violation",
+      "slots": {
+        "who": "지역아동센터",
+        "when": "2024년",
+        "what": "센터당 평균 아동 수",
+        "value": "25명 초과",
+        "dataset": "오렌지일보 취재",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T4",
+        "tier_violation": true,
+        "stage2": "SUPPORTED",
+        "pattern": "tier_violation",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S07",
+        "file": "S07.pdf",
+        "page": 1,
+        "line_start": 15,
+        "page_end": 1,
+        "line_end": 16,
+        "sentence": "본지 취재 결과 센터 한 곳당 평균 아동 수는 25명을 넘는 것으로 확인됐다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "출처는 실재하고 주장도 그대로 뒷받침한다. 그러나 T4(언론)를 핵심 수치의 단독 근거로 삼았다 — 등급 규칙 위반. T1~T3 보강이 필요하다."
+    },
+    {
+      "id": "C21",
+      "anchor": "현장에서는아동한명당성인한명이붙어야제대로된돌봄이가능하다는이야기가나온다.",
+      "claim": "현장에서는 아동 한 명당 성인 한 명이 붙어야 제대로 된 돌봄이 가능하다는 이야기가 나온다.",
+      "placement": "endnote",
+      "note": [
+        "endnote",
+        2
+      ],
+      "cited_as": {
+        "authors": "복지현장 이야기 (개인 블로그)",
+        "year": "2024",
+        "title": "지역아동센터에서 10년 일하며 느낀 것",
+        "publisher": "개인 블로그",
+        "date": "2024-03-02",
+        "url": "https://blog.orange.net/welfare-field/220"
+      },
+      "true_source_id": "S08",
+      "planted": "tier_violation",
+      "slots": {
+        "who": "지역아동센터 현장",
+        "when": "2024년",
+        "what": "필요 인력 비율",
+        "value": "아동 1명당 성인 1명",
+        "dataset": "개인 경험담",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T5",
+        "tier_violation": true,
+        "stage2": "SUPPORTED",
+        "pattern": "tier_violation",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S08",
+        "file": "S08.pdf",
+        "page": 1,
+        "line_start": 21,
+        "page_end": 1,
+        "line_end": 22,
+        "sentence": "내가 일하던 센터에서는 아이 한 명당 어른 한 명이 붙어야 겨우 돌봄이 됐다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "개인 블로그(T5)는 사용 금지 등급이다. 글은 실재하고 주장도 그 글에 있으나, 인용 자체를 삭제하고 T1~T3으로 대체해야 한다."
+    },
+    {
+      "id": "C22",
+      "anchor": "노인열명중한명이상(11.3%)이우울증상을보인다.",
+      "claim": "노인 열 명 중 한 명 이상(11.3%)이 우울증상을 보인다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 복지부·오렌지사회정책연구원",
+        "year": "2024",
+        "title": "2023년도 노인실태조사",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2024-08",
+        "date": "2024-06",
+        "url": "https://www.ospi.orange.re.kr/report/2024-08"
+      },
+      "true_source_id": "S03",
+      "planted": "none",
+      "slots": {
+        "who": "65세 이상 노인",
+        "when": "2023년",
+        "what": "우울증상 비율(SGDS-K 기준)",
+        "value": "11.3%",
+        "dataset": "노인실태조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T2",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S03",
+        "file": "S03.pdf",
+        "page": 2,
+        "line_start": 22,
+        "page_end": 2,
+        "line_end": 23,
+        "sentence": "단축형 노인우울척도(SGDS-K) 기준 우울증상을 보이는 노인의 비율은 11.3%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C23",
+      "anchor": "국민건강영양조사에따르면한부모가족가구주의취업률은74.3%다.",
+      "claim": "국민건강영양조사에 따르면 한부모가족 가구주의 취업률은 74.3%다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 가족평등부",
+        "year": "2025",
+        "title": "2024년 한부모가족 실태조사 주요 결과",
+        "publisher": "오렌지국 가족평등부",
+        "series": "보도자료",
+        "date": "2025-04-17",
+        "url": "https://www.mofe.orange.go.kr/news/press/2025/0417"
+      },
+      "true_source_id": "S01",
+      "planted": "wrong_dataset",
+      "slots": {
+        "who": "한부모가족 가구주",
+        "when": "2024년",
+        "what": "취업률",
+        "value": "74.3%",
+        "dataset": "국민건강영양조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "wrong_dataset",
+        "corrupted_slot": "dataset"
+      },
+      "evidence": {
+        "source_id": "S01",
+        "file": "S01.pdf",
+        "page": 2,
+        "line_start": 16,
+        "page_end": 2,
+        "line_end": 17,
+        "sentence": "한부모가족 가구주의 취업률은 74.3%였으며, 취업자 중 임금근로자 비율은 61.2%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [
+        "국민건강영양조사"
+      ],
+      "rationale": "수치는 한부모가족 실태조사에서 나온 것이다. 국민건강영양조사로 귀속한 것은 자료원 불일치다. S01 전문에 '국민건강영양조사'는 0회다."
+    },
+    {
+      "id": "C24",
+      "anchor": "2019년기준센터이용아동의43.6%가수급·차상위가구아동이었다.",
+      "claim": "2019년 기준 센터 이용 아동의 43.6%가 수급·차상위 가구 아동이었다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지사회정책연구원",
+        "year": "2023",
+        "title": "지역아동센터 운영실태와 정책과제",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2023-24",
+        "date": "2023-11",
+        "url": "https://www.ospi.orange.re.kr/report/2023-24"
+      },
+      "true_source_id": "S06",
+      "planted": "time_mismatch",
+      "slots": {
+        "who": "센터 이용 아동",
+        "when": "2019년",
+        "what": "수급·차상위 가구 아동 비율",
+        "value": "43.6%",
+        "dataset": "지역아동센터 운영실태 조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "time_mismatch",
+        "corrupted_slot": "when"
+      },
+      "evidence": {
+        "source_id": "S06",
+        "file": "S06.pdf",
+        "page": 2,
+        "line_start": 27,
+        "page_end": 2,
+        "line_end": 28,
+        "sentence": "2023년 기준 센터 이용 아동 중 국민기초생활보장 수급 및 차상위 가구 아동의 비율은 43.6%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "출처의 기준 시점은 2023년이다. 2019년 수치는 출처에 없다."
+    },
+    {
+      "id": "C25",
+      "anchor": "이연구가분석한아이들은6~11세2,412명이다.",
+      "claim": "이 연구가 분석한 아이들은 6~11세 2,412명이다.",
+      "placement": "footnote",
+      "note": [
+        "footnote",
+        1
+      ],
+      "cited_as": {
+        "authors": "김세라·정민우",
+        "year": "2023",
+        "title": "아동의 구강건강 상태와 가구 소득수준의 연관성",
+        "publisher": "오렌지구강보건학회",
+        "journal": "오렌지구강보건학회지",
+        "volume": "47",
+        "issue": "3",
+        "pages": "145-158",
+        "url": "https://www.kjoh.orange.or.kr/journal/view.php?vol=47&no=3&page=145"
+      },
+      "true_source_id": "S04",
+      "planted": "none",
+      "slots": {
+        "who": "6~11세 아동",
+        "when": "2019~2021년",
+        "what": "연구 대상 규모",
+        "value": "2,412명",
+        "dataset": "국민건강영양조사 원자료",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S04",
+        "file": "S04.pdf",
+        "page": 1,
+        "line_start": 37,
+        "page_end": 1,
+        "line_end": 37,
+        "sentence": "연구 대상은 6~11세 아동 2,412명이다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C26",
+      "anchor": "여기서빈곤율은세금과이전소득을반영한가구처분가능소득을기준으로,중위소득50%선을적용해계산한값이다.",
+      "claim": "여기서 빈곤율은 세금과 이전소득을 반영한 가구 처분가능소득을 기준으로, 중위소득 50% 선을 적용해 계산한 값이다.",
+      "placement": "endnote",
+      "note": [
+        "endnote",
+        1
+      ],
+      "cited_as": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Family Database CO2.2: Child poverty rates",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "date": "2024-09",
+        "url": "https://www.gecd.org/els/family/database/CO2_2.pdf"
+      },
+      "true_source_id": "S05",
+      "planted": "none",
+      "slots": {
+        "who": "전체 가구",
+        "when": "해당 없음",
+        "what": "빈곤율 산출 기준",
+        "value": "중위소득 50%",
+        "dataset": "GECD Family Database CO2.2",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T2",
+        "tier_violation": false,
+        "stage2": "SUPPORTED",
+        "pattern": "none",
+        "corrupted_slot": null
+      },
+      "evidence": {
+        "source_id": "S05",
+        "file": "S05.pdf",
+        "page": 1,
+        "line_start": 8,
+        "page_end": 1,
+        "line_end": 10,
+        "sentence": "Poverty rates are calculated on household disposable income after taxes and transfers, using a threshold of 50% of the median."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": ""
+    },
+    {
+      "id": "C27",
+      "anchor": "지역아동센터를이용하는아동은그렇지않은아동보다학교출석률이높았다.",
+      "claim": "지역아동센터를 이용하는 아동은 그렇지 않은 아동보다 학교 출석률이 높았다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지사회정책연구원",
+        "year": "2023",
+        "title": "지역아동센터 운영실태와 정책과제",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2023-24",
+        "date": "2023-11",
+        "url": "https://www.ospi.orange.re.kr/report/2023-24"
+      },
+      "true_source_id": "S06",
+      "planted": "unsupported",
+      "slots": {
+        "who": "센터 이용 아동 vs 비이용 아동",
+        "when": "2023년",
+        "what": "학교 출석률",
+        "value": "이용 아동이 더 높음",
+        "dataset": "지역아동센터 운영실태 조사",
+        "relation": "이용 → 출석률↑"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T3",
+        "tier_violation": false,
+        "stage2": "NOT_SUPPORTED",
+        "pattern": "unsupported",
+        "corrupted_slot": null
+      },
+      "evidence": null,
+      "mismatch_fields": [],
+      "absence_evidence": [
+        "출석"
+      ],
+      "rationale": "출처는 출석률을 다루지 않는다. '출석'은 S06 전문에 0회다."
+    },
+    {
+      "id": "C28",
+      "anchor": "2018년아동·청소년의아침결식률은34.6%였다.",
+      "claim": "2018년 아동·청소년의 아침 결식률은 34.6%였다.",
+      "placement": "body",
+      "note": null,
+      "cited_as": {
+        "authors": "오렌지국 보건통계청",
+        "year": "2024",
+        "title": "2023 국민건강영양조사 통계집",
+        "publisher": "오렌지국 보건통계청",
+        "series": "국민건강영양조사 제9기 2차년도",
+        "date": "2024-12",
+        "url": "https://knhanes.orange.go.kr/pub/2023/stat"
+      },
+      "true_source_id": "S02",
+      "planted": "time_mismatch",
+      "slots": {
+        "who": "6~18세 아동·청소년",
+        "when": "2018년",
+        "what": "아침식사 결식률",
+        "value": "34.6%",
+        "dataset": "국민건강영양조사",
+        "relation": "해당 없음"
+      },
+      "expected": {
+        "stage1": "PASS",
+        "tier": "T1",
+        "tier_violation": false,
+        "stage2": "PARTIAL",
+        "pattern": "time_mismatch",
+        "corrupted_slot": "when"
+      },
+      "evidence": {
+        "source_id": "S02",
+        "file": "S02.pdf",
+        "page": 2,
+        "line_start": 25,
+        "page_end": 2,
+        "line_end": 25,
+        "sentence": "2023년 6~18세 아동·청소년의 아침식사 결식률은 34.6%였다."
+      },
+      "mismatch_fields": [],
+      "absence_evidence": [],
+      "rationale": "출처의 기준 연도는 2023년이다."
+    }
+  ]
+}

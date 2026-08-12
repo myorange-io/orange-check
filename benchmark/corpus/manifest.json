@@ -1,0 +1,133 @@
+{
+  "world": "오렌지국",
+  "closed_world_rule": "corpus/ 안의 문서가 이 세계에 존재하는 출처의 전부다. corpus/manifest.json 이 각 출처의 권위 있는 서지정보다. 코퍼스에 없는 출처를 인용하면 stage1=FAIL(환각)이다.",
+  "sources": [
+    {
+      "id": "S01",
+      "file": "S01.pdf",
+      "tier": "T1",
+      "kind": "정부 보도자료",
+      "pages": 3,
+      "meta": {
+        "authors": "오렌지국 가족평등부",
+        "year": "2025",
+        "title": "2024년 한부모가족 실태조사 주요 결과",
+        "publisher": "오렌지국 가족평등부",
+        "series": "보도자료",
+        "date": "2025-04-17",
+        "url": "https://www.mofe.orange.go.kr/news/press/2025/0417"
+      }
+    },
+    {
+      "id": "S02",
+      "file": "S02.pdf",
+      "tier": "T1",
+      "kind": "정부 통계집",
+      "pages": 2,
+      "meta": {
+        "authors": "오렌지국 보건통계청",
+        "year": "2024",
+        "title": "2023 국민건강영양조사 통계집",
+        "publisher": "오렌지국 보건통계청",
+        "series": "국민건강영양조사 제9기 2차년도",
+        "date": "2024-12",
+        "url": "https://knhanes.orange.go.kr/pub/2023/stat"
+      }
+    },
+    {
+      "id": "S03",
+      "file": "S03.pdf",
+      "tier": "T2",
+      "kind": "국책연구기관 연구보고서",
+      "pages": 2,
+      "meta": {
+        "authors": "오렌지국 복지부·오렌지사회정책연구원",
+        "year": "2024",
+        "title": "2023년도 노인실태조사",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2024-08",
+        "date": "2024-06",
+        "url": "https://www.ospi.orange.re.kr/report/2024-08"
+      }
+    },
+    {
+      "id": "S04",
+      "file": "S04.pdf",
+      "tier": "T3",
+      "kind": "학술논문",
+      "pages": 3,
+      "meta": {
+        "authors": "김세라·정민우",
+        "year": "2023",
+        "title": "아동의 구강건강 상태와 가구 소득수준의 연관성",
+        "publisher": "오렌지구강보건학회",
+        "journal": "오렌지구강보건학회지",
+        "volume": "47",
+        "issue": "3",
+        "pages": "145-158",
+        "url": "https://www.kjoh.orange.or.kr/journal/view.php?vol=47&no=3&page=145"
+      }
+    },
+    {
+      "id": "S05",
+      "file": "S05.pdf",
+      "tier": "T2",
+      "kind": "국제기구 데이터베이스 발췌",
+      "pages": 4,
+      "meta": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Family Database CO2.2: Child poverty rates",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "date": "2024-09",
+        "url": "https://www.gecd.org/els/family/database/CO2_2.pdf"
+      }
+    },
+    {
+      "id": "S06",
+      "file": "S06.pdf",
+      "tier": "T3",
+      "kind": "국책연구기관 연구보고서",
+      "pages": 3,
+      "meta": {
+        "authors": "오렌지사회정책연구원",
+        "year": "2023",
+        "title": "지역아동센터 운영실태와 정책과제",
+        "publisher": "오렌지사회정책연구원",
+        "series": "연구보고서 2023-24",
+        "date": "2023-11",
+        "url": "https://www.ospi.orange.re.kr/report/2023-24"
+      }
+    },
+    {
+      "id": "S07",
+      "file": "S07.pdf",
+      "tier": "T4",
+      "kind": "언론 기사",
+      "pages": 1,
+      "meta": {
+        "authors": "오렌지일보 사회부",
+        "year": "2024",
+        "title": "\"돌봄 공백 여전\"… 지역아동센터 종사자 처우 논란",
+        "publisher": "오렌지일보",
+        "date": "2024-05-21",
+        "url": "https://www.orangeilbo.co.kr/article/2024/05/21/1029384"
+      }
+    },
+    {
+      "id": "S08",
+      "file": "S08.pdf",
+      "tier": "T5",
+      "kind": "개인 블로그",
+      "pages": 1,
+      "meta": {
+        "authors": "복지현장 이야기 (개인 블로그)",
+        "year": "2024",
+        "title": "지역아동센터에서 10년 일하며 느낀 것",
+        "publisher": "개인 블로그",
+        "date": "2024-03-02",
+        "url": "https://blog.orange.net/welfare-field/220"
+      }
+    }
+  ]
+}
