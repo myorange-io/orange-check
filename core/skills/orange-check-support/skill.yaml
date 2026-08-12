@@ -1,0 +1,20 @@
+name: orange-check-support
+title: Orange Check — 인용 적절성
+description:
+  - "본문 주장과 출처 원문을 대조해 인용이 적절한지 판정한다."
+  - "주장을 대상·시점·지표·수치·자료원·관계 여섯 칸으로 쪼개 칸마다 원문과 맞춰 보고, 쪽·행과 원문 인용으로 근거를 댄다."
+  - "이 인용이 출처에 맞는지, 과확장·지표명 오기·자료원 불일치가 있는지 볼 때 쓴다."
+intro: |
+  **출처가 존재한다 ≠ 그 출처가 본문 주장을 뒷받침한다.** 이 스킬은 뒤쪽만 본다.
+  서지 실존은 다루지 않는다 — 그건 `orange-check`의 1단계다.
+fragments: [30-slots, 40-support, 50-cove, 55-selfcheck]
+references: [ref-report-contract, ref-pdf-retrieval]
+outro: |
+  ## 입력
+
+  `citations.json`(`orange-check-extract` 산출물)과 출처 원문. 출처 원문이 없으면
+  **먼저 요청한다.** 없는 채로 판정하지 않는다.
+
+  ## 산출물
+
+  각 인용에 `stage2`를 채운 `citations.json`. 판정은 슬롯 표에서 규칙으로 끌어낸다.

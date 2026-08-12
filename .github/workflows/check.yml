@@ -1,0 +1,58 @@
+name: check
+
+# 회귀 게이트. dist/ 를 손으로 고쳤거나 채점기 공리가 깨지면 여기서 막힌다.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 도구상자 자체는 표준 라이브러리만 쓴다. PyMuPDF는 벤치마크 코퍼스를
+      # 만들고 핀포인트를 확인하는 데만 필요하다.
+      - name: PDF 판독기 설치
+        run: pip install --quiet pymupdf
+
+      - name: 도구상자가 정말 표준 라이브러리만 쓰는지
+        run: |
+          python - <<'PY'
+          import ast, pathlib, sys
+          STDLIB = set(sys.stdlib_module_names)
+          # 선택적 의존성 — 없으면 없는 대로 동작해야 한다
+          OPTIONAL = {"fitz", "pdfminer", "pypdf", "docx", "requests", "defusedxml", "refver"}
+          bad = []
+          for p in pathlib.Path("core/toolkit/refver").glob("*.py"):
+              tree = ast.parse(p.read_text(encoding="utf-8"))
+              for n in ast.walk(tree):
+                  mods = []
+                  if isinstance(n, ast.Import):
+                      mods = [a.name.split(".")[0] for a in n.names]
+                  elif isinstance(n, ast.ImportFrom) and n.level == 0 and n.module:
+                      mods = [n.module.split(".")[0]]
+                  for m in mods:
+                      if m not in STDLIB and m not in OPTIONAL:
+                          bad.append(f"{p.name}:{n.lineno} {m}")
+          if bad:
+              print("도구상자에 표준 라이브러리 밖 의존성이 있다:")
+              print("\n".join("  " + b for b in bad))
+              sys.exit(1)
+          print("도구상자는 표준 라이브러리 + 선택적 의존성만 쓴다")
+          PY
+
+      - name: 벤치마크 재생성 (사양 자기검증)
+        run: python3 benchmark/build.py
+        env:
+          PYTHONPATH: core/toolkit
+
+      - name: 회귀 게이트
+        run: python3 tools/check.py
+        env:
+          PYTHONPATH: core/toolkit
