@@ -3,17 +3,10 @@
 모델이 제 답을 스스로 곱씹어 고치는 것은, 바깥에서 오는 확인 신호가 없으면 잘 듣지 않는다.
 그래서 여기서는 **기계가 먼저 확인하고, 그 결과만 가지고 고친다.**
 
-<!--if:shell-->
-```bash
-python3 {{TOOLKIT}} validate report.json    # 계약 위반 목록
-```
-<!--endif-->
-<!--if:python_only-->
 ```python
 from refver.report import validate, load
 for e in validate(load("report.json")): print(e)
 ```
-<!--endif-->
 
 그리고 **적어 낸 근거가 실제로 그 자리에 있는지** 다시 연다. 이것이 지어낸 근거를 잡는 유일한 방법이다.
 

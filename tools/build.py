@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """dist/ 를 코어에서 생성한다.
 
-방법론 산문은 `core/methodology/` 한 곳에만 있다. 플랫폼별 SKILL.md는 손으로
-쓰지 않고 여기서 조립한다. 이 저장소가 이전에 겪은 실패가 정확히 그것이었다 —
-claude-code와 cowork의 SKILL.md가 조용히 갈라져 한쪽에만 있는 규칙이 생겼다.
+방법론 산문은 `core/methodology/` 한 곳에만 있고, SKILL.md는 여기서 조립한다.
+이 저장소가 이전에 겪은 실패가 정확히 그것이었다 — claude-code와 cowork의
+SKILL.md가 조용히 갈라져 한쪽에만 있는 규칙이 생겼다.
+
+패키지는 **하나**다. 네 플랫폼이 같은 것을 쓴다. 플랫폼별로 따로 만들어 보니
+갈라지는 내용이 273줄 중 30줄뿐이었고 전부 런타임 사실이어서, 스킬이 실행할 때
+스스로 확인하도록 옮겼다.
 
 `--check`는 임시 폴더에 다시 지어 committed dist/ 와 바이트 단위로 비교한다.
 누가 dist/ 를 직접 고치면 여기서 걸린다.
@@ -191,9 +195,7 @@ def build_skill(skill_dir: Path, prof: dict, out_root: Path) -> Path:
     body = [frontmatter(skill, prof), "", f"# {skill.get('title', name)}", ""]
     if skill.get("intro"):
         body += [substitute(apply_flags(skill["intro"], flags), prof).strip(), ""]
-    body += [f"> 실행 환경: **{prof['label']}**", ""]
-    if prof.get("degraded_note"):
-        body += [substitute(apply_flags(prof["degraded_note"], flags), prof).strip(), ""]
+    body += [f"> 실행 환경: {prof['label']}", ""]
     body += ["---", ""]
 
     for frag in (skill.get("fragments") or []):
@@ -238,7 +240,7 @@ def build_skill(skill_dir: Path, prof: dict, out_root: Path) -> Path:
 
 def build_profile(pf: Path, out_root: Path) -> dict:
     prof = parse_yaml(pf.read_text(encoding="utf-8"))
-    root = out_root / prof["profile"]
+    root = out_root / "skills"
     if root.exists():
         shutil.rmtree(root)
     root.mkdir(parents=True)
@@ -246,14 +248,11 @@ def build_profile(pf: Path, out_root: Path) -> dict:
     for sd in sorted((CORE / "skills").iterdir()):
         if (sd / "skill.yaml").exists():
             built.append(build_skill(sd, prof, root).name)
-    (root / "INSTALL.md").write_text(
-        f"# Orange Check 설치 — {prof['label']}\n\n"
-        + (prof.get("install") or "") + "\n\n"
-        + "## 들어 있는 스킬\n\n"
-        + "\n".join(f"- `{b}/`" for b in built) + "\n",
-        encoding="utf-8")
+    install = (CORE / "INSTALL.md").read_text(encoding="utf-8")
+    install += "\n## 들어 있는 스킬\n\n" + "\n".join(f"- `{b}/`" for b in built) + "\n"
+    (root / "INSTALL.md").write_text(install, encoding="utf-8")
     return {"profile": prof["profile"], "label": prof["label"],
-            "skills": built, "package": prof.get("package", "dir"), "root": root}
+            "skills": built, "package": prof.get("package", "both"), "root": root}
 
 
 def make_zip(info: dict, out_dir: Path) -> list[Path]:
@@ -266,22 +265,31 @@ def make_zip(info: dict, out_dir: Path) -> list[Path]:
     """
     out_dir.mkdir(parents=True, exist_ok=True)
     made = []
+
+    def add(zf, path: Path, arc: str) -> None:
+        # zip은 항목마다 현재 시각을 넣는다. 고정하지 않으면 빌드할 때마다
+        # 바이트가 달라져 작업 트리가 늘 더러운 상태가 된다.
+        info = zipfile.ZipInfo(arc, date_time=(2026, 1, 1, 0, 0, 0))
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o644 << 16
+        zf.writestr(info, path.read_bytes())
+
     # 스킬별 zip은 업로드로 설치하는 환경에만 필요하다.
     # 폴더째 복사하는 환경(Claude Code·Codex)에는 묶음 하나면 된다.
-    if info["package"] == "zip":
+    if info["package"] in ("zip", "both"):
         for skill in info["skills"]:
             src = info["root"] / skill
-            z = out_dir / f"{skill}-{info['profile']}.zip"
+            z = out_dir / f"{skill}.zip"
             with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED) as zf:
                 for p in sorted(src.rglob("*")):
                     if p.is_file():
-                        zf.write(p, str(Path(skill) / p.relative_to(src)))
+                        add(zf, p, str(Path(skill) / p.relative_to(src)))
             made.append(z)
-    bundle = out_dir / f"orange-check-{info['profile']}-all.zip"
+    bundle = out_dir / "orange-check-all.zip"
     with zipfile.ZipFile(bundle, "w", zipfile.ZIP_DEFLATED) as zf:
         for p in sorted(info["root"].rglob("*")):
             if p.is_file():
-                zf.write(p, str(p.relative_to(info["root"])))
+                add(zf, p, str(p.relative_to(info["root"])))
     made.append(bundle)
     return made
 
@@ -307,8 +315,6 @@ def diff_tree(a: Path, b: Path) -> list[str]:
     out += [f"없어야 할 파일: {x}" for x in sorted(fa - fb)]
     out += [f"빠진 파일: {x}" for x in sorted(fb - fa)]
     for x in sorted(fa & fb):
-        if x.endswith(".zip"):
-            continue  # zip은 타임스탬프 때문에 바이트가 달라진다
         if not filecmp.cmp(a / x, b / x, shallow=False):
             out.append(f"내용 다름: {x}")
     return out

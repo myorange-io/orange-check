@@ -141,7 +141,16 @@ class PdfWriter:
         self.y += 10.0
 
     def save(self, path: Path) -> None:
-        self.doc.save(str(path), garbage=3, deflate=True)
+        # 같은 사양에서 같은 바이트가 나와야 한다. 그러지 않으면 게이트를 돌릴
+        # 때마다 코퍼스가 바뀐 것으로 잡혀 진짜 변경을 가린다.
+        # PDF는 기본으로 생성 시각과 무작위 ID를 넣으므로 둘 다 고정한다.
+        self.doc.set_metadata({
+            "producer": "orange-check benchmark builder",
+            "creator": "orange-check", "title": "", "author": "",
+            "subject": "", "keywords": "",
+            "creationDate": "D:20260101000000Z", "modDate": "D:20260101000000Z",
+        })
+        self.doc.save(str(path), garbage=3, deflate=True, no_new_id=True)
 
 
 def build_source_pdf(src: dict, prose: dict, watermark: str, out: Path) -> dict:
@@ -399,14 +408,24 @@ def build_docx(spec: dict, doc_prose: dict, out: Path) -> dict:
     )
 
     out.parent.mkdir(parents=True, exist_ok=True)
+    # zip은 항목마다 현재 시각을 넣는다. 고정하지 않으면 같은 사양에서
+    # 매번 다른 바이트가 나와 회귀 게이트가 변경으로 잡는다.
+    stamp = (2026, 1, 1, 0, 0, 0)
+
+    def put(z, name, data):
+        info = zipfile.ZipInfo(name, date_time=stamp)
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o600 << 16
+        z.writestr(info, data)
+
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", content_types)
-        z.writestr("_rels/.rels", root_rels)
-        z.writestr("word/document.xml", document)
-        z.writestr("word/_rels/document.xml.rels", doc_rels)
-        z.writestr("word/footnotes.xml", notes_xml("footnote", footnotes))
-        z.writestr("word/endnotes.xml", notes_xml("endnote", endnotes))
-        z.writestr("word/settings.xml", settings)
+        put(z, "[Content_Types].xml", content_types)
+        put(z, "_rels/.rels", root_rels)
+        put(z, "word/document.xml", document)
+        put(z, "word/_rels/document.xml.rels", doc_rels)
+        put(z, "word/footnotes.xml", notes_xml("footnote", footnotes))
+        put(z, "word/endnotes.xml", notes_xml("endnote", endnotes))
+        put(z, "word/settings.xml", settings)
 
     missing = [c["id"] for c in spec["citations"] if c["id"] not in placed]
     for cid in missing:

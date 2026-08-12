@@ -7,7 +7,7 @@ description:
 intro: |
   검증 파이프라인의 입구. **여기서 놓친 인용은 뒤의 어떤 단계도 검증하지 못한다.**
   그래서 이 스킬의 목표는 판정이 아니라 **누락 0건**이다.
-fragments: [10-collect]
+fragments: [05-probe, 10-collect]
 references: [ref-report-contract]
 outro: |
   ## 산출물

@@ -67,6 +67,18 @@ def check_zip_layout() -> bool:
     return not bad
 
 
+def check_single_package() -> bool:
+    """패키지는 하나여야 한다 — 플랫폼별로 갈라지면 반드시 어긋난다."""
+    skills = ROOT / "dist" / "skills"
+    stray = [p.name for p in (ROOT / "dist").iterdir()
+             if p.is_dir() and p.name not in ("skills", "packages")]
+    ok = skills.is_dir() and not stray
+    print(f"  {'✓' if ok else '✗'} 패키지가 하나다 (플랫폼별 분기 없음)")
+    if stray:
+        print(f"      플랫폼별 폴더가 남아 있다: {stray}")
+    return ok
+
+
 def score_path(name: str) -> Path:
     return RUNS / f"{name}.score.json"
 
@@ -105,6 +117,7 @@ def main() -> int:
     print("구조")
     ok = True
     ok &= gate("dist/ 가 코어에서 그대로 재생성된다", [sys.executable, "tools/build.py", "--check"])
+    ok &= check_single_package()
     ok &= gate("도구상자 시험", [sys.executable, "core/toolkit/tests/test_toolkit.py"], env)
     ok &= check_zip_layout()
     print("\n심판의 심판")

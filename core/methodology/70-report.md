@@ -5,19 +5,11 @@
 - `report.json` — 기계가 읽는 정본. 모델이 직접 작성한다
 - `참고문헌_검증리포트.md` — 사람이 읽는 리포트. **report.json에서 생성한다**
 
-<!--if:shell-->
-```bash
-python3 {{TOOLKIT}} validate report.json
-python3 {{TOOLKIT}} render report.json -o 참고문헌_검증리포트.md
-```
-<!--endif-->
-<!--if:python_only-->
 ```python
 from refver.report import load, validate, render
 rep = load("report.json"); assert not validate(rep)
 open("참고문헌_검증리포트.md","w",encoding="utf-8").write(render(rep))
 ```
-<!--endif-->
 
 마크다운을 손으로 쓰지 않는다. 두 벌을 따로 쓰면 반드시 어긋나고, 어긋난 순간
 어느 쪽이 진실인지 알 수 없게 된다.

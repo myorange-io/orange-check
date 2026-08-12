@@ -1,17 +1,10 @@
 ## 1. 기계 점검을 먼저 돌린다 — 여기서 대부분이 끝난다
 
-<!--if:shell-->
-```bash
-python3 {{TOOLKIT}} audit report.json --corpus <출처폴더> --document <원문서>
-```
-<!--endif-->
-<!--if:python_only-->
 ```python
 from refver.judge import mechanical_audit, render_audit
 from refver.report import load
 print(render_audit(mechanical_audit(load("report.json"), corpus="sources", document="제안서.docx")))
 ```
-<!--endif-->
 
 기계가 보는 것.
 
