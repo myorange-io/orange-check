@@ -727,6 +727,49 @@ def main() -> int:
                 fail(f"{c['id']}: 규칙표대로면 유형이 {d[1]}인데 정답표는 {exp['pattern']}다")
         print(f"  {checked}건 확인")
 
+    print("── 근거가 그 주장의 근거가 맞는지 확인")
+    # 사실이 코퍼스에 있다는 것만으로는 부족하다. 그 사실이 **그 주장의** 근거여야 한다.
+    # 표가 있는 출처에서 인용마다 다른 행을 가리키는데 사실을 하나만 두면,
+    # 엉뚱한 행이 근거로 달려도 빌드는 통과한다.
+    num_re = re.compile(r"\d[\d,]*\.?\d*")
+    year_re = re.compile(r"^(?:19|20)\d{2}$")
+
+    def values(text: str) -> set:
+        """연도는 뺀다 — 어느 문장에나 있어서 우연히 겹치고, 그러면 검사가 무력해진다."""
+        return {x for x in num_re.findall(text) if not year_re.match(x) and len(x) >= 2}
+
+    checked = 0
+    for c in spec["citations"]:
+        fid = c.get("evidence_fid")
+        if not fid or fid not in fact_loc:
+            continue
+        corrupted = set(c.get("multi_slots") or
+                        ([c["expected"]["corrupted_slot"]] if c["expected"].get("corrupted_slot") else []))
+        if "value" in corrupted:
+            continue  # 수치를 일부러 틀린 인용은 근거와 숫자가 달라야 정상이다
+        want = values(c["claim"])
+        have = values(fact_loc[fid]["sentence"])
+        missing = want - have
+        checked += 1
+        if want and missing and not (want & have):
+            fail(f"{c['id']}: 주장의 수치 {sorted(missing)}가 근거({fid})에 하나도 없다 "
+                 f"— 다른 행·다른 문장을 가리키고 있을 수 있다")
+    print(f"  {checked}건 확인")
+
+    print("── 부재 증거가 정말 부재인지 확인")
+    for c in spec["citations"]:
+        terms = c.get("absence_evidence") or []
+        if not terms:
+            continue
+        sid = c.get("cites")
+        pages = page_cache.get(sid)
+        if not pages:
+            continue
+        for t in terms:
+            n = count_occurrences(pages, t)
+            if n:
+                fail(f"{c['id']}: 부재 증거 '{t}'가 {sid}에 {n}회 나온다 — 부재가 아니다")
+
     print("── 반칙 방지 점검(주장·근거 문자열 겹침)")
     worst = []
     for c in spec["citations"]:

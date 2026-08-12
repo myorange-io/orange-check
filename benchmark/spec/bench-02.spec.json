@@ -65,6 +65,11 @@
           "fid": "E01e",
           "section": "부문별 배출량",
           "sentence": "산업 부문 244.1 231.8"
+        },
+        {
+          "fid": "E01f",
+          "section": "부문별 배출량",
+          "sentence": "발전 부문 212.6 191.4"
         }
       ],
       "tables": [
@@ -320,6 +325,11 @@
           "fid": "E05d",
           "section": "Energy supply and demand",
           "sentence": "Coal 31.2 27.4"
+        },
+        {
+          "fid": "E05e",
+          "section": "Energy supply and demand",
+          "sentence": "Renewables 9.4 10.8"
         }
       ],
       "tables": [
@@ -590,7 +600,7 @@
       "placement": "body",
       "claim": "발전 부문 배출량은 2023년 181.4백만 톤까지 떨어졌다.",
       "cites": "E01",
-      "evidence_fid": "E01e",
+      "evidence_fid": "E01f",
       "from_table": true,
       "slots": {
         "who": "발전 부문",
@@ -658,10 +668,7 @@
         "pattern": "variable_name",
         "corrupted_slot": "what"
       },
-      "rationale": "출처의 지표는 '총발전량 대비 재생에너지 발전 비중'이다. 1차에너지 공급 비중은 다른 지표이고(E05 표 2.3에 별도로 있다) 값도 다르다. D05와 달리 이건 같은 것을 쉽게 바꿔 쓴 게 아니라 다른 지표를 가리킨다.",
-      "absence_evidence": [
-        "1차에너지"
-      ]
+      "rationale": "출처의 지표는 '총발전량 대비 재생에너지 발전 비중'이다. 1차에너지 공급 비중은 다른 지표이고(E05 표 2.3에 별도로 있다) 값도 다르다. D05와 달리 이건 같은 것을 쉽게 바꿔 쓴 게 아니라 다른 지표를 가리킨다. 부재로는 증명할 수 없다 — E02에는 1차에너지 공급 절이 따로 있다. 출처가 그 값을 '총발전량 대비'라고 못박은 문장이 근거다."
     },
     {
       "id": "D07",
@@ -983,7 +990,7 @@
       "placement": "body",
       "claim": "에너지총조사에 따르면 오렌지국의 1차에너지 공급 중 재생에너지 비중은 10.8%다.",
       "cites": "E05",
-      "evidence_fid": "E05d",
+      "evidence_fid": "E05e",
       "from_table": true,
       "slots": {
         "who": "오렌지국",
