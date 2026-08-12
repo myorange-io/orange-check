@@ -39,15 +39,15 @@
     "stage1_plain_accuracy": 1.0,
     "stage2_plain_accuracy": 1.0,
     "stage1_per_class": {
-      "PASS": "24/24",
       "FAIL": "2/2",
-      "MISMATCH": "2/2"
+      "MISMATCH": "2/2",
+      "PASS": "24/24"
     },
     "stage2_per_class": {
-      "NOT_SUPPORTED": "4/4",
       "SUPPORTED": "14/14",
-      "PARTIAL": "8/8",
-      "NOT_APPLICABLE": "2/2"
+      "NOT_SUPPORTED": "4/4",
+      "NOT_APPLICABLE": "2/2",
+      "PARTIAL": "8/8"
     }
   },
   "stage1_confusion": {

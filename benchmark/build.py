@@ -141,7 +141,16 @@ class PdfWriter:
         self.y += 10.0
 
     def save(self, path: Path) -> None:
-        self.doc.save(str(path), garbage=3, deflate=True)
+        # 같은 사양에서 같은 바이트가 나와야 한다. 그러지 않으면 게이트를 돌릴
+        # 때마다 코퍼스가 바뀐 것으로 잡혀 진짜 변경을 가린다.
+        # PDF는 기본으로 생성 시각과 무작위 ID를 넣으므로 둘 다 고정한다.
+        self.doc.set_metadata({
+            "producer": "orange-check benchmark builder",
+            "creator": "orange-check", "title": "", "author": "",
+            "subject": "", "keywords": "",
+            "creationDate": "D:20260101000000Z", "modDate": "D:20260101000000Z",
+        })
+        self.doc.save(str(path), garbage=3, deflate=True, no_new_id=True)
 
 
 def build_source_pdf(src: dict, prose: dict, watermark: str, out: Path) -> dict:
