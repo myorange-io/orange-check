@@ -265,6 +265,15 @@ def make_zip(info: dict, out_dir: Path) -> list[Path]:
     """
     out_dir.mkdir(parents=True, exist_ok=True)
     made = []
+
+    def add(zf, path: Path, arc: str) -> None:
+        # zip은 항목마다 현재 시각을 넣는다. 고정하지 않으면 빌드할 때마다
+        # 바이트가 달라져 작업 트리가 늘 더러운 상태가 된다.
+        info = zipfile.ZipInfo(arc, date_time=(2026, 1, 1, 0, 0, 0))
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o644 << 16
+        zf.writestr(info, path.read_bytes())
+
     # 스킬별 zip은 업로드로 설치하는 환경에만 필요하다.
     # 폴더째 복사하는 환경(Claude Code·Codex)에는 묶음 하나면 된다.
     if info["package"] in ("zip", "both"):
@@ -274,13 +283,13 @@ def make_zip(info: dict, out_dir: Path) -> list[Path]:
             with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED) as zf:
                 for p in sorted(src.rglob("*")):
                     if p.is_file():
-                        zf.write(p, str(Path(skill) / p.relative_to(src)))
+                        add(zf, p, str(Path(skill) / p.relative_to(src)))
             made.append(z)
     bundle = out_dir / "orange-check-all.zip"
     with zipfile.ZipFile(bundle, "w", zipfile.ZIP_DEFLATED) as zf:
         for p in sorted(info["root"].rglob("*")):
             if p.is_file():
-                zf.write(p, str(p.relative_to(info["root"])))
+                add(zf, p, str(p.relative_to(info["root"])))
     made.append(bundle)
     return made
 
@@ -306,8 +315,6 @@ def diff_tree(a: Path, b: Path) -> list[str]:
     out += [f"없어야 할 파일: {x}" for x in sorted(fa - fb)]
     out += [f"빠진 파일: {x}" for x in sorted(fb - fa)]
     for x in sorted(fa & fb):
-        if x.endswith(".zip"):
-            continue  # zip은 타임스탬프 때문에 바이트가 달라진다
         if not filecmp.cmp(a / x, b / x, shallow=False):
             out.append(f"내용 다름: {x}")
     return out
