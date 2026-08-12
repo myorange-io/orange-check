@@ -142,7 +142,9 @@ def main() -> int:
     ok &= check_zip_layout()
     print("\n심판의 심판")
     ok &= gate("채점기 자기시험(공리 확인)", [sys.executable, "benchmark/selftest.py"], env)
-    ok &= gate("벤치마크가 사양에서 재생성된다", [sys.executable, "benchmark/build.py"], env)
+    for b in BENCHES:
+        ok &= gate(f"{b}이 사양에서 재생성된다",
+                   [sys.executable, "benchmark/build.py", "--bench", b], env)
 
     if a.score:
         rp = RUNS / f"{a.score}.report.json"

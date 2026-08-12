@@ -48,7 +48,9 @@ jobs:
           PY
 
       - name: 벤치마크 재생성 (사양 자기검증)
-        run: python3 benchmark/build.py
+        run: |
+          python3 benchmark/build.py --bench bench-01
+          python3 benchmark/build.py --bench bench-02
         env:
           PYTHONPATH: core/toolkit
 
