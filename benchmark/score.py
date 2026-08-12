@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 
-SCORE_FORMULA_VERSION = "1.1"
+SCORE_FORMULA_VERSION = "1.2"
 WEIGHTS = {
     "extraction_f1": 0.18,
     "stage1_accuracy": 0.14,
@@ -251,10 +251,11 @@ def score(report: dict, key: dict, corpus: Path) -> dict:
         cls1[exp["stage1"]][1] += 1
         cls2[exp["stage2"]][1] += 1
         if idx is None:
-            if k["planted"] != "none":
-                planted_n += 1
-            else:
+            if (exp["stage1"] == "PASS" and exp["stage2"] == "SUPPORTED"
+                    and not exp.get("tier_violation")):
                 control_n += 1
+            else:
+                planted_n += 1
             row["expected_stage1"] = exp["stage1"]
             row["expected_stage2"] = exp["stage2"]
             per_citation.append(row)
@@ -289,7 +290,13 @@ def score(report: dict, key: dict, corpus: Path) -> dict:
             pat_ok += 1
 
         clean = (g1 == "PASS" and g2 == "SUPPORTED" and not gviol)
-        if k["planted"] == "none":
+        # 대조군인지는 라벨이 아니라 **정답이 무결한가**로 정한다.
+        # 쉬운 말로 바꿔 쓴 인용이나 일부러 의심스럽게 배치한 인용은
+        # 라벨이 'none'이 아니지만 정답은 무결하므로 오탐 측정 대상이다.
+        # 라벨로 가르면 정작 가장 중요한 함정들이 오탐 측정에서 빠진다.
+        is_control = (exp["stage1"] == "PASS" and exp["stage2"] == "SUPPORTED"
+                      and not exp.get("tier_violation"))
+        if is_control:
             control_n += 1
             if clean:
                 control_clean += 1

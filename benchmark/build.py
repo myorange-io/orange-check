@@ -160,7 +160,9 @@ class PdfWriter:
             self._raw("  " + "".join(cells).rstrip(), self.font, FS_BODY)
             if idx == 0:
                 self._ensure()
-                self._raw("  " + "─" * min(60, sum(widths) + 2 * len(widths)),
+                # 구분선은 ASCII로 긋는다. U+2500은 영문 폰트가 그리지 못해
+                # 그 줄이 통째로 사라지고, 삽입 줄 수와 추출 줄 수가 어긋난다.
+                self._raw("  " + "-" * min(60, sum(widths) + 2 * len(widths)),
                           self.font, FS_BODY, color=(0.4, 0.4, 0.4))
         self.y += 5.0
 
@@ -616,6 +618,13 @@ def overlap_score(claim: str, evidence: str) -> int:
 
 # ─────────────────────────────────────────────────────────────────── main
 
+def _is_control(c: dict) -> bool:
+    """정답이 무결한 인용 — 여기를 지적하면 오탐이다."""
+    e = c["expected"]
+    return (e["stage1"] == "PASS" and e["stage2"] == "SUPPORTED"
+            and not e.get("tier_violation"))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench", default="bench-01")
@@ -768,10 +777,12 @@ def main() -> int:
         key["citations"].append(entry)
 
     from collections import Counter
+
     key["totals"] = {
         "citations": len(spec["citations"]),
-        "planted": sum(1 for c in spec["citations"] if c["planted"] != "none"),
-        "control": sum(1 for c in spec["citations"] if c["planted"] == "none"),
+        # 대조군은 라벨이 아니라 정답이 무결한지로 센다 — 채점기와 같은 기준
+        "planted": sum(1 for c in spec["citations"] if not _is_control(c)),
+        "control": sum(1 for c in spec["citations"] if _is_control(c)),
         "by_pattern": dict(Counter(c["planted"] for c in spec["citations"])),
         "by_placement": dict(Counter(c["placement"] for c in spec["citations"])),
     }

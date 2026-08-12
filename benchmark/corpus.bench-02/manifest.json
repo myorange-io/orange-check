@@ -1,0 +1,133 @@
+{
+  "world": "오렌지국",
+  "closed_world_rule": "corpus/ 안의 문서가 이 세계에 존재하는 출처의 전부다. corpus/manifest.json 이 각 출처의 권위 있는 서지정보다. 코퍼스에 없는 출처를 인용하면 stage1=FAIL(환각)이다.",
+  "sources": [
+    {
+      "id": "E01",
+      "file": "E01.pdf",
+      "tier": "T2",
+      "kind": "국가 인벤토리 보고서 (1차 자료)",
+      "pages": 3,
+      "meta": {
+        "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+        "year": "2025",
+        "title": "2023년 국가 온실가스 인벤토리 보고서",
+        "publisher": "오렌지환경정책연구원",
+        "series": "인벤토리 보고서 2025-01",
+        "date": "2025-03",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+      }
+    },
+    {
+      "id": "E02",
+      "file": "E02.pdf",
+      "tier": "T1",
+      "kind": "정부 통계집",
+      "pages": 3,
+      "meta": {
+        "authors": "오렌지국 에너지통계청",
+        "year": "2025",
+        "title": "2024 에너지총조사 통계집",
+        "publisher": "오렌지국 에너지통계청",
+        "series": "에너지총조사 제12차",
+        "date": "2025-06",
+        "url": "https://stat.energy.orange.go.kr/pub/2024"
+      }
+    },
+    {
+      "id": "E03",
+      "file": "E03.pdf",
+      "tier": "T3",
+      "kind": "학술논문",
+      "pages": 3,
+      "meta": {
+        "authors": "장하윤·오세민",
+        "year": "2024",
+        "title": "재생에너지 확대가 전력 계통 안정성에 미치는 영향",
+        "publisher": "오렌지에너지학회",
+        "journal": "오렌지에너지학회지",
+        "volume": "31",
+        "issue": "2",
+        "pages": "77-95",
+        "url": "https://www.koes.orange.or.kr/journal/view.php?vol=31&no=2&page=77"
+      }
+    },
+    {
+      "id": "E04",
+      "file": "E04.pdf",
+      "tier": "T1",
+      "kind": "정부 보도자료",
+      "pages": 2,
+      "meta": {
+        "authors": "오렌지국 기후에너지부",
+        "year": "2025",
+        "title": "2030 국가 온실가스 감축목표 이행점검 결과",
+        "publisher": "오렌지국 기후에너지부",
+        "series": "보도자료",
+        "date": "2025-07-09",
+        "url": "https://www.moce.orange.go.kr/news/press/2025/0709"
+      }
+    },
+    {
+      "id": "E05",
+      "file": "E05.pdf",
+      "tier": "T2",
+      "kind": "국제기구 정책검토 보고서",
+      "pages": 5,
+      "meta": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Energy Policy Review: Orangeland 2024",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "date": "2024-11",
+        "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+      }
+    },
+    {
+      "id": "E06",
+      "file": "E06.pdf",
+      "tier": "T2",
+      "kind": "국제기구 통계집",
+      "pages": 3,
+      "meta": {
+        "authors": "GECD",
+        "year": "2025",
+        "title": "Renewable Energy Statistics 2025",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "date": "2025-04",
+        "url": "https://www.gecd.org/stats/renewables-2025.pdf"
+      }
+    },
+    {
+      "id": "E07",
+      "file": "E07.pdf",
+      "tier": "T4",
+      "kind": "언론 기사",
+      "pages": 1,
+      "meta": {
+        "authors": "오렌지경제신문 산업부",
+        "year": "2025",
+        "title": "온실가스 배출 6.2% 줄어… 감축 속도 빨라지나",
+        "publisher": "오렌지경제신문",
+        "date": "2025-03-21",
+        "url": "https://www.orangeecon.co.kr/article/2025/03/21/884201"
+      }
+    },
+    {
+      "id": "E08",
+      "file": "E08.pdf",
+      "tier": "T3",
+      "kind": "국책연구기관 연구보고서",
+      "pages": 2,
+      "meta": {
+        "authors": "오렌지환경정책연구원",
+        "year": "2024",
+        "title": "탄소중립 시나리오별 산업 파급효과 분석",
+        "publisher": "오렌지환경정책연구원",
+        "series": "연구보고서 2024-17",
+        "date": "2024-12",
+        "url": "https://www.oepi.orange.re.kr/report/2024-17"
+      }
+    }
+  ]
+}
