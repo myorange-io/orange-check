@@ -9,7 +9,8 @@ LLM 판단이 전혀 없다. 정답표와 리포트를 기계적으로 대조하
 
 실행:
   python3 benchmark/score.py report.json
-  python3 benchmark/score.py report.json --key benchmark/answer-key.json --json out.json
+  python3 benchmark/score.py report.json --bench bench-02
+  python3 benchmark/score.py report.json --key <정답표> --corpus <코퍼스> --json out.json
 """
 from __future__ import annotations
 
@@ -384,15 +385,24 @@ def render(res: dict) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("report", help="채점할 report.json")
-    ap.add_argument("--key", default=str(ROOT / "answer-key.json"))
-    ap.add_argument("--corpus", default=str(ROOT / "corpus"))
+    ap.add_argument("--bench", default="bench-01",
+                    help="어느 벤치마크의 정답표로 채점할지")
+    ap.add_argument("--key", help="정답표 경로(주면 --bench보다 우선)")
+    ap.add_argument("--corpus", help="코퍼스 경로(주면 --bench보다 우선)")
     ap.add_argument("--json", help="결과를 이 경로에 JSON으로 저장")
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args()
 
+    suffix = "" if a.bench == "bench-01" else f".{a.bench}"
+    key_path = Path(a.key) if a.key else ROOT / f"answer-key{suffix}.json"
+    corpus_path = Path(a.corpus) if a.corpus else ROOT / f"corpus{suffix}"
+    if not key_path.exists():
+        print(f"{key_path} 가 없다. python3 benchmark/build.py --bench {a.bench} 를 먼저 돌려라.",
+              file=sys.stderr)
+        return 1
     report = json.loads(Path(a.report).read_text(encoding="utf-8"))
-    key = json.loads(Path(a.key).read_text(encoding="utf-8"))
-    res = score(report, key, Path(a.corpus))
+    key = json.loads(key_path.read_text(encoding="utf-8"))
+    res = score(report, key, corpus_path)
     if a.json:
         Path(a.json).write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
     if not a.quiet:

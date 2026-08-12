@@ -4,9 +4,13 @@
 점수 없이 수정 없다. SKILL.md를 고쳤으면 벤치마크를 다시 돌리고 이 게이트를 통과해야 한다.
 점수가 떨어졌으면 회귀다. 되돌린다.
 
-  python3 tools/check.py                    전부 검사
-  python3 tools/check.py --score run-a      리포트 하나 채점하고 이력에 남긴다
-  python3 tools/check.py --promote run-a    이 결과를 새 기준선으로 삼는다
+  python3 tools/check.py                       전부 검사
+  python3 tools/check.py --score run-b          bench-01 리포트를 채점한다
+  python3 tools/check.py --score run-c --bench bench-02
+  python3 tools/check.py --promote run-b        이 결과를 그 벤치마크의 기준선으로 삼는다
+
+기준선은 벤치마크마다 따로 잡고, 총평은 평균으로 낸다. 한쪽만 좋아지고
+다른 쪽이 나빠지는 것을 총점 하나로 덮지 않기 위해서다.
 """
 from __future__ import annotations
 
@@ -20,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 BENCH = ROOT / "benchmark"
 RUNS = BENCH / "runs"
 BASELINE = RUNS / "baseline.json"
+BENCHES = ("bench-01", "bench-02")
 
 # 기준선 대비 이만큼 넘게 떨어지면 회귀로 본다. 모델 출력에는 실행마다 흔들림이 있다.
 TOLERANCE = 2.0
@@ -83,19 +88,32 @@ def score_path(name: str) -> Path:
     return RUNS / f"{name}.score.json"
 
 
-def score_report(name: str) -> dict:
+def score_report(name: str, bench: str = "bench-01") -> dict:
     rp, sp = RUNS / f"{name}.report.json", score_path(name)
     code, out = run([sys.executable, str(BENCH / "score.py"), str(rp),
-                     "--json", str(sp), "--quiet"])
+                     "--bench", bench, "--json", str(sp), "--quiet"])
     if code != 0:
         raise SystemExit(f"채점 실패: {out}")
-    return json.loads(sp.read_text(encoding="utf-8"))
+    res = json.loads(sp.read_text(encoding="utf-8"))
+    res["bench"] = bench
+    sp.write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
+    return res
+
+
+def load_baseline() -> dict:
+    """{bench: {run, score, ...}}. 예전 단일 형식도 읽어 준다."""
+    if not BASELINE.exists():
+        return {}
+    d = json.loads(BASELINE.read_text(encoding="utf-8"))
+    return d if "bench-01" in d or "bench-02" in d else {"bench-01": d}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--score", help="benchmark/runs/<이름>.report.json 을 채점한다")
     ap.add_argument("--promote", help="이 실행 결과를 기준선으로 삼는다")
+    ap.add_argument("--bench", default="bench-01", choices=list(BENCHES),
+                    help="어느 벤치마크로 채점할지")
     a = ap.parse_args()
     env = {"PYTHONPATH": str(ROOT / "core" / "toolkit")}
 
@@ -105,12 +123,14 @@ def main() -> int:
             print(f"{p} 가 없다. 먼저 --score {a.promote} 를 돌려라.", file=sys.stderr)
             return 1
         res = json.loads(p.read_text(encoding="utf-8"))
-        BASELINE.write_text(json.dumps(
-            {"run": a.promote, "score": res["score"],
-             "formula_version": res["formula_version"],
-             "components": res["components"]},
-            ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"기준선 갱신: {a.promote} = {res['score']:.2f}점")
+        bench = res.get("bench", a.bench)
+        base = load_baseline()
+        base[bench] = {"run": a.promote, "score": res["score"],
+                       "formula_version": res["formula_version"],
+                       "components": res["components"]}
+        BASELINE.write_text(json.dumps(base, ensure_ascii=False, indent=2), encoding="utf-8")
+        avg = sum(b["score"] for b in base.values()) / len(base)
+        print(f"기준선 갱신: {bench} = {res['score']:.2f}점 (전체 평균 {avg:.2f})")
         return 0
 
     print("회귀 게이트\n")
@@ -129,15 +149,22 @@ def main() -> int:
         if not rp.exists():
             print(f"\n{rp} 가 없다.", file=sys.stderr)
             return 1
-        print(f"\n채점: {a.score}")
-        res = score_report(a.score)
-        code, out = run([sys.executable, str(BENCH / "score.py"), str(rp)])
+        print(f"\n채점: {a.score}  [{a.bench}]")
+        res = score_report(a.score, a.bench)
+        code, out = run([sys.executable, str(BENCH / "score.py"), str(rp), "--bench", a.bench])
         print("\n".join("  " + l for l in out.strip().split("\n")))
-        if BASELINE.exists():
-            base = json.loads(BASELINE.read_text(encoding="utf-8"))
+        all_base = load_baseline()
+        base = all_base.get(a.bench)
+        if base:
             d = res["score"] - base["score"]
-            print(f"\n  기준선({base['run']}) {base['score']:.2f} → 이번 {res['score']:.2f} "
-                  f"({d:+.2f})")
+            print(f"\n  {a.bench} 기준선({base['run']}) {base['score']:.2f} → 이번 "
+                  f"{res['score']:.2f} ({d:+.2f})")
+            others = {k: v["score"] for k, v in all_base.items() if k != a.bench}
+            if others:
+                avg = (res["score"] + sum(others.values())) / (1 + len(others))
+                old = sum(v["score"] for v in all_base.values()) / len(all_base)
+                print(f"  전체 평균 {old:.2f} → {avg:.2f}  "
+                      f"({', '.join(f'{k} {v:.1f}' for k, v in others.items())} 포함)")
             if base.get("formula_version") != res.get("formula_version"):
                 print("  ⚠ 산식 버전이 달라 직접 비교할 수 없다. 기준선을 다시 잡아라.")
             elif d < -TOLERANCE:
@@ -150,7 +177,7 @@ def main() -> int:
                     if bv is not None and v - bv < -0.10:
                         print(f"    · {k}: {bv:.0%} → {v:.0%} — 총점은 유지됐지만 이 항목이 나빠졌다")
         else:
-            print("\n  기준선이 없다. --promote 로 이 결과를 기준선으로 삼을 수 있다.")
+            print(f"\n  {a.bench} 기준선이 없다. --promote 로 이 결과를 기준선으로 삼을 수 있다.")
 
     print()
     print("통과" if ok else "실패 — 위 항목을 고치기 전에는 배포하지 말 것")
