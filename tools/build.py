@@ -256,30 +256,46 @@ def build_profile(pf: Path, out_root: Path) -> dict:
             "skills": built, "package": prof.get("package", "dir"), "root": root}
 
 
-def make_zip(info: dict, out_dir: Path) -> Path | None:
+def make_zip(info: dict, out_dir: Path) -> list[Path]:
+    """zip을 쓰는 플랫폼용 패키지.
+
+    claude.ai 스킬 업로드는 **zip 하나당 스킬 하나**를 기대한다. 압축을 풀면
+    SKILL.md를 담은 폴더 하나가 나와야 한다. 여러 스킬을 한 겹 더 감싸 넣으면
+    업로드가 되지 않는다. 그래서 스킬마다 따로 만들고,
+    지침을 통째로 붙여 쓰는 환경을 위해 묶음 하나를 더 만든다.
+    """
     if info["package"] != "zip":
-        return None
+        return []
     out_dir.mkdir(parents=True, exist_ok=True)
-    z = out_dir / f"orange-check-{info['profile']}.zip"
-    with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED) as zf:
+    made = []
+    for skill in info["skills"]:
+        src = info["root"] / skill
+        z = out_dir / f"{skill}-{info['profile']}.zip"
+        with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED) as zf:
+            for p in sorted(src.rglob("*")):
+                if p.is_file():
+                    zf.write(p, str(Path(skill) / p.relative_to(src)))
+        made.append(z)
+    bundle = out_dir / f"orange-check-{info['profile']}-all.zip"
+    with zipfile.ZipFile(bundle, "w", zipfile.ZIP_DEFLATED) as zf:
         for p in sorted(info["root"].rglob("*")):
             if p.is_file():
-                # zip 안에서 최상위 폴더 하나로 열리게 한다
-                zf.write(p, str(Path("orange-check") / p.relative_to(info["root"])))
-    return z
+                zf.write(p, str(p.relative_to(info["root"])))
+    made.append(bundle)
+    return made
 
 
 def build_all(out_root: Path, quiet: bool = False) -> list[dict]:
     infos = []
     for pf in sorted(PLATFORMS.glob("*.yaml")):
         info = build_profile(pf, out_root)
-        z = make_zip(info, out_root / "packages")
-        info["zip"] = z
+        zs = make_zip(info, out_root / "packages")
+        info["zips"] = zs
         infos.append(info)
         if not quiet:
             n = sum(1 for _ in info["root"].rglob("*") if _.is_file())
             print(f"  {info['profile']:<14} 스킬 {len(info['skills'])}개 · 파일 {n}개"
-                  + (f" · {z.name}" if z else ""))
+                  + (f" · zip {len(zs)}개" if zs else ""))
     return infos
 
 

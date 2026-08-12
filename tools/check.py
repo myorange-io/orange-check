@@ -43,6 +43,30 @@ def gate(name: str, cmd: list[str], env: dict | None = None) -> bool:
     return ok
 
 
+def check_zip_layout() -> bool:
+    """스킬 zip은 풀었을 때 SKILL.md를 담은 폴더 하나가 나와야 한다.
+
+    claude.ai 스킬 업로드가 그 구조를 기대한다. 여러 스킬을 한 겹 더 감싸 넣으면
+    업로드 자체가 되지 않는다 — 한 번 그렇게 만들었다가 잡았다.
+    """
+    import zipfile
+    pk = ROOT / "dist" / "packages"
+    bad = []
+    for z in sorted(pk.glob("*.zip")):
+        if z.name.endswith("-all.zip"):
+            continue
+        with zipfile.ZipFile(z) as zf:
+            names = zf.namelist()
+        roots = {n.split("/")[0] for n in names}
+        skills = [n for n in names if n.count("/") == 1 and n.endswith("SKILL.md")]
+        if len(roots) != 1 or len(skills) != 1:
+            bad.append(f"{z.name}: 최상위 폴더 {sorted(roots)}, 1단계 SKILL.md {len(skills)}개")
+    print(f"  {'✓' if not bad else '✗'} 스킬 zip 구조 (풀면 SKILL.md 담은 폴더 하나)")
+    for b in bad:
+        print(f"      {b}")
+    return not bad
+
+
 def score_report(path: Path) -> dict:
     code, out = run([sys.executable, str(BENCH / "score.py"), str(path),
                      "--json", str(path.with_suffix(".score.json")), "--quiet"])
@@ -77,6 +101,7 @@ def main() -> int:
     ok = True
     ok &= gate("dist/ 가 코어에서 그대로 재생성된다", [sys.executable, "tools/build.py", "--check"])
     ok &= gate("도구상자 시험", [sys.executable, "core/toolkit/tests/test_toolkit.py"], env)
+    ok &= check_zip_layout()
     print("\n심판의 심판")
     ok &= gate("채점기 자기시험(공리 확인)", [sys.executable, "benchmark/selftest.py"], env)
     ok &= gate("벤치마크가 사양에서 재생성된다", [sys.executable, "benchmark/build.py"], env)

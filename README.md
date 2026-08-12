@@ -63,7 +63,11 @@ Claude Code · Claude 앱(Cowork) · OpenAI Codex · ChatGPT for Work 네 곳에
 | **Claude 앱 (Cowork·claude.ai)** | `orange-check-claude-app.zip` | 설정 → 기능에서 **코드 실행**을 켠 뒤, Cowork → 맞춤설정 → 스킬 → ＋ → 스킬 업로드 |
 | **Claude Code** | `dist/claude-code/` | `cp -R orange-check* ~/.claude/skills/` |
 | **OpenAI Codex** | `dist/codex/` | `cp -R orange-check* ~/.codex/skills/` |
-| **ChatGPT for Work** | `orange-check-chatgpt-work.zip` | `SKILL.md` 내용을 프로젝트 지침에 붙여 넣고, 문서와 **출처 원문을 함께** 첨부 |
+| **ChatGPT for Work** | `orange-check-chatgpt-work-all.zip` | `SKILL.md` 내용을 프로젝트 지침에 붙여 넣고, 문서와 **출처 원문을 함께** 첨부 |
+
+zip은 **스킬 하나당 하나**입니다 — 압축을 풀면 `SKILL.md`를 담은 폴더 하나가 나옵니다.
+claude.ai 업로드가 그 구조를 기대하기 때문입니다. 네 스킬을 다 쓰려면 zip 네 개를 각각
+올리거나, 지침을 통째로 붙여 쓰는 환경에서는 `-all.zip` 묶음을 씁니다.
 
 ### 사용
 
