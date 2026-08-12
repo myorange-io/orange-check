@@ -115,6 +115,60 @@ def test_safexml():
         check(ok, "경로를 벗어나는 ZIP 항목을 거부한다")
 
 
+def test_hml():
+    """HWPML — 법제처 고시·규정에서 흔한 XML 한글 문서."""
+    print("\nHWPML 판독")
+    from refver.hwp import read_hangul
+    doc = (b'<?xml version="1.0" encoding="utf-8"?>\n'
+           b'<!DOCTYPE HWPML [\n\t<!ENTITY nbsp\t"&#160;">\n]>\n'
+           b'<HWPML Version="2.1">'
+           b'<HEAD><DOCSUMMARY><TITLE>\xea\xb7\x9c\xec\xa0\x95</TITLE></DOCSUMMARY>'
+           b'<FOOTNOTESHAPE Type="1"/></HEAD>'
+           b'<BODY><SECTION>'
+           b'<P><TEXT><CHAR>\xec\xa0\x9c1\xec\xa1\xb0 \xeb\xaa\xa9\xec\xa0\x81&nbsp;\xec\x9d\xb4 \xea\xb7\x9c\xec\xa0\x95\xec\x9d\x80 268.5\xeb\xa7\x8c\xec\x9b\x90\xec\x9d\x84 \xec\xa0\x95\xed\x95\x9c\xeb\x8b\xa4.</CHAR></TEXT></P>'
+           b'<P><TEXT><CHAR>\xec\xa0\x9c2\xec\xa1\xb0 \xec\xa0\x81\xec\x9a\xa9</CHAR></TEXT>'
+           b'<FOOTNOTE Number="1"><P><TEXT><CHAR>\xea\xb0\x81\xec\xa3\xbc \xeb\x82\xb4\xec\x9a\xa9\xec\x9d\xb4\xeb\x8b\xa4.</CHAR></TEXT></P></FOOTNOTE></P>'
+           b'</SECTION></BODY></HWPML>')
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, "regulation.hwp")   # .hwp 확장자에 XML 내용 — 실제로 흔하다
+        open(p, "wb").write(doc)
+        units = read_hangul(p)
+        body = [u.text for u in units if u.part == "body"]
+        fn = [u.text for u in units if u.part == "footnote"]
+        check(len(body) == 2, f"본문 문단 2개 (실제 {len(body)})")
+        check(any("268.5만원" in t for t in body), "본문 수치가 나온다")
+        check(any(" " in t or "목적" in t for t in body), "&nbsp; 엔티티가 치환된다")
+        check(len(fn) == 1 and "각주" in fn[0], f"각주가 분리된다 (실제 {len(fn)}건)")
+        check(not any("각주" in t for t in body), "각주 글자가 본문에 섞이지 않는다")
+        check(not any("규정" == t for t in body), "HEAD의 제목·스타일은 본문에 들어오지 않는다")
+
+
+def test_doctype_safety():
+    """DTD를 처리하지 않고 제거하되, 문자 참조 엔티티만 받아들인다."""
+    print("\nDTD 안전 처리")
+    from refver.safexml import UnsafeDocument, defuse_doctype, fromstring
+
+    ok = defuse_doctype(b'<?xml version="1.0"?><!DOCTYPE X [<!ENTITY nbsp "&#160;">]><X>a&nbsp;b</X>')
+    check(b"<!DOCTYPE" not in ok, "DOCTYPE 선언이 제거된다")
+    check(b"&#160;" in ok and b"&nbsp;" not in ok, "문자 참조 엔티티가 치환된다")
+    check(fromstring(ok).text.startswith("a"), "치환 후 정상 파싱된다")
+
+    for name, bad in [
+        ("외부 참조(XXE)", b'<!DOCTYPE X SYSTEM "file:///etc/passwd"><X/>'),
+        ("중첩 엔티티(폭탄)", b'<!DOCTYPE X [<!ENTITY a "AA"><!ENTITY b "&a;&a;&a;">]><X>&b;</X>'),
+        ("외부 엔티티", b'<!DOCTYPE X [<!ENTITY e SYSTEM "http://x/e">]><X>&e;</X>'),
+    ]:
+        raised = None
+        try:
+            defuse_doctype(b'<?xml version="1.0"?>' + bad)
+        except Exception as exc:
+            raised = exc
+        check(isinstance(raised, UnsafeDocument), f"{name}를 거부한다")
+
+    plain = b"<a>no doctype</a>"
+    check(defuse_doctype(plain) == plain, "DTD가 없으면 그대로 둔다")
+
+
 def test_docx():
     print("\ndocx 판독 (벤치마크 문서)")
     path = os.path.join(os.path.dirname(os.path.dirname(HERE)), "..",
@@ -242,7 +296,9 @@ def test_judge():
 def main() -> int:
     print("refver 도구상자 시험")
     test_hwpx()
+    test_hml()
     test_safexml()
+    test_doctype_safety()
     test_docx()
     test_pdf()
     test_report()

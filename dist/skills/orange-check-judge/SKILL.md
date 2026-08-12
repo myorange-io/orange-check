@@ -1,3 +1,24 @@
+---
+name: orange-check-judge
+description: "참고문헌 검증 리포트가 얼마나 잘 됐는지 채점한다. 근거가 실제로 그 자리에 있는지 원문을 다시 열어 확인하고, 판정이 슬롯 표에서 규칙대로 나왔는지, 인용을 빠뜨리지 않았는지 검사한 뒤 남은 부분만 판단으로 채점한다. 검증 리포트 채점, 검증 품질 확인, 스킬 개선 요청에 쓴다."
+license: MIT
+metadata:
+  runtime-profile: universal
+  suite: orange-check
+  contract: refver-report/1.0
+---
+
+# Orange Check — 검증 심판
+
+스킬을 잘 만들려면 그 스킬이 몇 점짜리인지 재는 심판이 있어야 한다. 이 스킬이 그 심판이다.
+
+심판이 흔들리지 않게 하는 방법은 하나뿐이다. **판단해야 할 몫을 최대한 줄이는 것.**
+기계로 확인되는 것은 전부 기계에 넘기고, 남은 것만 판단한다.
+
+> 실행 환경: Claude Code · Claude 앱(Cowork) · OpenAI Codex · ChatGPT for Work
+
+---
+
 ## 1. 기계 점검을 먼저 돌린다 — 여기서 대부분이 끝난다
 
 ```python
@@ -56,3 +77,9 @@ gate       : PASS | REVIEW | FAIL   (기계 점검 결과 그대로)
 **심판 자신을 의심할 것.** 이 심판이 제대로 재는지는 벤치마크로 확인한다.
 `benchmark/`의 정답표가 있는 문서에 대해, 품질이 다른 리포트들의 순위가
 `score.py` 순위와 같아야 한다. 다르면 심판이 틀린 것이다.
+
+---
+
+## 참고 문서
+
+- `references/ref-report-contract.md` — 리포트 계약 (report.json)

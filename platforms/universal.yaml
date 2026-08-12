@@ -1,0 +1,22 @@
+profile: universal
+label: Claude Code · Claude 앱(Cowork) · OpenAI Codex · ChatGPT for Work
+
+# 네 플랫폼이 하나의 패키지를 함께 쓴다.
+#
+# 예전에는 플랫폼마다 SKILL.md를 따로 만들었다. 그런데 실제로 갈라진 내용은
+# 273줄 중 30줄뿐이었고, 그 30줄은 전부 **런타임 사실**이었다 — 셸이 되는가,
+# 코드가 인터넷에 나갈 수 있는가, 독립 에이전트를 띄울 수 있는가.
+#
+# 그런 것은 빌드 때 정할 일이 아니다. 조직 설정이나 샌드박스 정책이 문서와
+# 다를 수 있어서, 빌드 시점의 추측보다 실행 시점의 확인이 정확하다.
+# 그래서 스킬이 시작할 때 스스로 확인하고 맞춰 움직이게 했다.
+
+# 가장 빡빡한 제한에 맞춘다 — claude.ai가 200자다.
+description_max: 200
+
+# 네 플랫폼 검증기가 모두 받는 항목만 쓴다.
+# allowed-tools 는 Claude Code에서만 유효하고 claude.ai 업로드에서는 거부된다.
+# compatibility 는 Codex 검증기가 받지 않는다. 둘 다 없어도 동작에 지장이 없다.
+frontmatter_allow: [name, description, license, metadata]
+
+package: both

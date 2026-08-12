@@ -3,20 +3,14 @@
 여기서 놓친 인용은 영원히 검증되지 않는다. 참고문헌 목록만 보면 안 된다. 실제 문서에서
 인용의 상당수는 **각주·미주에만** 있고 목록에는 없다.
 
-<!--if:shell-->
-```bash
-python3 {{TOOLKIT}} read <문서> --summary   # 본문·각주·미주 건수 확인
-python3 {{TOOLKIT}} read <문서>             # 전수 추출
-```
-<!--endif-->
-<!--if:python_only-->
 ```python
-import sys; sys.path.insert(0, "{{TOOLKIT_DIR}}")
+import sys; sys.path.insert(0, "scripts")
 from refver.doc import read_document, summarize
 units = read_document("문서.docx")
 print(summarize(units))          # {'body': 43, 'footnote': 4, 'endnote': 4}
 ```
-<!--endif-->
+
+셸이 있으면 `python3 -m refver read <문서> --summary` 로도 된다.
 
 지원 형식: `.docx` `.pdf` `.hwp` `.hwpx` `.txt` `.md`.
 한글 문서는 의존성 없이 읽는다. HWPX는 각주·미주까지 분리되고, HWP 5.x 이진 파일은

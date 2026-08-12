@@ -4,37 +4,26 @@
 
 ### 2-1. 원문을 연다
 
-<!--if:net_scripts-->
 원문 PDF를 받아 기계로 판독한다. "바이너리라 못 읽는다"는 응답이 와도 포기하지 않는다.
-대부분 텍스트 레이어가 있고 요약 모델이 못 읽었을 뿐이다. 자세한 기법은 `references/pdf-and-deeplink-retrieval.md`.
-<!--endif-->
-<!--if:no_net_scripts-->
-이 환경에서는 코드가 인터넷에 나갈 수 없다. 0단계를 마친 뒤 **필요한 원문 목록을 한 번에**
-사용자에게 요청한다 — 출처명, 알고 있는 URL, 그 출처에 걸린 인용 번호를 함께 적어
-사용자가 무엇을 왜 올려야 하는지 알게 한다. 올라오지 않은 출처는 2단계를
-`INSUFFICIENT_EVIDENCE`로 남긴다. 원문 없이 판정을 지어내지 않는다.
-<!--endif-->
+대부분 텍스트 레이어가 있고 요약 모델이 못 읽었을 뿐이다. 자세한 기법은
+`references/pdf-and-deeplink-retrieval.md`.
+
+받아 오기가 **정책으로 막힌 환경이면**(앞의 환경 확인 참조) 사용자에게 원문을 요청한다.
+올라오지 않은 출처는 `INSUFFICIENT_EVIDENCE`다. 원문 없이 판정을 지어내지 않는다.
 
 검증 질문에는 **주체·시점·수치** 세 요소를 반드시 넣는다.
 나쁨: "이거 맞나?" / 좋음: "268.5만원이 '가구소득'인가 '처분가능소득'인가, 2024년 기준인가?"
 
 ### 2-2. 쪽·행 핀포인트 (의무)
 
-<!--if:shell-->
-```bash
-python3 {{TOOLKIT}} find <출처.pdf> "확인할 문장"      # 쪽·행. 쪽 경계를 넘어도 찾는다
-python3 {{TOOLKIT}} count <출처.pdf> 저소득 여성 가구주  # 전수 검색 — 0회는 부재의 증거
-python3 {{TOOLKIT}} grep <출처.pdf> '[0-9]+\.[0-9]%'  # 수치 훑기
-```
-<!--endif-->
-<!--if:python_only-->
 ```python
 from refver.pdf import page_lines, find, occurrences
 pages = page_lines("출처.pdf")
 find(pages, "확인할 문장")          # [{'page': 12, 'line': 8, ...}]
 occurrences(pages, "저소득")        # 0 이면 그 출처는 저소득을 다루지 않는다
 ```
-<!--endif-->
+
+셸이 있으면 `python3 -m refver find <pdf> "문장"` · `count <pdf> 저소득 …` · `grep <pdf> '[0-9]+\.[0-9]%'`.
 
 **부재도 증거다.** 출처 전문에 '한부모'가 0회라면 "저소득 한부모 여성" 주장은 그 출처로
 뒷받침되지 않는다(과확장). 확인한 검색어를 `absence_checked`에 남긴다.

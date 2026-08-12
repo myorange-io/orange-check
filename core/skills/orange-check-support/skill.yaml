@@ -7,7 +7,7 @@ description:
 intro: |
   **출처가 존재한다 ≠ 그 출처가 본문 주장을 뒷받침한다.** 이 스킬은 뒤쪽만 본다.
   서지 실존은 다루지 않는다 — 그건 `orange-check`의 1단계다.
-fragments: [30-slots, 40-support, 50-cove, 55-selfcheck]
+fragments: [05-probe, 30-slots, 40-support, 50-cove, 55-selfcheck]
 references: [ref-report-contract, ref-pdf-retrieval]
 outro: |
   ## 입력
