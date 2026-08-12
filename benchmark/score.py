@@ -34,13 +34,15 @@ WEIGHTS = {
     "pattern_accuracy": 0.05,
 }
 
-STAGE1 = {"PASS", "MISMATCH", "FAIL"}
-STAGE2 = {"SUPPORTED", "PARTIAL", "NOT_SUPPORTED", "NOT_APPLICABLE"}
-PATTERNS = {
+# 튜플이어야 한다. 집합을 순회하면 프로세스마다 순서가 달라져
+# 같은 입력에 다른 파일이 나오고, 회귀 게이트가 그것을 변경으로 잡는다.
+STAGE1 = ("PASS", "MISMATCH", "FAIL")
+STAGE2 = ("SUPPORTED", "PARTIAL", "NOT_SUPPORTED", "NOT_APPLICABLE")
+PATTERNS = (
     "none", "hallucinated", "biblio_mismatch", "overreach", "variable_name",
     "wrong_dataset", "number_error", "time_mismatch", "direction_only",
     "unsupported", "tier_violation",
-}
+)
 
 
 def norm(s) -> str:
@@ -72,10 +74,10 @@ def validate(report) -> list[str]:
             errs.append(f"{w}: claim(본문 주장 원문)이 비었음")
         s1 = c.get("stage1")
         if not isinstance(s1, dict) or s1.get("verdict") not in STAGE1:
-            errs.append(f"{w}.stage1.verdict가 {sorted(STAGE1)} 중 하나가 아님")
+            errs.append(f"{w}.stage1.verdict가 {list(STAGE1)} 중 하나가 아님")
         s2 = c.get("stage2")
         if not isinstance(s2, dict) or s2.get("verdict") not in STAGE2:
-            errs.append(f"{w}.stage2.verdict가 {sorted(STAGE2)} 중 하나가 아님")
+            errs.append(f"{w}.stage2.verdict가 {list(STAGE2)} 중 하나가 아님")
         if isinstance(s2, dict):
             ev = s2.get("evidence", [])
             if ev is not None and not isinstance(ev, list):

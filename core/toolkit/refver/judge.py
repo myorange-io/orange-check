@@ -20,6 +20,9 @@ from .report import SLOTS, validate
 
 # 규칙표 — core/methodology/30-slots.md 와 같은 내용이다.
 # 어느 칸이 어긋났는지로 판정이 결정된다.
+# 2단계 판정과 다른 축에서 붙는 유형 — 판정과 어긋나도 모순이 아니다.
+CROSS_STAGE = ("biblio_mismatch", "tier_violation", "hallucinated")
+
 SINGLE_SLOT_PATTERN = {
     "who": ("PARTIAL", "overreach"),
     "when": ("PARTIAL", "time_mismatch"),
@@ -45,6 +48,21 @@ def derive_verdict(slots: dict | None) -> tuple[str, str] | None:
     if len(bad) == 1:
         return SINGLE_SLOT_PATTERN.get(bad[0], ("PARTIAL", "unsupported"))
     return ("NOT_SUPPORTED", "unsupported")
+
+
+def _term(t) -> str:
+    """검색어에 붙은 주석을 떼어 낸다.
+
+    계약은 검색어만 적으라고 하지만, 실제로는 "치주질환 (S04 전문 0회)"처럼
+    설명을 붙여 오는 경우가 있다. 괄호 앞까지를 검색어로 본다.
+    """
+    s = str(t).strip()
+    for sep in (" (", "(", " —", " -", ":"):
+        i = s.find(sep)
+        if i > 0:
+            s = s[:i]
+            break
+    return s.strip()
 
 
 def _sources(corpus: str | None, sid: str) -> str | None:
@@ -99,25 +117,45 @@ def mechanical_audit(report: dict, corpus: str | None = None,
             else:
                 pin_ok += 1
 
-    # ── 부재: 0회라고 한 검색어가 정말 0회인가
+    # ── 부재: 0회라고 한 검색어가 정말 0회인가, 그리고 그 0회가 의미가 있는가
     for c in cits:
         s2 = c.get("stage2") or {}
         terms = s2.get("absence_checked") or []
         if not terms:
             continue
-        sid = next((ev.get("source_id") for ev in (s2.get("evidence") or [])
-                    if isinstance(ev, dict) and ev.get("source_id")), None)
-        sid = sid or (c.get("stage1") or {}).get("matched_source_id")
-        path = _sources(corpus, str(sid or ""))
-        if not path:
-            continue
-        if path not in cache:
-            cache[path] = page_lines(path)
-        for t in terms:
-            n = occurrences(cache[path], str(t))
-            if n:
-                flag(c.get("id"), "false_absence",
-                     f"'{t}'가 0회라고 했으나 {sid}에 {n}회 나온다", "blocker")
+        sids = {ev.get("source_id") for ev in (s2.get("evidence") or [])
+                if isinstance(ev, dict) and ev.get("source_id")}
+        sids.add((c.get("stage1") or {}).get("matched_source_id"))
+        sids.discard(None)
+        # 본문이 쓴 말 하나는 반드시 확인했어야 한다. 동의어까지 함께 훑는 것은
+        # 오히려 좋은 습관이므로(한부모·한 부모·편부모) 개별 검색어를 벌하지 않고,
+        # **본문에 걸리는 말이 하나도 없을 때만** 지적한다.
+        claim = norm(c.get("claim") or "")
+        if claim and not any(norm(_term(t)) and norm(_term(t)) in claim for t in terms):
+            flag(c.get("id"), "irrelevant_absence",
+                 f"부재를 확인한 말({', '.join(str(t) for t in terms[:4])}) 중 본문 주장에 나오는 것이 "
+                 "하나도 없다 — 본문이 쓰지도 않은 말이 출처에 없다는 건 근거가 아니다",
+                 "minor")
+        for raw in terms:
+            t = _term(raw)
+            if t != str(raw).strip():
+                # 설명이 붙어 있으면 무엇을 주장한 것인지 알 수 없다. 이때 0회라고
+                # 단정하고 반박하면 없는 문제를 지어내게 된다 — 심판의 헛다리는
+                # 놓치는 것보다 나쁘다. 형식을 지적하는 데서 멈춘다.
+                flag(c.get("id"), "annotated_absence_term",
+                     f"absence_checked에 설명이 붙어 있다: “{str(raw)[:50]}…”. "
+                     "검색어만 적고 설명은 note에 쓴다", "minor")
+                continue
+            for sid in sids:
+                path = _sources(corpus, str(sid))
+                if not path:
+                    continue
+                if path not in cache:
+                    cache[path] = page_lines(path)
+                n = occurrences(cache[path], t)
+                if n:
+                    flag(c.get("id"), "false_absence",
+                         f"'{t}'가 0회라고 했으나 {sid}에 {n}회 나온다", "blocker")
 
     # ── 도출: 슬롯 표에서 그 판정이 나오는가
     derivable = agree = 0
@@ -139,6 +177,34 @@ def mechanical_audit(report: dict, corpus: str | None = None,
             flag(c.get("id"), "verdict_not_derived",
                  f"슬롯 표대로면 {d[0]}({d[1]})인데 {got}({s2.get('pattern')})라고 적었고 사유도 없다",
                  "major")
+        # 판정이 맞아도 유형이 어긋날 수 있다 — 여기까지 봐야 '규칙에서 나왔다'가 성립한다
+        pat = s2.get("pattern")
+        if d[0] == got and pat and pat != d[1] and pat not in CROSS_STAGE:
+            flag(c.get("id"), "pattern_not_derived",
+                 f"슬롯 표대로면 유형이 {d[1]}인데 {pat}이라고 적었다", "minor")
+        if got == "SUPPORTED" and pat not in (None, "none") and pat not in CROSS_STAGE:
+            flag(c.get("id"), "pattern_contradicts_verdict",
+                 f"SUPPORTED인데 오류 유형 {pat}이 붙어 있다", "major")
+
+    # ── 대체 출처: 무엇을 하라는 것인지 밝혔는가
+    for c in cits:
+        rep = c.get("replacement")
+        bad2 = ((c.get("stage2") or {}).get("verdict") in ("PARTIAL", "NOT_SUPPORTED")
+                or (c.get("stage1") or {}).get("verdict") in ("MISMATCH", "FAIL")
+                or c.get("tier_violation"))
+        if not bad2:
+            continue
+        if not rep:
+            flag(c.get("id"), "no_replacement",
+                 "문제 인용인데 대체 출처도, 어떻게 하라는 말도 없다", "minor")
+            continue
+        act = rep.get("action")
+        if act not in ("replace", "fix_claim", "delete", "none_found"):
+            flag(c.get("id"), "replacement_action_missing",
+                 f"replacement.action이 없거나 알 수 없다: {act}", "minor")
+        elif act == "replace" and not (rep.get("citation") and rep.get("supports")):
+            flag(c.get("id"), "replacement_incomplete",
+                 "action=replace인데 어느 출처가 무엇으로 뒷받침하는지 비었다", "minor")
 
     # ── 전수: 문서에서 다시 뽑아 건수를 맞춘다
     coverage = None

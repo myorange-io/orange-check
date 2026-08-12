@@ -49,6 +49,7 @@
       },
       "tier_violation": false,
       "replacement": {
+        "action": "replace | fix_claim | delete | none_found",
         "citation": "기관, 연도, 제목", "tier": "T1",
         "url": "실제로 열어 본 URL", "supports": "이 출처의 어느 문장이 주장을 뒷받침하는가"
       }
@@ -67,5 +68,8 @@
 - `MISMATCH`면 `mismatch_fields`가 있어야 한다.
 - 원문을 못 구했으면 `INSUFFICIENT_EVIDENCE`. 그럴듯한 판정을 지어내지 않는다.
 - `id`는 1단계와 2단계가 같은 번호를 쓴다.
+- 문제 인용에는 `replacement.action`으로 무엇을 하라는 것인지 밝힌다.
+- `absence_checked`는 **검색어만** 담는다. `["치주질환", "치주", "잇몸"]` 처럼 적고,
+  설명은 `note`에 쓴다. 그중 최소 하나는 **본문 주장이 실제로 쓴 말**이어야 한다.
 
 `validate` 명령이 위 규칙을 기계로 검사한다. 통과하기 전에는 리포트를 내지 않는다.

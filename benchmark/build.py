@@ -408,14 +408,24 @@ def build_docx(spec: dict, doc_prose: dict, out: Path) -> dict:
     )
 
     out.parent.mkdir(parents=True, exist_ok=True)
+    # zip은 항목마다 현재 시각을 넣는다. 고정하지 않으면 같은 사양에서
+    # 매번 다른 바이트가 나와 회귀 게이트가 변경으로 잡는다.
+    stamp = (2026, 1, 1, 0, 0, 0)
+
+    def put(z, name, data):
+        info = zipfile.ZipInfo(name, date_time=stamp)
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o600 << 16
+        z.writestr(info, data)
+
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", content_types)
-        z.writestr("_rels/.rels", root_rels)
-        z.writestr("word/document.xml", document)
-        z.writestr("word/_rels/document.xml.rels", doc_rels)
-        z.writestr("word/footnotes.xml", notes_xml("footnote", footnotes))
-        z.writestr("word/endnotes.xml", notes_xml("endnote", endnotes))
-        z.writestr("word/settings.xml", settings)
+        put(z, "[Content_Types].xml", content_types)
+        put(z, "_rels/.rels", root_rels)
+        put(z, "word/document.xml", document)
+        put(z, "word/_rels/document.xml.rels", doc_rels)
+        put(z, "word/footnotes.xml", notes_xml("footnote", footnotes))
+        put(z, "word/endnotes.xml", notes_xml("endnote", endnotes))
+        put(z, "word/settings.xml", settings)
 
     missing = [c["id"] for c in spec["citations"] if c["id"] not in placed]
     for cid in missing:

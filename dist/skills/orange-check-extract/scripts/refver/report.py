@@ -205,8 +205,10 @@ def render(report: dict) -> str:
                 L.append(f"- 서지: {s1['note']}")
             rep = c.get("replacement")
             if rep:
-                L.append(f"- **대체 출처 제안**: {rep.get('citation','')} "
-                         f"({rep.get('tier','')}) {rep.get('url','')}")
+                act = {"replace": "대체 출처 제안", "fix_claim": "주장을 고칠 것",
+                       "delete": "인용을 지울 것", "none_found": "대체 출처를 찾지 못함"}
+                L.append(f"- **{act.get(rep.get('action'), '대체 출처 제안')}**: "
+                         f"{rep.get('citation','')} {rep.get('tier') or ''} {rep.get('url','')}".rstrip())
                 if rep.get("supports"):
                     L.append(f"  - 뒷받침 근거: {rep['supports']}")
             L.append("")

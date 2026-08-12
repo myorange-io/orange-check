@@ -292,6 +292,30 @@ def test_judge():
     check("notes_ignored" in kinds, "각주·미주를 통째로 빠뜨린 것을 잡는다")
     check(a["gate"] == "FAIL", f"치명 지적이 있으면 게이트가 FAIL이다 (실제 {a['gate']})")
 
+    # 판정은 맞는데 유형이 어긋난 경우 — 예전 심판은 이걸 보지 못했다
+    rep2 = {"schema_version": "refver-report/1.0", "document": {"filename": "x"},
+            "citations": [cit("G1", v2="SUPPORTED", pat="number_error",
+                              slots={"who": {"claimed": "노인", "source": "노인", "match": True}},
+                              ev=[{"source_id": "S03", "page": 2, "line": 5, "quote": real}])]}
+    k2 = {f["kind"] for f in mechanical_audit(rep2, corpus=corpus)["findings"]}
+    check("pattern_contradicts_verdict" in k2, "SUPPORTED에 오류 유형이 붙으면 잡는다")
+
+    # 심판의 헛다리 방지 — 설명이 붙은 검색어를 '0회라 주장했다'고 뒤집어씌우지 않는다
+    rep3 = {"schema_version": "refver-report/1.0", "document": {"filename": "x"},
+            "citations": [cit("G2", absence=["독거 (S03 전문 여러 번 등장)"],
+                              ev=[{"source_id": "S03", "page": 2, "line": 5, "quote": real}])]}
+    k3 = {f["kind"] for f in mechanical_audit(rep3, corpus=corpus)["findings"]}
+    check("false_absence" not in k3, "설명이 붙은 검색어를 거짓 부재로 몰지 않는다")
+    check("annotated_absence_term" in k3, "대신 형식만 지적한다")
+
+    # 동의어를 함께 훑는 것은 벌하지 않는다
+    rep4 = {"schema_version": "refver-report/1.0", "document": {"filename": "x"},
+            "citations": [cit("G3", claim="노인 우울증상 비율은 11.3%다.",
+                              absence=["우울증상", "우울감", "정신건강"],
+                              ev=[{"source_id": "S03", "page": 2, "line": 5, "quote": real}])]}
+    k4 = {f["kind"] for f in mechanical_audit(rep4, corpus=corpus)["findings"]}
+    check("irrelevant_absence" not in k4, "동의어를 함께 확인한 것은 벌하지 않는다")
+
 
 def main() -> int:
     print("refver 도구상자 시험")
