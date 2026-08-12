@@ -264,18 +264,19 @@ def make_zip(info: dict, out_dir: Path) -> list[Path]:
     업로드가 되지 않는다. 그래서 스킬마다 따로 만들고,
     지침을 통째로 붙여 쓰는 환경을 위해 묶음 하나를 더 만든다.
     """
-    if info["package"] != "zip":
-        return []
     out_dir.mkdir(parents=True, exist_ok=True)
     made = []
-    for skill in info["skills"]:
-        src = info["root"] / skill
-        z = out_dir / f"{skill}-{info['profile']}.zip"
-        with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED) as zf:
-            for p in sorted(src.rglob("*")):
-                if p.is_file():
-                    zf.write(p, str(Path(skill) / p.relative_to(src)))
-        made.append(z)
+    # 스킬별 zip은 업로드로 설치하는 환경에만 필요하다.
+    # 폴더째 복사하는 환경(Claude Code·Codex)에는 묶음 하나면 된다.
+    if info["package"] == "zip":
+        for skill in info["skills"]:
+            src = info["root"] / skill
+            z = out_dir / f"{skill}-{info['profile']}.zip"
+            with zipfile.ZipFile(z, "w", zipfile.ZIP_DEFLATED) as zf:
+                for p in sorted(src.rglob("*")):
+                    if p.is_file():
+                        zf.write(p, str(Path(skill) / p.relative_to(src)))
+            made.append(z)
     bundle = out_dir / f"orange-check-{info['profile']}-all.zip"
     with zipfile.ZipFile(bundle, "w", zipfile.ZIP_DEFLATED) as zf:
         for p in sorted(info["root"].rglob("*")):
