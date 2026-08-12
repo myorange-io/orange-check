@@ -169,6 +169,59 @@ def test_doctype_safety():
     check(defuse_doctype(plain) == plain, "DTD가 없으면 그대로 둔다")
 
 
+def test_hwpx_roundtrip():
+    """벤치마크 빌더가 쓴 HWPX를 도구상자가 읽어 내는가.
+
+    한글 문서를 검증하겠다면서 HWPX 경로를 손으로 만든 픽스처로만 시험하면,
+    실제로 쓰이는 모양과 어긋나도 모른다. 빌더가 쓴 것을 그대로 읽어 본다.
+    """
+    print("\nHWPX 쓰기→읽기 왕복")
+    root = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(HERE)), ".."))
+    bench = os.path.join(root, "benchmark")
+    if not os.path.exists(os.path.join(bench, "build.py")):
+        print("  · 빌더가 없어 건너뜀")
+        return
+    sys.path.insert(0, bench)
+    try:
+        import build as B
+    except Exception as exc:
+        print(f"  · 빌더를 불러올 수 없어 건너뜀 ({type(exc).__name__})")
+        return
+
+    spec = {
+        "document": {"title": "시험 문서", "author": "시험", "date": "2025-01", "format": "hwpx"},
+        "sources": [{"id": "E01", "tier": "T2", "meta": {
+            "authors": "오렌지환경정책연구원", "year": "2025",
+            "title": "2023년 국가 온실가스 인벤토리 보고서", "url": "https://x.example/a"}}],
+        "citations": [
+            {"id": "D01", "placement": "body", "claim": "총배출량은 전년보다 5.8% 줄었다.", "cites": "E01"},
+            {"id": "D02", "placement": "footnote", "claim": "폐기물 부문의 불확도가 가장 크다.", "cites": "E01"},
+            {"id": "D03", "placement": "endnote", "claim": "흡수원은 반영하지 않았다.", "cites": "E01"},
+        ]}
+    prose = {"title": "시험 문서", "sections": [{"heading": "1. 서론", "blocks": [
+        {"text": "들어가며. 총배출량은 전년보다 5.8% 줄었다. 뒤 문장.", "citation_ids": ["D01"]},
+        {"text": "폐기물 부문의 불확도가 가장 크다. 해석에 주의가 필요하다.", "citation_ids": ["D02"]},
+        {"text": "끝으로. 흡수원은 반영하지 않았다.", "citation_ids": ["D03"]}]}]}
+
+    with tempfile.TemporaryDirectory() as d:
+        out = os.path.join(d, "t.hwpx")
+        B.FAILURES.clear()
+        B.build_hwpx(spec, prose, __import__("pathlib").Path(out))
+        check(not B.FAILURES, f"빌드에 위반이 없다 ({B.FAILURES[:1]})")
+        units = read_document(out)
+        body = [u.text for u in units if u.part == "body"]
+        fn = [u.text for u in units if u.part == "footnote"]
+        en = [u.text for u in units if u.part == "endnote"]
+        check(all(any(c["claim"] in b for b in body) for c in spec["citations"]),
+              "주장 세 건이 모두 본문에서 축자로 나온다")
+        check(len(fn) == 1 and "인벤토리" in fn[0], f"각주가 분리된다 ({len(fn)}건)")
+        check(len(en) == 1 and "인벤토리" in en[0], f"미주가 분리된다 ({len(en)}건)")
+        check(not any("오렌지환경정책연구원" in b for b in body[:3]),
+              "각주 글자가 본문 문단에 섞이지 않는다")
+        check(any("(오렌지환경정책연구원, 2025)" in b for b in body),
+              "본문 인용 표시가 삽입된다")
+
+
 def test_docx():
     print("\ndocx 판독 (벤치마크 문서)")
     path = os.path.join(os.path.dirname(os.path.dirname(HERE)), "..",
@@ -323,6 +376,7 @@ def main() -> int:
     test_hml()
     test_safexml()
     test_doctype_safety()
+    test_hwpx_roundtrip()
     test_docx()
     test_pdf()
     test_report()
