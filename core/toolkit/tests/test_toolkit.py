@@ -184,6 +184,61 @@ def test_report():
     check("report.json에서 만들어졌다" in md, "손으로 고치지 말라는 안내가 들어간다")
 
 
+def test_judge():
+    """심판의 기계 점검이 흠을 실제로 잡는지 — 흠을 심어 확인한다."""
+    print("\n심판 기계 점검")
+    base = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(HERE)), ".."))
+    corpus = os.path.join(base, "benchmark", "corpus")
+    doc = os.path.join(base, "benchmark", "docs", "bench-01.docx")
+    if not os.path.isdir(corpus):
+        print("  · 코퍼스가 없어 건너뜀")
+        return
+    from refver.judge import derive_verdict, mechanical_audit
+
+    check(derive_verdict({"who": {"match": True}, "value": {"match": True}}) == ("SUPPORTED", "none"),
+          "슬롯이 전부 일치하면 SUPPORTED가 도출된다")
+    check(derive_verdict({"value": {"match": False}, "who": {"match": True}})[0] == "NOT_SUPPORTED",
+          "VALUE가 어긋나면 NOT_SUPPORTED가 도출된다")
+    check(derive_verdict({"who": {"match": False}, "value": {"match": True}}) == ("PARTIAL", "overreach"),
+          "WHO만 어긋나면 PARTIAL/과확장이 도출된다")
+    check(derive_verdict({"what": {"match": False}, "value": {"match": True}}) == ("PARTIAL", "variable_name"),
+          "WHAT만 어긋나면 PARTIAL/지표명 오기가 도출된다")
+
+    def cit(cid, **kw):
+        d = {"id": cid, "claim": kw.get("claim", "어떤 주장이다."), "doc_locator": "body:1",
+             "cited_source": {"authors": "오렌지국 복지부", "year": "2024", "title": "노인실태조사"},
+             "stage1": {"verdict": "PASS", "tier": "T2", "matched_source_id": kw.get("sid", "S03")},
+             "stage2": {"verdict": kw.get("v2", "SUPPORTED"), "pattern": kw.get("pat", "none"),
+                        "evidence": kw.get("ev", []), "slots": kw.get("slots")},
+             "tier_violation": False}
+        if kw.get("absence"):
+            d["stage2"]["absence_checked"] = kw["absence"]
+        return d
+
+    real = "단축형 노인우울척도(SGDS-K) 기준 우울증상을 보이는 노인의 비율은 11.3%였다."
+    rep = {"schema_version": "refver-report/1.0", "document": {"filename": "bench-01.docx"},
+           "citations": [
+               cit("F1", ev=[{"source_id": "S03", "page": 1, "line": 9,
+                              "quote": "이 문장은 어떤 출처에도 없다."}]),
+               cit("F2", ev=[{"source_id": "S03", "page": 9, "line": 1, "quote": real}]),
+               cit("F3", sid="S01", absence=["양육비"],
+                   ev=[{"source_id": "S01", "page": 2, "line": 20,
+                        "quote": "양육비를 한 번도 받지 못했다고 응답한 비율은 72.1%였다."}]),
+               cit("F4", v2="PARTIAL", pat="overreach",
+                   slots={"who": {"claimed": "노인", "source": "노인", "match": True},
+                          "value": {"claimed": "11.3%", "source": "11.3%", "match": True}},
+                   ev=[{"source_id": "S03", "page": 2, "line": 5, "quote": real}]),
+           ]}
+    a = mechanical_audit(rep, corpus=corpus, document=doc)
+    kinds = {f["kind"] for f in a["findings"]}
+    check("fabricated_evidence" in kinds, "지어낸 근거를 잡는다")
+    check("wrong_page" in kinds, "틀린 쪽 번호를 잡는다")
+    check("false_absence" in kinds, "거짓 부재 주장을 잡는다")
+    check("verdict_not_derived" in kinds, "슬롯 표에서 도출되지 않는 판정을 잡는다")
+    check("notes_ignored" in kinds, "각주·미주를 통째로 빠뜨린 것을 잡는다")
+    check(a["gate"] == "FAIL", f"치명 지적이 있으면 게이트가 FAIL이다 (실제 {a['gate']})")
+
+
 def main() -> int:
     print("refver 도구상자 시험")
     test_hwpx()
@@ -191,6 +246,7 @@ def main() -> int:
     test_docx()
     test_pdf()
     test_report()
+    test_judge()
     print()
     if FAILS:
         print(f"실패 {len(FAILS)}건")
