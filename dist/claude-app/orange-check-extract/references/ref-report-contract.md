@@ -31,7 +31,7 @@
       },
       "stage2": {
         "verdict": "SUPPORTED | PARTIAL | NOT_SUPPORTED | NOT_APPLICABLE | INSUFFICIENT_EVIDENCE",
-        "pattern": "none | hallucinated | biblio_mismatch | overreach | variable_name | wrong_dataset | number_error | time_mismatch | unsupported | tier_violation",
+        "pattern": "none | hallucinated | biblio_mismatch | overreach | variable_name | wrong_dataset | number_error | time_mismatch | direction_only | unsupported | tier_violation",
         "slots": {
           "who":     {"claimed": "저소득 한부모 여성", "source": "한부모가족 전체", "match": false},
           "when":    {"claimed": "2024년", "source": "2024년", "match": true},

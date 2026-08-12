@@ -13,7 +13,8 @@ SCHEMA_VERSION = "refver-report/1.0"
 STAGE1 = ("PASS", "MISMATCH", "FAIL", "UNVERIFIABLE")
 STAGE2 = ("SUPPORTED", "PARTIAL", "NOT_SUPPORTED", "NOT_APPLICABLE", "INSUFFICIENT_EVIDENCE")
 PATTERNS = ("none", "hallucinated", "biblio_mismatch", "overreach", "variable_name",
-            "wrong_dataset", "number_error", "time_mismatch", "unsupported", "tier_violation")
+            "wrong_dataset", "number_error", "time_mismatch", "direction_only",
+            "unsupported", "tier_violation")
 TIERS = ("T1", "T2", "T3", "T4", "T5")
 SLOTS = ("who", "when", "what", "value", "dataset", "relation")
 
@@ -26,7 +27,8 @@ PATTERN_KO = {
     "none": "—", "hallucinated": "환각 출처", "biblio_mismatch": "서지 오기",
     "overreach": "과확장", "variable_name": "지표명 오기", "wrong_dataset": "자료원 불일치",
     "number_error": "수치 오기", "time_mismatch": "시점 불일치",
-    "unsupported": "출처가 다루지 않음", "tier_violation": "등급 규칙 위반",
+    "direction_only": "방향만 맞음", "unsupported": "출처가 다루지 않음",
+    "tier_violation": "등급 규칙 위반",
 }
 
 

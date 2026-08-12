@@ -67,12 +67,17 @@ def check_zip_layout() -> bool:
     return not bad
 
 
-def score_report(path: Path) -> dict:
-    code, out = run([sys.executable, str(BENCH / "score.py"), str(path),
-                     "--json", str(path.with_suffix(".score.json")), "--quiet"])
+def score_path(name: str) -> Path:
+    return RUNS / f"{name}.score.json"
+
+
+def score_report(name: str) -> dict:
+    rp, sp = RUNS / f"{name}.report.json", score_path(name)
+    code, out = run([sys.executable, str(BENCH / "score.py"), str(rp),
+                     "--json", str(sp), "--quiet"])
     if code != 0:
         raise SystemExit(f"채점 실패: {out}")
-    return json.loads(path.with_suffix(".score.json").read_text(encoding="utf-8"))
+    return json.loads(sp.read_text(encoding="utf-8"))
 
 
 def main() -> int:
@@ -83,7 +88,7 @@ def main() -> int:
     env = {"PYTHONPATH": str(ROOT / "core" / "toolkit")}
 
     if a.promote:
-        p = RUNS / f"{a.promote}.score.json"
+        p = score_path(a.promote)
         if not p.exists():
             print(f"{p} 가 없다. 먼저 --score {a.promote} 를 돌려라.", file=sys.stderr)
             return 1
@@ -112,7 +117,7 @@ def main() -> int:
             print(f"\n{rp} 가 없다.", file=sys.stderr)
             return 1
         print(f"\n채점: {a.score}")
-        res = score_report(rp)
+        res = score_report(a.score)
         code, out = run([sys.executable, str(BENCH / "score.py"), str(rp)])
         print("\n".join("  " + l for l in out.strip().split("\n")))
         if BASELINE.exists():

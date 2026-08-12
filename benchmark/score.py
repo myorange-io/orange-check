@@ -38,7 +38,8 @@ STAGE1 = {"PASS", "MISMATCH", "FAIL"}
 STAGE2 = {"SUPPORTED", "PARTIAL", "NOT_SUPPORTED", "NOT_APPLICABLE"}
 PATTERNS = {
     "none", "hallucinated", "biblio_mismatch", "overreach", "variable_name",
-    "wrong_dataset", "number_error", "time_mismatch", "unsupported", "tier_violation",
+    "wrong_dataset", "number_error", "time_mismatch", "direction_only",
+    "unsupported", "tier_violation",
 }
 
 
