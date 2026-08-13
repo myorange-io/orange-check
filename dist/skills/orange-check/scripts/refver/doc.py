@@ -44,13 +44,17 @@ def read_docx(path: str) -> list[Unit]:
                     text = "".join(t.text or "" for t in p.iter(f"{W}t"))
                     links = [rels[h.get(f"{R}id")] for h in p.iter(f"{W}hyperlink")
                              if h.get(f"{R}id") in rels]
+                    notes = _docx_note_refs(p) if part == "body" else []
                     if not text.strip() and not links:
                         continue
                     idx += 1
-                    units.append(Unit(
-                        text=text.strip(), part=part, index=idx, note_id=note_id,
-                        meta={"hyperlinks": links} if links else {},
-                    ))
+                    meta = {}
+                    if links:
+                        meta["hyperlinks"] = links
+                    if notes:
+                        meta["notes"] = notes
+                    units.append(Unit(text=text.strip(), part=part, index=idx,
+                                      note_id=note_id, meta=meta))
 
         if "word/document.xml" in names:
             paragraphs(z.read("word/document.xml"), "body")
@@ -59,6 +63,27 @@ def read_docx(path: str) -> list[Unit]:
         if "word/endnotes.xml" in names:
             paragraphs(z.read("word/endnotes.xml"), "endnote", id_attr=f"{W}id")
     return units
+
+
+def _docx_note_refs(para) -> list[dict]:
+    """각주·미주 표시가 문단의 **어느 글자 위치**에 붙어 있는지 찾는다.
+
+    이게 없으면 각주가 그 문단 어디에 달렸는지 알 수 없다. 문단 끝에 달린
+    것처럼 보여서, 실제로는 첫 문장에 달린 각주를 통째로 놓치게 된다.
+    실측에서 이 때문에 인용 두 건을 놓쳤다.
+    """
+    out, pos = [], 0
+    for node in para.iter():
+        tag = node.tag
+        if tag == f"{W}t":
+            pos += len(node.text or "")
+        elif tag in (f"{W}footnoteReference", f"{W}endnoteReference"):
+            out.append({
+                "kind": "footnote" if tag.endswith("footnoteReference") else "endnote",
+                "id": node.get(f"{W}id"),
+                "after_chars": pos,
+            })
+    return out
 
 
 # ──────────────────────────────────────────────────────────────────── pdf

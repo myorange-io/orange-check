@@ -140,6 +140,32 @@ class PdfWriter:
             self._raw(subtitle, self.font, FS_BODY, color=(0.3, 0.3, 0.3))
         self.y += 10.0
 
+    def table(self, caption: str, rows: list[list[str]]) -> None:
+        """표를 칸 맞춘 텍스트 줄로 그린다.
+
+        실제 보고서는 통계를 표에 담는다. 산문만으로 만든 코퍼스는 그 상황을
+        시험하지 못한다. PDF에서 표는 결국 줄 단위 텍스트로 추출되므로,
+        여기서도 줄로 그리되 칸을 공백으로 맞춘다. 대조는 공백을 지우고 하므로
+        사양에는 `"산업 부문 2,318 2,241"`처럼 칸을 한 칸씩 띄워 적으면 된다.
+        """
+        widths = [max(len(str(r[i])) for r in rows) for i in range(len(rows[0]))]
+        self._ensure(LINE_H * (len(rows) + 3))
+        self.y += 4.0
+        if caption:
+            self._ensure()
+            self._raw(caption, self.font, FS_BODY)
+        for idx, row in enumerate(rows):
+            cells = [str(c).ljust(widths[i] + 2) for i, c in enumerate(row)]
+            self._ensure()
+            self._raw("  " + "".join(cells).rstrip(), self.font, FS_BODY)
+            if idx == 0:
+                self._ensure()
+                # 구분선은 ASCII로 긋는다. U+2500은 영문 폰트가 그리지 못해
+                # 그 줄이 통째로 사라지고, 삽입 줄 수와 추출 줄 수가 어긋난다.
+                self._raw("  " + "-" * min(60, sum(widths) + 2 * len(widths)),
+                          self.font, FS_BODY, color=(0.4, 0.4, 0.4))
+        self.y += 5.0
+
     def save(self, path: Path) -> None:
         # 같은 사양에서 같은 바이트가 나와야 한다. 그러지 않으면 게이트를 돌릴
         # 때마다 코퍼스가 바뀐 것으로 잡혀 진짜 변경을 가린다.
@@ -159,10 +185,16 @@ def build_source_pdf(src: dict, prose: dict, watermark: str, out: Path) -> dict:
     m = src["meta"]
     sub = " · ".join(x for x in [m.get("publisher"), m.get("series"), m.get("date")] if x)
     w.title(m["title"], sub)
+    tables = {t["section"]: t for t in (src.get("tables") or [])}
     for sec in prose["sections"]:
         w.heading(sec["heading"])
         for para in sec["paragraphs"]:
             w.block(para)
+        t = tables.pop(sec["heading"], None)
+        if t:
+            w.table(t.get("caption", ""), t["rows"])
+    for t in tables.values():
+        fail(f"{src['id']}: 표를 붙일 절 '{t['section']}'이 산문에 없다")
     w.save(out)
 
     # 재추출로 삽입 순서 == 추출 순서 확인
@@ -433,6 +465,120 @@ def build_docx(spec: dict, doc_prose: dict, out: Path) -> dict:
     return note_map
 
 
+HWPX_NS = ('xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" '
+           'xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph"')
+
+
+def build_hwpx(spec: dict, doc_prose: dict, out: Path) -> dict:
+    """벤치마크 문서를 HWPX(ZIP+OWPML)로 쓴다.
+
+    한글 문서를 검증하겠다면서 벤치마크 문서가 docx뿐이면, HWPX 판독 경로는
+    합성 픽스처로만 시험된다. 실제 문서를 만들어 왕복시킨다.
+    """
+    src_by_id = {s["id"]: s for s in spec["sources"]}
+    cit_by_id = {c["id"]: c for c in spec["citations"]}
+
+    def cited_meta(c: dict) -> dict:
+        if c.get("fabricated_source"):
+            return dict(c["fabricated_source"])
+        m = dict(src_by_id[c["cites"]]["meta"])
+        m.update(c.get("cited_meta_override") or {})
+        return m
+
+    def t(text: str) -> str:
+        return f"<hp:run><hp:t>{escape(text)}</hp:t></hp:run>"
+
+    body: list[str] = []
+    note_map: dict[str, tuple[str, int]] = {}
+    placed: set[str] = set()
+    fn_id = en_id = 1
+
+    body.append(f"<hp:p>{t(spec['document']['title'])}</hp:p>")
+    body.append(f"<hp:p>{t(spec['document']['author'] + ' · ' + spec['document']['date'])}</hp:p>")
+
+    for sec in doc_prose["sections"]:
+        body.append(f"<hp:p>{t(sec['heading'])}</hp:p>")
+        for blk in sec["blocks"]:
+            text, runs, cursor = blk["text"], [], 0
+            for cid in blk.get("citation_ids", []):
+                c = cit_by_id.get(cid)
+                if c is None:
+                    fail(f"문서 산문이 알 수 없는 인용 id를 참조: {cid}")
+                    continue
+                pos = text.find(c["claim"], cursor)
+                if pos == -1:
+                    continue
+                end = pos + len(c["claim"])
+                runs.append(t(text[cursor:end]))
+                meta = cited_meta(c)
+                if c["placement"] == "body":
+                    runs.append(t(inline_marker(meta)))
+                else:
+                    kind = "footNote" if c["placement"] == "footnote" else "endNote"
+                    nid = fn_id if c["placement"] == "footnote" else en_id
+                    runs.append(
+                        f'<hp:run><hp:{kind} number="{nid}"><hp:subList>'
+                        f"<hp:p>{t(format_ref(meta))}</hp:p>"
+                        f"</hp:subList></hp:{kind}></hp:run>")
+                    note_map[cid] = (c["placement"], nid)
+                    if c["placement"] == "footnote":
+                        fn_id += 1
+                    else:
+                        en_id += 1
+                placed.add(cid)
+                cursor = end
+            runs.append(t(text[cursor:]))
+            body.append("<hp:p>" + "".join(runs) + "</hp:p>")
+
+    body.append(f"<hp:p>{t('참고문헌')}</hp:p>")
+    seen: set[str] = set()
+    for c in spec["citations"]:
+        if c["placement"] != "body":
+            continue
+        meta = cited_meta(c)
+        ref = format_ref(meta)
+        if ref in seen:
+            continue
+        seen.add(ref)
+        url = meta.get("url")
+        body.append(f"<hp:p>{t('· ' + ref + (' ' + url if url else ''))}</hp:p>")
+
+    section = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+               f'<hs:sec {HWPX_NS}>' + "".join(body) + "</hs:sec>")
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    stamp = (2026, 1, 1, 0, 0, 0)
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+        def put(name: str, data: str) -> None:
+            info = zipfile.ZipInfo(name, date_time=stamp)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, data)
+        put("mimetype", "application/hwp+zip")
+        put("META-INF/container.xml",
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<container xmlns="urn:hancom:names:tc:opendocument:xmlns:container">'
+            '<rootfiles><rootfile full-path="Contents/content.hpf"/></rootfiles></container>')
+        put("Contents/content.hpf",
+            '<?xml version="1.0" encoding="UTF-8"?><opf:package '
+            'xmlns:opf="http://www.idpf.org/2007/opf/"><opf:spine>'
+            '<opf:itemref idref="section0"/></opf:spine></opf:package>')
+        put("Contents/header.xml",
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<hh:head xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" version="1.31"/>')
+        put("Contents/section0.xml", section)
+
+    missing = [c["id"] for c in spec["citations"] if c["id"] not in placed]
+    for cid in missing:
+        fail(f"주장 문장이 문서에 배치되지 않음: {cid}")
+    return note_map
+
+
+def hwpx_text(path: Path) -> dict[str, str]:
+    with zipfile.ZipFile(path) as z:
+        raw = z.read("Contents/section0.xml").decode("utf-8")
+    return {"Contents/section0.xml": re.sub(r"<[^>]+>", "", raw)}
+
+
 def docx_text(path: Path) -> dict[str, str]:
     with zipfile.ZipFile(path) as z:
         parts = {}
@@ -472,6 +618,13 @@ def overlap_score(claim: str, evidence: str) -> int:
 
 # ─────────────────────────────────────────────────────────────────── main
 
+def _is_control(c: dict) -> bool:
+    """정답이 무결한 인용 — 여기를 지적하면 오탐이다."""
+    e = c["expected"]
+    return (e["stage1"] == "PASS" and e["stage2"] == "SUPPORTED"
+            and not e.get("tier_violation"))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench", default="bench-01")
@@ -483,7 +636,8 @@ def main() -> int:
     prose_dir = ROOT / "spec" / "prose"
     watermark = spec["world"]["watermark"]
 
-    corpus_dir = ROOT / "corpus"
+    suffix = "" if args.bench == "bench-01" else f".{args.bench}"
+    corpus_dir = ROOT / f"corpus{suffix}"
     if corpus_dir.exists():
         shutil.rmtree(corpus_dir)
     corpus_dir.mkdir(parents=True)
@@ -528,15 +682,93 @@ def main() -> int:
 
     print("── 벤치마크 문서 조립")
     doc_prose = json.loads((prose_dir / f"{args.bench}.doc.json").read_text(encoding="utf-8"))
-    docx_path = ROOT / "docs" / f"{args.bench}.docx"
-    note_map = build_docx(spec, doc_prose, docx_path)
-
-    parts = docx_text(docx_path)
+    fmt = (spec["document"].get("format") or "docx").lower()
+    doc_path = ROOT / "docs" / f"{args.bench}.{fmt}"
+    if fmt == "hwpx":
+        note_map = build_hwpx(spec, doc_prose, doc_path)
+        parts = hwpx_text(doc_path)
+    else:
+        note_map = build_docx(spec, doc_prose, doc_path)
+        parts = docx_text(doc_path)
+    print(f"  형식 {fmt} → {doc_path.name}")
     whole = norm("".join(parts.values()))
     for c in spec["citations"]:
         n = whole.count(norm(c["claim"]))
         if n != 1:
             fail(f"{c['id']}: 주장 문장이 문서에 {n}회 등장(1회여야 함)")
+
+    print("── 정답이 규칙표에서 도출되는지 확인")
+    # 정답표가 스킬이 따르는 규칙표와 어긋나면 벤치마크가 불공정해진다.
+    # 규칙대로 답한 리포트가 오답 처리되기 때문이다. 같은 함수로 검사한다.
+    import sys as _sys
+    _sys.path.insert(0, str(ROOT.parent / "core" / "toolkit"))
+    try:
+        from refver.judge import derive_verdict
+    except ImportError:
+        print("  · refver를 불러올 수 없어 건너뜀")
+    else:
+        checked = 0
+        for c in spec["citations"]:
+            exp = c["expected"]
+            if exp["stage2"] in ("NOT_APPLICABLE", "INSUFFICIENT_EVIDENCE"):
+                continue
+            wrong = c.get("multi_slots") or (
+                [exp["corrupted_slot"]] if exp.get("corrupted_slot") else [])
+            if exp["pattern"] == "unsupported" and not wrong:
+                wrong = ["what"]
+            slots = {k: {"match": k not in wrong}
+                     for k in ("who", "when", "what", "value", "dataset", "relation")}
+            d = derive_verdict(slots, has_evidence=bool(c.get("evidence_fid")))
+            checked += 1
+            if d[0] != exp["stage2"]:
+                fail(f"{c['id']}: 규칙표대로면 {d[0]}인데 정답표는 {exp['stage2']}다")
+            elif d[1] != exp["pattern"] and exp["pattern"] not in (
+                    "none", "biblio_mismatch", "tier_violation"):
+                fail(f"{c['id']}: 규칙표대로면 유형이 {d[1]}인데 정답표는 {exp['pattern']}다")
+        print(f"  {checked}건 확인")
+
+    print("── 근거가 그 주장의 근거가 맞는지 확인")
+    # 사실이 코퍼스에 있다는 것만으로는 부족하다. 그 사실이 **그 주장의** 근거여야 한다.
+    # 표가 있는 출처에서 인용마다 다른 행을 가리키는데 사실을 하나만 두면,
+    # 엉뚱한 행이 근거로 달려도 빌드는 통과한다.
+    num_re = re.compile(r"\d[\d,]*\.?\d*")
+    year_re = re.compile(r"^(?:19|20)\d{2}$")
+
+    def values(text: str) -> set:
+        """연도는 뺀다 — 어느 문장에나 있어서 우연히 겹치고, 그러면 검사가 무력해진다."""
+        return {x for x in num_re.findall(text) if not year_re.match(x) and len(x) >= 2}
+
+    checked = 0
+    for c in spec["citations"]:
+        fid = c.get("evidence_fid")
+        if not fid or fid not in fact_loc:
+            continue
+        corrupted = set(c.get("multi_slots") or
+                        ([c["expected"]["corrupted_slot"]] if c["expected"].get("corrupted_slot") else []))
+        if "value" in corrupted:
+            continue  # 수치를 일부러 틀린 인용은 근거와 숫자가 달라야 정상이다
+        want = values(c["claim"])
+        have = values(fact_loc[fid]["sentence"])
+        missing = want - have
+        checked += 1
+        if want and missing and not (want & have):
+            fail(f"{c['id']}: 주장의 수치 {sorted(missing)}가 근거({fid})에 하나도 없다 "
+                 f"— 다른 행·다른 문장을 가리키고 있을 수 있다")
+    print(f"  {checked}건 확인")
+
+    print("── 부재 증거가 정말 부재인지 확인")
+    for c in spec["citations"]:
+        terms = c.get("absence_evidence") or []
+        if not terms:
+            continue
+        sid = c.get("cites")
+        pages = page_cache.get(sid)
+        if not pages:
+            continue
+        for t in terms:
+            n = count_occurrences(pages, t)
+            if n:
+                fail(f"{c['id']}: 부재 증거 '{t}'가 {sid}에 {n}회 나온다 — 부재가 아니다")
 
     print("── 반칙 방지 점검(주장·근거 문자열 겹침)")
     worst = []
@@ -555,8 +787,8 @@ def main() -> int:
     key = {
         "bench_id": spec["bench_id"],
         "spec_version": spec["spec_version"],
-        "document": f"docs/{args.bench}.docx",
-        "corpus": "corpus/",
+        "document": f"docs/{args.bench}.{fmt}",
+        "corpus": f"corpus{suffix}/",
         "watermark": watermark,
         "closed_world_rule": spec["closed_world_rule"],
         "planted_taxonomy": spec["planted_taxonomy"],
@@ -588,14 +820,16 @@ def main() -> int:
         key["citations"].append(entry)
 
     from collections import Counter
+
     key["totals"] = {
         "citations": len(spec["citations"]),
-        "planted": sum(1 for c in spec["citations"] if c["planted"] != "none"),
-        "control": sum(1 for c in spec["citations"] if c["planted"] == "none"),
+        # 대조군은 라벨이 아니라 정답이 무결한지로 센다 — 채점기와 같은 기준
+        "planted": sum(1 for c in spec["citations"] if not _is_control(c)),
+        "control": sum(1 for c in spec["citations"] if _is_control(c)),
         "by_pattern": dict(Counter(c["planted"] for c in spec["citations"])),
         "by_placement": dict(Counter(c["placement"] for c in spec["citations"])),
     }
-    (ROOT / "answer-key.json").write_text(
+    (ROOT / f"answer-key{suffix}.json").write_text(
         json.dumps(key, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print()
@@ -605,8 +839,8 @@ def main() -> int:
     print(f"빌드 성공: 인용 {key['totals']['citations']}건 "
           f"(심은 오류 {key['totals']['planted']} / 대조군 {key['totals']['control']})")
     print(f"  코퍼스 {len(manifest['sources'])}종 → {corpus_dir}")
-    print(f"  문서 → {docx_path}")
-    print(f"  정답표 → {ROOT / 'answer-key.json'}")
+    print(f"  문서 → {doc_path}")
+    print(f"  정답표 → {ROOT / f'answer-key{suffix}.json'}")
     return 0
 
 

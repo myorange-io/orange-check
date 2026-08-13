@@ -91,9 +91,13 @@ def read_hwpx(path: str) -> list[Unit]:
                     )
                     if text.strip():
                         counters[part] = counters.get(part, 0) + 1
+                        meta = {"section": name}
+                        refs = _hwpx_note_refs(el)
+                        if refs:
+                            meta["notes"] = refs
                         units.append(Unit(text=text.strip(), part=part,
                                           index=counters[part], note_id=note_id,
-                                          meta={"section": name}))
+                                          meta=meta))
                     # 문단 안에 매달린 각주는 따로 훑는다
                     for n in el.iter():
                         if n is el:
@@ -107,6 +111,26 @@ def read_hwpx(path: str) -> list[Unit]:
             walk(root, "body", None)
 
     return units
+
+
+def _hwpx_note_refs(para) -> list[dict]:
+    """각주·미주가 문단의 어느 글자 위치에 달렸는지 찾는다.
+
+    노트를 문단과 따로 내놓기만 하면 어느 문장에 달린 것인지 알 수 없다.
+    문단 끝에 달린 것처럼 보여 첫 문장의 각주를 놓치게 된다.
+    """
+    out, pos = [], 0
+    for node in para.iter():
+        ln = _localname(node.tag)
+        if ln in _TEXT_TAGS and not _has_note_ancestor(para, node):
+            pos += len(node.text or "")
+        elif _NOTE_HINT.search(ln):
+            out.append({
+                "kind": "endnote" if "end" in ln.lower() else "footnote",
+                "id": node.get("number") or node.get("instId") or node.get("id"),
+                "after_chars": pos,
+            })
+    return out
 
 
 def _has_note_ancestor(para, node) -> bool:

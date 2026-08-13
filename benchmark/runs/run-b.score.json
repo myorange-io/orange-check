@@ -1,6 +1,6 @@
 {
   "score": 100.0,
-  "formula_version": "1.1",
+  "formula_version": "1.2",
   "schema_valid": true,
   "weights": {
     "extraction_f1": 0.18,
@@ -483,5 +483,6 @@
       "expected_violation": false,
       "got_violation": false
     }
-  ]
+  ],
+  "bench": "bench-01"
 }

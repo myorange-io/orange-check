@@ -32,8 +32,14 @@ SINGLE_SLOT_PATTERN = {
 }
 
 
-def derive_verdict(slots: dict | None) -> tuple[str, str] | None:
-    """슬롯 표에서 판정을 끌어낸다. 표가 없으면 None."""
+def derive_verdict(slots: dict | None, has_evidence: bool = True) -> tuple[str, str] | None:
+    """슬롯 표에서 판정을 끌어낸다. 표가 없으면 None.
+
+    `has_evidence`는 "지표명이 다르다"와 "출처가 그 주제를 아예 다루지 않는다"를
+    가른다. 둘 다 WHAT이 어긋난 것으로 적히지만 전혀 다른 상황이다.
+    출처에 견줄 지표가 있어서 이름만 다르면 부분적이고, 출처가 그 주제를
+    다루지 않아 댈 근거 자체가 없으면 뒷받침 안 됨이다.
+    """
     if not isinstance(slots, dict):
         return None
     filled = {k: v for k, v in slots.items()
@@ -42,7 +48,9 @@ def derive_verdict(slots: dict | None) -> tuple[str, str] | None:
         return None
     bad = [k for k, v in filled.items() if not v.get("match")]
     if not bad:
-        return ("SUPPORTED", "none")
+        return ("SUPPORTED", "none") if has_evidence else ("NOT_SUPPORTED", "unsupported")
+    if not has_evidence:
+        return ("NOT_SUPPORTED", "unsupported")
     if "value" in bad:
         return ("NOT_SUPPORTED", "number_error")
     if len(bad) == 1:
@@ -164,7 +172,7 @@ def mechanical_audit(report: dict, corpus: str | None = None,
         got = s2.get("verdict")
         if got in ("NOT_APPLICABLE", "INSUFFICIENT_EVIDENCE"):
             continue
-        d = derive_verdict(s2.get("slots"))
+        d = derive_verdict(s2.get("slots"), bool(s2.get("evidence")))
         if d is None:
             if got in ("PARTIAL", "NOT_SUPPORTED"):
                 flag(c.get("id"), "no_slot_table",

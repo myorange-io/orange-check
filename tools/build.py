@@ -347,6 +347,15 @@ def main() -> int:
     if DIST.exists():
         shutil.rmtree(DIST)
     infos = build_all(DIST)
+    # macOS가 폴더를 지웠다 다시 만드는 사이에 "skills 2" 같은 빈 중복 폴더를
+    # 남기는 일이 있다. 놔두면 "패키지가 하나다" 검사가 계속 걸린다.
+    for stray in DIST.iterdir():
+        if stray.is_dir() and stray.name not in ("skills", "packages"):
+            if any(stray.rglob("*")):
+                print(f"  경고: 예상 밖 폴더에 내용이 있다 — {stray.name}", file=sys.stderr)
+            else:
+                shutil.rmtree(stray)
+                print(f"  빈 중복 폴더 제거: {stray.name}")
     print(f"\n플랫폼 {len(infos)}종 완료 → {DIST}")
     return 0
 
