@@ -237,6 +237,17 @@ def test_docx():
     links = [l for u in units for l in u.meta.get("hyperlinks", [])]
     check(len(links) >= 5, f"외부 하이퍼링크 추출 {len(links)}건")
 
+    # 각주가 문단의 어느 위치에 달렸는지 — 이게 없으면 문단 첫 문장의 각주를 놓친다
+    anchored = [(u, n) for u in units if u.part == "body"
+                for n in u.meta.get("notes", [])]
+    check(len(anchored) >= 4, f"각주 부착 위치를 찾는다 ({len(anchored)}건)")
+    mid = [(u, n) for u, n in anchored if 0 < n["after_chars"] < len(u.text) - 5]
+    check(bool(mid), f"문단 끝이 아닌 곳에 달린 각주도 잡는다 ({len(mid)}건)")
+    if mid:
+        u, n = mid[0]
+        check(n["kind"] in ("footnote", "endnote") and n["id"],
+              f"종류와 번호가 함께 나온다 ({n['kind']}#{n['id']})")
+
 
 def test_pdf():
     print("\nPDF 핀포인트")

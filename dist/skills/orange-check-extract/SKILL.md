@@ -71,6 +71,17 @@ print(summarize(units))          # {'body': 43, 'footnote': 4, 'endnote': 4}
 본문이 온전히 나오되 각주 귀속은 근사다. 각주가 중요한 HWP라면 HWPX로 저장하거나
 `rhwp`가 있으면 `read --via-pdf`로 PDF를 거쳐 쪽·행까지 얻는다.
 
+**각주·미주가 어느 문장에 달렸는지 확인한다.** 추출 결과에서 노트는 본문과 따로 나오므로,
+그냥 보면 문단 끝에 달린 것처럼 보인다. 실제로는 문단 첫 문장에 달린 각주가 흔하고,
+그걸 놓치면 그 인용은 통째로 빠진다. 본문 단위의 `meta.notes`에 노트가 문단의 몇 번째
+글자 뒤에 붙었는지(`after_chars`) 들어 있으니, 그 앞 문장을 주장으로 잡는다.
+
+```python
+for u in units:
+    for n in u.meta.get("notes", []):
+        print(n["kind"], n["id"], "→", u.text[:n["after_chars"]][-40:])
+```
+
 수집한 뒤 할 일.
 
 - 인용마다 **"본문 주장 ↔ 인용 출처"** 쌍으로 정리하고 번호를 매긴다.

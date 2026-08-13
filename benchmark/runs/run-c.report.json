@@ -1,0 +1,2084 @@
+{
+  "schema_version": "refver-report/1.0",
+  "run": {
+    "platform_profile": "claude-code",
+    "capabilities_observed": {
+      "pdf_backend": "pymupdf",
+      "pdftotext": true,
+      "kordoc": "kordoc",
+      "net_scripts": false,
+      "subagents": false
+    },
+    "degraded": true,
+    "degraded_reasons": [
+      "폐쇄 코퍼스 모드 — 웹을 쓰지 않고 benchmark/corpus.bench-02/manifest.json을 유일한 서지 권위로 삼았다. 매니페스트에 없는 출처는 1단계 FAIL로 처리했다",
+      "독립 에이전트를 띄우지 않고 3단계 재검증을 한 번의 눈감기 패스로 수행했다 — 1단계 MISMATCH·FAIL, 2단계 PARTIAL·NOT_SUPPORTED, 등급 위반 전건 17건을 앞선 판정을 덮어 두고 출처 원문만으로 다시 채웠으며 판정이 뒤집힌 건은 없었다",
+      "대체 출처는 코퍼스 안에서만 찾았고 URL은 매니페스트에 적힌 값을 옮긴 것이라 실제 접속으로 확인하지 못했다"
+    ],
+    "generated_at": "2026-08-13T00:54:17+00:00"
+  },
+  "document": {
+    "filename": "bench-02.hwpx",
+    "format": "hwpx"
+  },
+  "citations": [
+    {
+      "id": "C01",
+      "claim": "2023년까지 쌓인 감축률은 19.3%로 그해 목표였던 21.0%에 1.7%포인트 모자랐다.(오렌지국 기후에너지부, 2025)",
+      "doc_locator": "body:4",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부",
+        "year": "2025",
+        "title": "2030 국가 온실가스 감축목표 이행점검 결과",
+        "publisher": "오렌지국 기후에너지부",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "보도자료",
+        "url": "https://www.moce.orange.go.kr/news/press/2025/0709"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "E04",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 국가 전체 온실가스 배출(2018년 기준연도 대비 누적)",
+            "source": "오렌지국 국가 전체 배출(기준연도 2018년 대비 누적)",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년까지 누적",
+            "source": "2023년까지 누적",
+            "match": true
+          },
+          "what": {
+            "claimed": "누적 감축률과 연차별 목표치 대비 미달 폭",
+            "source": "누적 감축률 / 연차별 목표치",
+            "match": true
+          },
+          "value": {
+            "claimed": "19.3% / 21.0% / 1.7%포인트",
+            "source": "19.3% / 21.0% / 1.7%포인트",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "2030 국가 온실가스 감축목표 이행점검",
+            "source": "국가온실가스종합관리체계 확정 통계 기반 이행점검",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E04",
+            "page": 1,
+            "line": 28,
+            "quote": "2023년까지의 누적 감축률은 기준연도 대비 19.3%로, 연차별 목표치 21.0%에 1.7%포인트 못 미쳤다"
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C02",
+      "claim": "2023년 한 해 동안 온실가스 총배출량은 전년보다 5.8% 줄었다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+      "doc_locator": "body:5 | footnote:1",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+        "year": "2025",
+        "title": "2023년 국가 온실가스 인벤토리 보고서",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "인벤토리 보고서 2025-01",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 국가 전체 온실가스 총배출량(흡수원 미반영)",
+            "source": "오렌지국 국가 전체 총배출량 — 흡수원을 반영하지 않은 기준",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년",
+            "source": "2023년",
+            "match": true
+          },
+          "what": {
+            "claimed": "온실가스 총배출량 전년 대비 증감률",
+            "source": "총배출량 전년 대비 감소율",
+            "match": true
+          },
+          "value": {
+            "claimed": "5.8% 감소",
+            "source": "5.8% 감소",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "2023년 국가 온실가스 인벤토리",
+            "source": "2023년 국가 온실가스 인벤토리(GECD 2019 지침)",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E01",
+            "page": 2,
+            "line": 11,
+            "quote": "2023년 총배출량은 전년 대비 5.8% 감소하였다"
+          },
+          {
+            "source_id": "E01",
+            "page": 1,
+            "line": 9,
+            "quote": "흡수원을 반영하지 않은 총배출량 기준이다"
+          }
+        ],
+        "absence_checked": [],
+        "note": "본문이 덧붙인 '숲이 흡수한 몫을 빼지 않은 값'이라는 단서도 출처 1쪽에 그대로 있다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C03",
+      "claim": "지난해 온실가스 배출은 6.2% 감소해 감축 속도가 빨라졌다는 평가가 나온다.(오렌지경제신문 산업부, 2025)",
+      "doc_locator": "body:6",
+      "cited_source": {
+        "authors": "오렌지경제신문 산업부",
+        "year": "2025",
+        "title": "온실가스 배출 6.2% 줄어… 감축 속도 빨라지나",
+        "publisher": "오렌지경제신문",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.orangeecon.co.kr/article/2025/03/21/884201"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T4",
+        "matched_source_id": "E07",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 국가 전체 온실가스 총배출량",
+            "source": "오렌지국 국가 전체 총배출량",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년(지난해)",
+            "source": "2023년",
+            "match": true
+          },
+          "what": {
+            "claimed": "총배출량 전년 대비 감소율",
+            "source": "총배출량 전년 대비 감소율",
+            "match": true
+          },
+          "value": {
+            "claimed": "6.2% 감소",
+            "source": "5.8% 감소(1차 자료 E01 기준)",
+            "match": false
+          },
+          "dataset": {
+            "claimed": "인벤토리 보고서",
+            "source": "2023년 국가 온실가스 인벤토리 보고서",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E07",
+            "page": 1,
+            "line": 6,
+            "quote": "지난해 온실가스 총배출량은 전년보다 6.2% 줄었다"
+          },
+          {
+            "source_id": "E01",
+            "page": 2,
+            "line": 11,
+            "quote": "2023년 총배출량은 전년 대비 5.8% 감소하였다"
+          }
+        ],
+        "absence_checked": [],
+        "note": "인용한 출처(E07, 언론)에는 6.2%가 그대로 있으나 1차 자료(E01)는 5.8%다. 1차 자료를 판정 기준으로 삼는 규칙에 따라 VALUE 불일치로 본다. T4를 수치의 단독 근거로 삼았으므로 등급 위반도 함께 표시한다. 본문 스스로 '0.4%포인트 차이'를 지적하고는 있으나, 6.2%를 인용문으로 실은 이상 판정은 달라지지 않는다."
+      },
+      "tier_violation": true,
+      "replacement": {
+        "action": "replace",
+        "citation": "오렌지국 기후에너지부·오렌지환경정책연구원 (2025), 2023년 국가 온실가스 인벤토리 보고서, 인벤토리 보고서 2025-01",
+        "tier": "T2",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01",
+        "supports": "E01 2쪽: \"2023년 총배출량은 전년 대비 5.8% 감소하였다\" — 1차 자료의 확정 수치는 5.8%다."
+      }
+    },
+    {
+      "id": "C04",
+      "claim": "산업 부문 배출량은 2022년 244.1에서 2023년 231.8백만 톤으로 내려왔다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+      "doc_locator": "body:8",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+        "year": "2025",
+        "title": "2023년 국가 온실가스 인벤토리 보고서",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "인벤토리 보고서 2025-01",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "산업 부문",
+            "source": "산업 부문",
+            "match": true
+          },
+          "when": {
+            "claimed": "2022년·2023년",
+            "source": "2022년·2023년",
+            "match": true
+          },
+          "what": {
+            "claimed": "부문별 온실가스 배출량",
+            "source": "부문별 온실가스 배출량",
+            "match": true
+          },
+          "value": {
+            "claimed": "244.1 → 231.8 백만 톤",
+            "source": "244.1 → 231.8 (백만 톤 CO2eq)",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "[표 2-1] 부문별 온실가스 배출량",
+            "source": "[표 2-1] 부문별 온실가스 배출량",
+            "match": true
+          },
+          "relation": {
+            "claimed": "2022년보다 2023년이 낮음",
+            "source": "2022년보다 2023년이 낮음",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E01",
+            "page": 2,
+            "line": 6,
+            "quote": "산업 부문   244.1  231.8"
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처의 표 2-1이 텍스트 행으로 판독된다. 같은 표에서 2023년 산업 231.8 > 발전 191.4이므로 '산업이 여전히 가장 큰 배출원'이라는 부수 서술도 표와 어긋나지 않는다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C05",
+      "claim": "발전 부문 배출량은 2023년 181.4백만 톤까지 떨어졌다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+      "doc_locator": "body:9",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+        "year": "2025",
+        "title": "2023년 국가 온실가스 인벤토리 보고서",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "인벤토리 보고서 2025-01",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "slots": {
+          "who": {
+            "claimed": "발전 부문",
+            "source": "발전 부문",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년",
+            "source": "2023년",
+            "match": true
+          },
+          "what": {
+            "claimed": "부문별 온실가스 배출량",
+            "source": "부문별 온실가스 배출량",
+            "match": true
+          },
+          "value": {
+            "claimed": "181.4 백만 톤",
+            "source": "191.4 백만 톤",
+            "match": false
+          },
+          "dataset": {
+            "claimed": "[표 2-1] 부문별 온실가스 배출량",
+            "source": "[표 2-1] 부문별 온실가스 배출량",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E01",
+            "page": 2,
+            "line": 5,
+            "quote": "발전 부문   212.6  191.4"
+          }
+        ],
+        "absence_checked": [
+          "181.4"
+        ],
+        "note": "표 2-1의 발전 부문 2023년 값은 191.4이며 181.4는 출처 전문에 한 번도 나오지 않는다. 앞 두 자리가 바뀐 전형적인 표 전사 오류로 보인다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E01 2쪽 표 2-1: 발전 부문 2022년 212.6 → 2023년 191.4. 본문 수치를 191.4로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C06",
+      "claim": "감축분의 62%는 산업 부문의 생산 조정에서 나왔다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+      "doc_locator": "body:10",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+        "year": "2025",
+        "title": "2023년 국가 온실가스 인벤토리 보고서",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "인벤토리 보고서 2025-01",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "overreach",
+        "slots": {
+          "who": {
+            "claimed": "산업 부문(생산 조정)",
+            "source": "발전 부문(연료 전환)",
+            "match": false
+          },
+          "when": {
+            "claimed": "2023년",
+            "source": "2023년",
+            "match": true
+          },
+          "what": {
+            "claimed": "총배출 감소분에 대한 요인별 기여 비중",
+            "source": "감소분의 요인별 기여 비중",
+            "match": true
+          },
+          "value": {
+            "claimed": "62%",
+            "source": "62%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "2023년 인벤토리 감축 요인 분해",
+            "source": "2023년 인벤토리 감축 요인 분해",
+            "match": true
+          },
+          "relation": {
+            "claimed": "감소분의 다수가 그 요인에서 나왔다",
+            "source": "감소분의 다수가 그 요인에서 나왔다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E01",
+            "page": 2,
+            "line": 13,
+            "quote": "감소분의 62%는 발전 부문의 연료 전환에서, 나머지는"
+          }
+        ],
+        "absence_checked": [
+          "생산 조정"
+        ],
+        "note": "62%는 발전 부문 연료 전환의 몫이고, 산업 생산 위축은 나머지 38%다. 본문은 두 요인을 맞바꿔 적었다. 부문(WHO)과 기전(연료 전환/생산 조정)이 한 몸이라 두 칸이 함께 흔들리지만, 슬롯이 겹칠 때는 하나만 고르는 규칙에 따라 '62%를 엉뚱한 부문에 귀속했다'로 더 잘 설명되는 WHO만 불일치로 적었다. 두 칸을 다 표시하면 NOT_SUPPORTED로 넘어가 무엇이 문제인지 흐려진다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E01 2쪽: \"감소분의 62%는 발전 부문의 연료 전환에서, 나머지는 산업 생산 위축에서 비롯되었다\". '감축분의 62%는 발전 부문의 연료 전환에서 나왔고 나머지가 산업 생산 위축이다'로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C07",
+      "claim": "폐기물 부문은 숫자를 믿기 어려운 정도가 가장 큰 부문으로, 오차 범위가 ±12.4%에 이른다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+      "doc_locator": "body:11",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+        "year": "2025",
+        "title": "2023년 국가 온실가스 인벤토리 보고서",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "인벤토리 보고서 2025-01",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "폐기물 부문",
+            "source": "폐기물 부문",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년 인벤토리 산정",
+            "source": "2023년 인벤토리 산정",
+            "match": true
+          },
+          "what": {
+            "claimed": "오차 범위(산정 정확도)",
+            "source": "산정 불확도(95% 신뢰구간)",
+            "match": true
+          },
+          "value": {
+            "claimed": "±12.4%",
+            "source": "±12.4%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "몬테카를로 2만 회 반복 불확도 산정",
+            "source": "몬테카를로 시뮬레이션 2만 회 반복, 95% 신뢰구간",
+            "match": true
+          },
+          "relation": {
+            "claimed": "부문 가운데 가장 크다",
+            "source": "부문 가운데 가장 크다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E01",
+            "page": 2,
+            "line": 32,
+            "quote": "폐기물 부문의 산정 불확도는 ±12.4%로"
+          }
+        ],
+        "absence_checked": [],
+        "note": "'산정 불확도'를 '숫자를 믿기 어려운 정도·오차 범위'로 풀어 쓴 것은 같은 것을 가리키는 다른 표현이므로 지표명 오기로 보지 않는다. 농업 ±9.7%, 산업공정 ±5.2%, 에너지 연소 ±1.8%이므로 '가장 크다'도 맞다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C08",
+      "claim": "배출량 산정은 GECD 2019 지침을 따랐다.",
+      "doc_locator": "body:12 | footnote:2",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+        "year": "2025",
+        "title": "2023년 국가 온실가스 인벤토리 보고서",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "인벤토리 보고서 2025-01",
+        "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 국가 온실가스 인벤토리",
+            "source": "오렌지국 국가 온실가스 인벤토리",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "배출량 산정에 적용한 지침",
+            "source": "배출량 산정에 적용한 지침",
+            "match": true
+          },
+          "value": null,
+          "dataset": {
+            "claimed": "2023년 국가 온실가스 인벤토리 보고서",
+            "source": "2023년 국가 온실가스 인벤토리 보고서",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E01",
+            "page": 1,
+            "line": 8,
+            "quote": "배출량은 GECD 2019 지침에 따라 산정하였으며"
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C09",
+      "claim": "수송을 포함한 비산업 부문은 모두 연차 목표를 달성했다.(오렌지국 기후에너지부, 2025)",
+      "doc_locator": "body:13",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부",
+        "year": "2025",
+        "title": "2030 국가 온실가스 감축목표 이행점검 결과",
+        "publisher": "오렌지국 기후에너지부",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "보도자료",
+        "url": "https://www.moce.orange.go.kr/news/press/2025/0709"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "E04",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "overreach",
+        "slots": {
+          "who": {
+            "claimed": "수송을 포함한 비산업 부문 전체(수송·건물·농축수산·폐기물)",
+            "source": "수송 부문 하나 — '연차 목표를 달성한 유일한 부문'",
+            "match": false
+          },
+          "when": {
+            "claimed": "2023년 이행점검",
+            "source": "2023년 이행점검",
+            "match": true
+          },
+          "what": {
+            "claimed": "연차 목표 달성 여부",
+            "source": "연차 목표 달성 여부",
+            "match": true
+          },
+          "value": null,
+          "dataset": {
+            "claimed": "2030 NDC 이행점검 부문별 평가",
+            "source": "2030 NDC 이행점검 부문별 평가",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E04",
+            "page": 2,
+            "line": 5,
+            "quote": "수송 부문은 연차 목표를 달성한 유일한 부문이다"
+          },
+          {
+            "source_id": "E04",
+            "page": 2,
+            "line": 7,
+            "quote": "건물 부문은 12.6% 감축으로 연차 목"
+          }
+        ],
+        "absence_checked": [
+          "비산업"
+        ],
+        "note": "출처는 수송이 '유일한' 달성 부문이라고 못 박았고, 같은 쪽에서 건물(12.6% vs 목표 16.0%), 농축수산(6.9% vs 8.5%), 폐기물(0.4%p 부족)의 미달을 함께 적었다. '비산업'이라는 묶음 자체가 출처에 0회 나온다 — 본문이 만든 범주다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E04 2쪽: \"수송 부문은 연차 목표를 달성한 유일한 부문이다\". '수송 부문만 연차 목표를 달성했다'로 좁혀 써야 한다."
+      }
+    },
+    {
+      "id": "C10",
+      "claim": "2024년 재생에너지가 1차에너지 공급에서 차지한 비중은 12.7%였다.(오렌지국 에너지통계청, 2025)",
+      "doc_locator": "body:15",
+      "cited_source": {
+        "authors": "오렌지국 에너지통계청",
+        "year": "2025",
+        "title": "2024 에너지총조사 통계집",
+        "publisher": "오렌지국 에너지통계청",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "에너지총조사 제12차",
+        "url": "https://stat.energy.orange.go.kr/pub/2024"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "E02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "variable_name",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국",
+            "source": "오렌지국",
+            "match": true
+          },
+          "when": {
+            "claimed": "2024년",
+            "source": "2024년",
+            "match": true
+          },
+          "what": {
+            "claimed": "1차에너지 공급 중 재생에너지 비중",
+            "source": "총발전량 대비 재생에너지 발전 비중",
+            "match": false
+          },
+          "value": {
+            "claimed": "12.7%",
+            "source": "12.7%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "2024 에너지총조사",
+            "source": "2024 에너지총조사(제12차)",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E02",
+            "page": 2,
+            "line": 38,
+            "quote": "2024년 재생에너지 발전 비중은 총발전량 대비 12.7%였다"
+          },
+          {
+            "source_id": "E02",
+            "page": 1,
+            "line": 38,
+            "quote": "재생 및 기타 7.0%의 순으로 나타났다"
+          }
+        ],
+        "absence_checked": [],
+        "note": "같은 출처가 1차에너지 공급 구성비는 '재생 및 기타 7.0%'로 따로 싣는다. 12.7%는 총발전량을 분모로 삼은 값이므로 1차에너지 공급 비중과는 다른 지표다. 분모가 다르면 다른 지표이므로 지표명 오기로 본다(같은 것을 쉬운 말로 바꿔 쓴 경우가 아니다)."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E02 2쪽: \"2024년 재생에너지 발전 비중은 총발전량 대비 12.7%였다\". 1차에너지 공급 기준을 쓰려면 E02 1쪽의 '재생 및 기타 7.0%'를 인용해야 한다."
+      }
+    },
+    {
+      "id": "C11",
+      "claim": "오렌지국 발전량에서 재생에너지가 차지하는 비중은 34.6%에 이르렀다.(GECD, 2025)",
+      "doc_locator": "body:16 | endnote:1",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2025",
+        "title": "Renewable Energy Statistics 2025",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.gecd.org/stats/renewables-2025.pdf"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E06",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "overreach",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국",
+            "source": "GECD 회원국 전체 — 발전량 가중 평균",
+            "match": false
+          },
+          "when": null,
+          "what": {
+            "claimed": "발전량에서 재생에너지가 차지하는 비중",
+            "source": "share of renewables in electricity generation (gross generation basis)",
+            "match": true
+          },
+          "value": {
+            "claimed": "34.6%",
+            "source": "34.6%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "GECD Renewable Energy Statistics 2025",
+            "source": "GECD Renewable Energy Statistics 2025",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E06",
+            "page": 2,
+            "line": 39,
+            "quote": "The GECD average share of renewables in electricity generation reached 34.6% in 2024."
+          }
+        ],
+        "absence_checked": [
+          "오렌지국",
+          "Orangeland"
+        ],
+        "note": "34.6%는 GECD 회원국 전체의 발전량 가중 평균이며, 이 통계집은 오렌지국을 개별로 다루지 않는다(영문 원문에서 'Orangeland'가 0회, 한국어 '오렌지국'도 0회). 본문이 뒤에서 '이 통계집의 비중은 총발전량을 분모로 삼은 값'이라고 덧붙인 것은 맞지만, 그 값을 오렌지국 값으로 돌려 놓은 것이 잘못이다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E06 2쪽: \"The GECD average share of renewables in electricity generation reached 34.6% in 2024.\" 오렌지국 자신의 발전 비중은 E02 2쪽의 12.7%다. 'GECD 회원국 평균은 34.6%'로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C12",
+      "claim": "에너지총조사에 따르면 오렌지국의 1차에너지 공급 중 재생에너지 비중은 10.8%다.(GECD, 2024)",
+      "doc_locator": "body:17",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Energy Policy Review: Orangeland 2024",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E05",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "wrong_dataset",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국",
+            "source": "Orangeland",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "1차에너지 공급 중 재생에너지 비중",
+            "source": "Table 2.3 Share of primary energy supply by fuel — Renewables",
+            "match": true
+          },
+          "value": {
+            "claimed": "10.8%",
+            "source": "10.8% (2023년)",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "에너지총조사",
+            "source": "GECD, Energy Policy Review: Orangeland 2024, Table 2.3",
+            "match": false
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E05",
+            "page": 3,
+            "line": 8,
+            "quote": "Renewables 9.4 10.8"
+          },
+          {
+            "source_id": "E02",
+            "page": 1,
+            "line": 38,
+            "quote": "재생 및 기타 7.0%의 순으로 나타났다"
+          }
+        ],
+        "absence_checked": [],
+        "note": "10.8%는 인용한 GECD 정책검토 보고서의 표 2.3에 있는 값이고, 본문이 자료원으로 적은 에너지총조사(E02)는 같은 개념을 '재생 및 기타 7.0%'로 싣는다. 수치·지표·대상은 맞고 자료원 귀속만 틀렸다. 다만 E05는 내부 불일치가 있다 — 산문(2쪽)은 2023년 renewables를 18 per cent로, 표 2.3은 10.8로 적는다. 본문이 옮긴 값이 표와 정확히 일치하므로 표를 근거로 삼았고, 이 불일치는 사람이 확인할 항목으로 남긴다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E05 3쪽 Table 2.3: Renewables 2022년 9.4 → 2023년 10.8. 'GECD 정책검토 보고서에 따르면'으로 자료원 표기를 고치거나, 에너지총조사를 쓰려면 7.0%를 인용해야 한다."
+      }
+    },
+    {
+      "id": "C13",
+      "claim": "태양광은 2023년 8.1%에서 2024년 9.6%로 발전 비중이 늘었다.",
+      "doc_locator": "body:18 | footnote:3",
+      "cited_source": {
+        "authors": "오렌지국 에너지통계청",
+        "year": "2025",
+        "title": "2024 에너지총조사 통계집",
+        "publisher": "오렌지국 에너지통계청",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "에너지총조사 제12차",
+        "url": "https://stat.energy.orange.go.kr/pub/2024"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "E02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "태양광",
+            "source": "태양광",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년·2024년",
+            "source": "2023년·2024년",
+            "match": true
+          },
+          "what": {
+            "claimed": "발전 비중",
+            "source": "재생에너지원별 발전 비중(%)",
+            "match": true
+          },
+          "value": {
+            "claimed": "8.1% → 9.6%",
+            "source": "8.1 → 9.6",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "2024 에너지총조사",
+            "source": "[표 4-2] 재생에너지원별 발전 비중",
+            "match": true
+          },
+          "relation": {
+            "claimed": "2023년보다 2024년이 높음",
+            "source": "2023년보다 2024년이 높음",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E02",
+            "page": 3,
+            "line": 12,
+            "quote": "태양광   8.1    9.6"
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C14",
+      "claim": "2022년 GECD 회원국이 새로 늘린 발전설비의 71%가 태양광이었다.(GECD, 2025)",
+      "doc_locator": "body:18",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2025",
+        "title": "Renewable Energy Statistics 2025",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.gecd.org/stats/renewables-2025.pdf"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E06",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "time_mismatch",
+        "slots": {
+          "who": {
+            "claimed": "GECD 회원국",
+            "source": "GECD members",
+            "match": true
+          },
+          "when": {
+            "claimed": "2022년",
+            "source": "2024년",
+            "match": false
+          },
+          "what": {
+            "claimed": "새로 늘린 발전설비 중 태양광 비중",
+            "source": "share of all new capacity added",
+            "match": true
+          },
+          "value": {
+            "claimed": "71%",
+            "source": "71%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "GECD Renewable Energy Statistics 2025",
+            "source": "GECD Renewable Energy Statistics 2025",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E06",
+            "page": 2,
+            "line": 7,
+            "quote": "Solar photovoltaic accounted for 71% of all new capacity added across GECD members in 2024."
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처의 기준연도는 2024년이다(이 통계집 자체가 2024년을 대상으로 한다). 2022년은 출처가 다루는 기간이 아니며 71%가 붙을 수 있는 해가 아니다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E06 2쪽: \"Solar photovoltaic accounted for 71% of all new capacity added across GECD members in 2024.\" 연도를 2024년으로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C15",
+      "claim": "예비력 확보 비용은 변동성 재생에너지 비중이 10%포인트 오를 때마다 연간 3,240억원씩 늘어난다.(장하윤·오세민, 2024)",
+      "doc_locator": "body:20",
+      "cited_source": {
+        "authors": "장하윤·오세민",
+        "year": "2024",
+        "title": "재생에너지 확대가 전력 계통 안정성에 미치는 영향",
+        "publisher": "오렌지에너지학회",
+        "journal": "오렌지에너지학회지",
+        "volume": "31",
+        "issue": "2",
+        "pages": "77-95",
+        "series": "",
+        "url": "https://www.koes.orange.or.kr/journal/view.php?vol=31&no=2&page=77"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "E03",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 전력 계통(5개 급전 권역)",
+            "source": "오렌지국 계통운영기관 5개 급전 권역",
+            "match": true
+          },
+          "when": {
+            "claimed": "2019~2023년 실적 기반 추정",
+            "source": "2019~2023년 15분 단위 수급 자료",
+            "match": true
+          },
+          "what": {
+            "claimed": "예비력 확보 비용",
+            "source": "예비력 확보 비용(운영·주파수 조정·비상 대기 정산액 합)",
+            "match": true
+          },
+          "value": {
+            "claimed": "10%포인트당 연간 3,240억원",
+            "source": "10%포인트 상승 시 연간 3,240억원 증가",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "계통운영 실적·예비력 정산 패널 자료",
+            "source": "계통운영 실적·예비력 정산 패널 자료",
+            "match": true
+          },
+          "relation": {
+            "claimed": "비중이 오르면 비용이 는다",
+            "source": "비중이 오르면 비용이 는다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E03",
+            "page": 2,
+            "line": 14,
+            "quote": "변동성 재생에너지 비중이 10%포인트 상승할 때 예비력 확보 비용은 연간 3,240억원 증가하는 것으로 추정되었다"
+          },
+          {
+            "source_id": "E03",
+            "page": 2,
+            "line": 16,
+            "quote": "다만 이 추정치는 저장장치 보급을 현행 수준으로 고정한 경우이며"
+          }
+        ],
+        "absence_checked": [],
+        "note": "추정치 자체를 그대로 옮긴 문장이므로 슬롯이 모두 일치한다. 출처가 붙여 둔 '저장장치 현행 수준 고정' 조건을 떼고 정책 결론까지 끌고 간 것은 다음 문장(C16)이다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C16",
+      "claim": "재생에너지를 늘리면 예비력 비용이 연간 3,240억원씩 불어나므로 확대 속도를 조절해야 한다.(장하윤·오세민, 2024)",
+      "doc_locator": "body:21",
+      "cited_source": {
+        "authors": "장하윤·오세민",
+        "year": "2024",
+        "title": "재생에너지 확대가 전력 계통 안정성에 미치는 영향",
+        "publisher": "오렌지에너지학회",
+        "journal": "오렌지에너지학회지",
+        "volume": "31",
+        "issue": "2",
+        "pages": "77-95",
+        "series": "",
+        "url": "https://www.koes.orange.or.kr/journal/view.php?vol=31&no=2&page=77"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "E03",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "overreach",
+        "slots": {
+          "who": {
+            "claimed": "조건 없이 재생에너지 확대 일반",
+            "source": "저장장치 보급을 현행 수준으로 고정한 경우에 한함 — 저장장치가 두 배면 증가폭은 절반 이하",
+            "match": false
+          },
+          "when": {
+            "claimed": "2019~2023년 실적 기반 추정",
+            "source": "2019~2023년 실적 기반 추정",
+            "match": true
+          },
+          "what": {
+            "claimed": "예비력 확보 비용 증가분",
+            "source": "예비력 확보 비용 증가분",
+            "match": true
+          },
+          "value": {
+            "claimed": "연간 3,240억원",
+            "source": "연간 3,240억원",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "계통운영 실적·예비력 정산 패널 자료",
+            "source": "계통운영 실적·예비력 정산 패널 자료",
+            "match": true
+          },
+          "relation": {
+            "claimed": "비중이 오르면 비용이 는다",
+            "source": "비중이 오르면 비용이 는다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E03",
+            "page": 2,
+            "line": 14,
+            "quote": "변동성 재생에너지 비중이 10%포인트 상승할 때 예비력 확보 비용은 연간 3,240억원 증가하는 것으로 추정되었다"
+          },
+          {
+            "source_id": "E03",
+            "page": 2,
+            "line": 16,
+            "quote": "다만 이 추정치는 저장장치 보급을 현행 수준으로 고정한 경우이며, 저장장치가 두 배로 늘면 증가폭은 절반 이하로 줄어든다"
+          },
+          {
+            "source_id": "E03",
+            "page": 2,
+            "line": 34,
+            "quote": "계통 안정성 확보 비용은 재생에너지 확대의 장애가 아니라 함께 설계해야 할 항목이다"
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처가 스스로 '저장장치 보급을 현행 수준으로 고정한 경우'라고 범위를 좁혀 두었는데 본문은 그 단서를 떼고 확대 일반에 적용했다 — WHO 슬롯 불일치다. 더구나 출처의 정책적 함의는 정반대로, '계통 안정성 확보 비용은 재생에너지 확대의 장애가 아니라 함께 설계해야 할 항목'이라고 적었다. 이 정책 결론의 뒤집힘은 RELATION(비중↑→비용↑)이 아니라 범위 단서 탈락에서 비롯되므로 슬롯을 하나만 표시하는 규칙에 따라 WHO 하나로 적고 여기에 기록한다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E03 2쪽: 추정치는 저장장치 현행 수준 고정 조건이며 저장장치가 두 배면 증가폭이 절반 이하로 줄어든다. '저장장치 보급을 현행 수준으로 두면'이라는 조건을 되살려 써야 한다."
+      }
+    },
+    {
+      "id": "C17",
+      "claim": "재생에너지 확대는 전기요금 인상으로 이어진다는 점도 함께 지적된다.",
+      "doc_locator": "body:22 | endnote:2",
+      "cited_source": {
+        "authors": "장하윤·오세민",
+        "year": "2024",
+        "title": "재생에너지 확대가 전력 계통 안정성에 미치는 영향",
+        "publisher": "오렌지에너지학회",
+        "journal": "오렌지에너지학회지",
+        "volume": "31",
+        "issue": "2",
+        "pages": "77-95",
+        "series": "",
+        "url": "https://www.koes.orange.or.kr/journal/view.php?vol=31&no=2&page=77"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "E03",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "unsupported",
+        "slots": {
+          "who": null,
+          "when": null,
+          "what": {
+            "claimed": "전기요금 인상",
+            "source": "출처는 전기요금을 전혀 다루지 않는다 — 예비력 확보 비용만 추정한다",
+            "match": false
+          },
+          "value": null,
+          "dataset": {
+            "claimed": "장하윤·오세민(2024)",
+            "source": "예비력 정산 명세·급전 지시 이행 실적",
+            "match": false
+          },
+          "relation": null
+        },
+        "evidence": [],
+        "absence_checked": [
+          "전기요금",
+          "전력요금",
+          "소매요금",
+          "요금"
+        ],
+        "note": "출처 전문에서 '요금'이 한 글자도 나오지 않는다(전기요금·전력요금·소매요금·요금 모두 0회). 이 연구가 다루는 것은 계통운영자가 부담하는 예비력 확보 비용이지 최종 소비자 요금이 아니며, 출처 스스로 '운영 단계의 비용만을 다루며 투자 지출은 포함하지 않는다'고 한계를 밝혔다. 댈 근거 문장이 없으므로 지표명 오기가 아니라 무관한 인용이다. 본문도 바로 뒤에 '이 주장은 별도의 근거가 필요하다'고 적었다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "delete",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "미주 2(장하윤·오세민 2024)는 이 문장의 근거가 될 수 없으므로 떼야 한다. 코퍼스 8개 출처 어디에도 '재생에너지 확대 → 전기요금 인상'을 뒷받침하는 문장이 없다. 주장을 살리려면 요금 결정 구조를 다룬 별도 출처가 필요하다."
+      }
+    },
+    {
+      "id": "C18",
+      "claim": "오렌지국은 GECD 회원국 가운데 에너지집약도가 네 번째로 높다.(GECD, 2024)",
+      "doc_locator": "body:24",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Energy Policy Review: Orangeland 2024",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E05",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국",
+            "source": "Orangeland",
+            "match": true
+          },
+          "when": {
+            "claimed": "2024년 정책검토 시점",
+            "source": "2024 review",
+            "match": true
+          },
+          "what": {
+            "claimed": "GECD 회원국 중 에너지집약도 순위",
+            "source": "the fourth most energy-intensive economy among GECD members",
+            "match": true
+          },
+          "value": {
+            "claimed": "네 번째로 높다",
+            "source": "fourth most (0.16 toe per thousand units of GDP)",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "GECD Energy Policy Review: Orangeland 2024",
+            "source": "GECD Energy Policy Review: Orangeland 2024",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E05",
+            "page": 2,
+            "line": 20,
+            "quote": "Orangeland remains the fourth most energy-intensive economy among GECD members"
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C19",
+      "claim": "2023년 탄소가격은 톤당 평균 24.1단위로 GECD 중간값 48.9의 절반에 못 미쳤다.(GECD, 2024)",
+      "doc_locator": "body:25",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Energy Policy Review: Orangeland 2024",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E05",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 배출권거래제 탄소가격",
+            "source": "Orangeland carbon price",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년",
+            "source": "2023",
+            "match": true
+          },
+          "what": {
+            "claimed": "톤당 평균 탄소가격 / GECD 중간값",
+            "source": "carbon price averaged per tonne / GECD median",
+            "match": true
+          },
+          "value": {
+            "claimed": "24.1단위 / 48.9",
+            "source": "21.4 currency units / 48.9",
+            "match": false
+          },
+          "dataset": {
+            "claimed": "GECD Energy Policy Review: Orangeland 2024",
+            "source": "GECD Energy Policy Review: Orangeland 2024",
+            "match": true
+          },
+          "relation": {
+            "claimed": "중간값의 절반에 못 미침",
+            "source": "well below the GECD median",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E05",
+            "page": 3,
+            "line": 21,
+            "quote": "The carbon price averaged 21.4 currency units per tonne in 2023, well below the GECD median of 48.9."
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처는 21.4이고 본문은 24.1이다 — 자릿수가 뒤집혔다. GECD 중간값 48.9는 일치한다. 24.1은 출처 전문에 한 번 나오지만 그것은 표 2.3의 2022년 원자력 1차에너지 비중이지 탄소가격이 아니다. 21.4는 중간값 48.9의 절반(24.45)에도 못 미치므로 '절반에 못 미쳤다'는 방향 서술 자체는 유지된다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E05 3쪽: \"The carbon price averaged 21.4 currency units per tonne in 2023\". 본문 수치를 21.4단위로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C20",
+      "claim": "석탄이 1차에너지 공급에서 차지하는 몫은 2022년 31.2%에서 2023년 27.4%로 낮아졌다.",
+      "doc_locator": "body:26 | footnote:4",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2024",
+        "title": "Energy Policy Review: Orangeland 2024",
+        "publisher": "Global Economic Cooperation and Development (GECD)",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "E05",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 석탄",
+            "source": "Orangeland — Coal",
+            "match": true
+          },
+          "when": {
+            "claimed": "2022년·2023년",
+            "source": "2022·2023",
+            "match": true
+          },
+          "what": {
+            "claimed": "1차에너지 공급 중 석탄 비중",
+            "source": "Share of primary energy supply by fuel — Coal",
+            "match": true
+          },
+          "value": {
+            "claimed": "31.2% → 27.4%",
+            "source": "31.2 → 27.4",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "GECD Energy Policy Review: Orangeland 2024",
+            "source": "Table 2.3",
+            "match": true
+          },
+          "relation": {
+            "claimed": "2022년보다 2023년이 낮음",
+            "source": "2022년보다 2023년이 낮음",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E05",
+            "page": 3,
+            "line": 5,
+            "quote": "Coal          31.2 27.4"
+          }
+        ],
+        "absence_checked": [],
+        "note": "표 2.3의 두 값이 본문 수치와 정확히 일치한다. 다만 같은 출처의 산문(2쪽)은 2023년 석탄을 'coal 9 per cent'로, 재생에너지를 18 per cent로 적어 표 2.3과 어긋난다 — 출처 내부 불일치다. 본문이 인용한 두 값이 표에 그대로 있으므로 표를 근거로 삼았고, 이 불일치는 사람이 확인할 항목으로 남긴다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C21",
+      "claim": "가속 시나리오에서 2030년 제조업 부가가치는 기준선보다 1.4% 낮아진다.(오렌지환경정책연구원, 2024)",
+      "doc_locator": "body:28",
+      "cited_source": {
+        "authors": "오렌지환경정책연구원",
+        "year": "2024",
+        "title": "탄소중립 시나리오별 산업 파급효과 분석",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "연구보고서 2024-17",
+        "url": "https://www.oepi.orange.re.kr/report/2024-17"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "E08",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "제조업",
+            "source": "제조업",
+            "match": true
+          },
+          "when": {
+            "claimed": "2030년",
+            "source": "2030년",
+            "match": true
+          },
+          "what": {
+            "claimed": "기준선 대비 부가가치 변화",
+            "source": "기준 시나리오 대비 부가가치 변화",
+            "match": true
+          },
+          "value": {
+            "claimed": "1.4% 낮아짐",
+            "source": "1.4% 낮아짐",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "가속 시나리오",
+            "source": "B안(가속)",
+            "match": true
+          },
+          "relation": {
+            "claimed": "기준선보다 낮음",
+            "source": "기준 시나리오보다 낮음",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E08",
+            "page": 2,
+            "line": 6,
+            "quote": "B안에서 2030년 제조업 부가가치는 기준 시나리오 대비 1.4% 낮아지는 것으로 분석되었다"
+          },
+          {
+            "source_id": "E08",
+            "page": 1,
+            "line": 27,
+            "quote": "B안(가속)"
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처가 B안을 '가속'으로 정의했으므로 '가속 시나리오'라는 본문 표현은 B안을 정확히 가리킨다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C22",
+      "claim": "최대 감축 시나리오에서 제조업이 끌어들이는 취업 인원은 4만 2천명 늘어난다.(오렌지환경정책연구원, 2024)",
+      "doc_locator": "body:29",
+      "cited_source": {
+        "authors": "오렌지환경정책연구원",
+        "year": "2024",
+        "title": "탄소중립 시나리오별 산업 파급효과 분석",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "연구보고서 2024-17",
+        "url": "https://www.oepi.orange.re.kr/report/2024-17"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "E08",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "unsupported",
+        "slots": {
+          "who": {
+            "claimed": "제조업",
+            "source": "재생에너지 관련 산업",
+            "match": false
+          },
+          "when": {
+            "claimed": "2030년",
+            "source": "2030년",
+            "match": true
+          },
+          "what": {
+            "claimed": "취업유발인원 증가",
+            "source": "취업유발인원 증가",
+            "match": true
+          },
+          "value": {
+            "claimed": "4만 2천명",
+            "source": "4만 2천명",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "최대 감축 시나리오(C안)",
+            "source": "B안(가속) — 앞 문장의 '같은 시나리오'",
+            "match": false
+          },
+          "relation": {
+            "claimed": "늘어난다",
+            "source": "늘어난다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E08",
+            "page": 2,
+            "line": 14,
+            "quote": "같은 시나리오에서 재생에너지 관련 산업의 취업유발인원은 4만 2천명 늘어난다"
+          },
+          {
+            "source_id": "E08",
+            "page": 1,
+            "line": 27,
+            "quote": "B안(가속)"
+          }
+        ],
+        "absence_checked": [],
+        "note": "4만 2천명은 (가) 제조업 전체가 아니라 재생에너지 관련 산업의 값이고, (나) 최대 감축(C안)이 아니라 직전 문장이 가리키는 B안(가속)의 값이다. 대상 집단과 시나리오 구분이 둘 다 어긋나므로 부분적이 아니라 뒷받침 안 됨이다. 출처는 오히려 B안에서 철강 -4.1%, 석유화학 -3.3%, 시멘트 -5.6%처럼 제조업 주요 업종의 부가가치 감소를 적고 있다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E08 2쪽: \"같은 시나리오에서 재생에너지 관련 산업의 취업유발인원은 4만 2천명 늘어난다\" (같은 시나리오 = B안 가속). '가속 시나리오에서 재생에너지 관련 산업의 취업유발인원이 4만 2천명 늘어난다'로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C23",
+      "claim": "전환의 짐이 몇몇 지역에 쏠리는 만큼 지역별로 보상을 설계해야 한다는 제언도 나왔다.",
+      "doc_locator": "body:30 | endnote:3",
+      "cited_source": {
+        "authors": "오렌지환경정책연구원",
+        "year": "2024",
+        "title": "탄소중립 시나리오별 산업 파급효과 분석",
+        "publisher": "오렌지환경정책연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "연구보고서 2024-17",
+        "url": "https://www.oepi.orange.re.kr/report/2024-17"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "E08",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "산업 전환 부담이 집중되는 지역",
+            "source": "배출집약 업종 사업장이 밀집한 3개 광역권",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "보상 설계 단위에 대한 제언",
+            "source": "보상과 지원의 설계 단위 — 지역 단위 보상 설계",
+            "match": true
+          },
+          "value": null,
+          "dataset": {
+            "claimed": "탄소중립 시나리오별 산업 파급효과 분석 정책 제언",
+            "source": "정책 제언 둘째 항",
+            "match": true
+          },
+          "relation": {
+            "claimed": "부담이 특정 지역에 쏠린다 → 지역 단위 보상이 필요하다",
+            "source": "부담이 특정 지역에 집중되므로 지역 단위 보상 설계가 필요하다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E08",
+            "page": 2,
+            "line": 31,
+            "quote": "산업 전환의 부담이 특정 지역에 집중되므로 지역 단위 보상 설계가 필요하다"
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C24",
+      "claim": "업계에서는 경기 둔화가 배출 감소의 주된 요인이었다는 분석도 나온다.",
+      "doc_locator": "body:31 | endnote:4",
+      "cited_source": {
+        "authors": "오렌지경제신문 산업부",
+        "year": "2025",
+        "title": "온실가스 배출 6.2% 줄어… 감축 속도 빨라지나",
+        "publisher": "오렌지경제신문",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": "https://www.orangeecon.co.kr/article/2025/03/21/884201"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T4",
+        "matched_source_id": "E07",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "tier_violation",
+        "slots": {
+          "who": {
+            "claimed": "업계",
+            "source": "업계",
+            "match": true
+          },
+          "when": {
+            "claimed": "2023년(지난해)",
+            "source": "지난해",
+            "match": true
+          },
+          "what": {
+            "claimed": "배출 감소 원인에 대한 업계의 해석",
+            "source": "배출 감소 원인에 대한 업계의 해석",
+            "match": true
+          },
+          "value": null,
+          "dataset": {
+            "claimed": "오렌지경제신문 기사",
+            "source": "오렌지경제신문 기사",
+            "match": true
+          },
+          "relation": {
+            "claimed": "경기 둔화 → 배출 감소",
+            "source": "경기 둔화 → 배출 감소",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E07",
+            "page": 1,
+            "line": 28,
+            "quote": "업계에서는 경기 둔화의 영향이 컸다는 분석도 나온다"
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처는 '영향이 컸다'로 적었고 본문은 '주된 요인'으로 옮겼다. 같은 취지를 조금 세게 쓴 것으로 보아 슬롯 불일치로 잡지 않았으나, '컸다 → 주된'은 강화된 표현이므로 사람이 한 번 볼 값이다. 판정과 별개로 이 주장의 근거가 T4 언론 하나뿐이라 등급 규칙(T4는 보조 근거만) 위반이다. 1차 자료 E01은 감소분의 62%를 발전 부문 연료 전환에 귀속해 이 업계 해석과 상충한다."
+      },
+      "tier_violation": true,
+      "replacement": {
+        "action": "none_found",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "코퍼스 8개 출처를 모두 확인했으나 '업계가 경기 둔화를 주된 요인으로 본다'는 진술을 담은 T1~T3 출처가 없다. E01(T2)은 LMDI 요인 분해로 활동효과 +2.1%p, 구조효과 -1.4%p, 에너지집약도효과 -3.9%p, 배출계수효과 -2.6%p를 제시하므로 경기 요인의 크기를 따지려면 이 분해를 인용하는 편이 낫다. 업계 견해 자체를 살리려면 T4 인용임을 본문에 밝혀야 한다."
+      }
+    },
+    {
+      "id": "C25",
+      "claim": "탄소국경조정으로 오렌지국 수출기업이 부담할 비용은 연간 1조 8천억원으로 추산된다.",
+      "doc_locator": "body:32 | footnote:5",
+      "cited_source": {
+        "authors": "오렌지무역연구원",
+        "year": "2025",
+        "title": "탄소국경조정제도 대응 전략 연구",
+        "publisher": "오렌지무역연구원",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "",
+        "url": ""
+      },
+      "stage1": {
+        "verdict": "FAIL",
+        "tier": null,
+        "matched_source_id": null,
+        "mismatch_fields": [],
+        "note": "코퍼스 매니페스트의 여덟 개 출처(E01~E08) 어디에도 '오렌지무역연구원'이나 '탄소국경조정제도 대응 전략 연구'가 없다. 이 실행에서는 코퍼스가 존재하는 출처의 전부이므로 존재하지 않는 출처로 판정한다. 문서 말미 참고문헌 목록(body:41~48)에도 이 출처만 빠져 있어, 각주에만 달리고 목록에는 오르지 않은 인용이다."
+      },
+      "stage2": {
+        "verdict": "NOT_APPLICABLE",
+        "pattern": "hallucinated",
+        "slots": null,
+        "evidence": [],
+        "absence_checked": [],
+        "note": "출처가 존재하지 않으므로 인용 적절성을 판정할 대상이 없다. 수치(연간 1조 8천억원)도 코퍼스 어느 출처에서도 확인되지 않는다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "delete",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "실재하지 않는 출처이므로 각주 5와 해당 수치를 함께 지워야 한다. 탄소국경조정 부담을 다룬 출처가 코퍼스에 없으므로, 주장을 살리려면 근거부터 새로 확보해야 한다."
+      }
+    },
+    {
+      "id": "C26",
+      "claim": "2022년 건물 부문의 최종에너지 소비는 1.9% 줄었다.(오렌지국 에너지통계청, 2025)",
+      "doc_locator": "body:34",
+      "cited_source": {
+        "authors": "오렌지국 에너지통계청",
+        "year": "2025",
+        "title": "2024 에너지총조사 통계집",
+        "publisher": "오렌지국 에너지통계청",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "에너지총조사 제12차",
+        "url": "https://stat.energy.orange.go.kr/pub/2024"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "E02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "unsupported",
+        "slots": {
+          "who": {
+            "claimed": "건물 부문",
+            "source": "산업 부문",
+            "match": false
+          },
+          "when": {
+            "claimed": "2022년",
+            "source": "2024년(제12차 조사 대상 연도)",
+            "match": false
+          },
+          "what": {
+            "claimed": "최종에너지 소비 전년 대비 증감률",
+            "source": "최종에너지 소비 전년 대비 증감률",
+            "match": true
+          },
+          "value": {
+            "claimed": "1.9% 감소",
+            "source": "1.9% 감소(산업 부문 값)",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "2024 에너지총조사",
+            "source": "2024 에너지총조사",
+            "match": true
+          },
+          "relation": {
+            "claimed": "줄었다",
+            "source": "감소하였다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E02",
+            "page": 2,
+            "line": 12,
+            "quote": "산업 부문의 최종에너지 소비는 전년 대비 1.9% 감소하였다"
+          },
+          {
+            "source_id": "E02",
+            "page": 2,
+            "line": 20,
+            "quote": "건물 부문은 연면적 증가와 냉방도일 상승이 겹치며 2.4% 증가한 반면"
+          }
+        ],
+        "absence_checked": [
+          "2022년"
+        ],
+        "note": "1.9% 감소는 산업 부문의 2024년 값이다. 같은 조사에서 건물 부문은 2.4% '증가'했으므로 부호까지 반대다. 게다가 이 통계집은 2024년을 대상으로 하며 '2022년'이라는 표기 자체가 전문에 0회 나온다. 대상 부문과 기준 연도가 둘 다 어긋나므로 뒷받침 안 됨이다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E02 2쪽: 산업 부문 최종에너지 소비 1.9% 감소, 건물 부문 2.4% 증가(모두 2024년). 건물 부문을 말하려면 '2024년 건물 부문 최종에너지 소비는 2.4% 늘었다'로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C27",
+      "claim": "발전 손실까지 포함한 산업 부문 에너지 소비는 전년 대비 1.9% 감소했다.(오렌지국 에너지통계청, 2025)",
+      "doc_locator": "body:35",
+      "cited_source": {
+        "authors": "오렌지국 에너지통계청",
+        "year": "2025",
+        "title": "2024 에너지총조사 통계집",
+        "publisher": "오렌지국 에너지통계청",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "에너지총조사 제12차",
+        "url": "https://stat.energy.orange.go.kr/pub/2024"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "E02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "variable_name",
+        "slots": {
+          "who": {
+            "claimed": "산업 부문",
+            "source": "산업 부문",
+            "match": true
+          },
+          "when": {
+            "claimed": "전년 대비(2024년)",
+            "source": "전년 대비(2024년)",
+            "match": true
+          },
+          "what": {
+            "claimed": "발전 손실까지 포함한 에너지 소비",
+            "source": "최종에너지 소비 — 발전 손실은 포함하지 않는다",
+            "match": false
+          },
+          "value": {
+            "claimed": "1.9% 감소",
+            "source": "1.9% 감소",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "2024 에너지총조사",
+            "source": "2024 에너지총조사",
+            "match": true
+          },
+          "relation": {
+            "claimed": "감소",
+            "source": "감소",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "E02",
+            "page": 2,
+            "line": 12,
+            "quote": "산업 부문의 최종에너지 소비는 전년 대비 1.9% 감소하였다"
+          },
+          {
+            "source_id": "E02",
+            "page": 1,
+            "line": 16,
+            "quote": "발전 손실은 포함하지 않는다"
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처는 조사 개요에서 '본 조사의 소비량은 최종에너지 기준이며, 발전 손실은 포함하지 않는다'고 못 박았다. 본문은 같은 1.9%에 정반대의 산정 기준을 붙였다. 수치·집단·연도는 맞고 지표 정의만 어긋난 경우다. 본문이 바로 뒤에 '발전 손실을 넣느냐 빼느냐에 따라 소비량이 크게 달라진다'고 쓴 만큼 이 표기는 문서 자신의 논지와도 충돌한다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "E02 1쪽: \"본 조사의 소비량은 에너지원별 열량 환산계수를 적용한 최종에너지 기준이며, 발전 손실은 포함하지 않는다\". '발전 손실을 뺀 최종에너지 기준'으로 고쳐야 한다."
+      }
+    },
+    {
+      "id": "C28",
+      "claim": "정부는 2026년 상반기 안에 부문별 몫을 다시 나눈 로드맵을 내놓겠다고 했다.",
+      "doc_locator": "body:36 | footnote:6",
+      "cited_source": {
+        "authors": "오렌지국 기후에너지부",
+        "year": "2025",
+        "title": "2030 국가 온실가스 감축목표 이행점검 결과",
+        "publisher": "오렌지국 기후에너지부",
+        "journal": "",
+        "volume": "",
+        "issue": "",
+        "pages": "",
+        "series": "보도자료",
+        "url": "https://www.moce.orange.go.kr/news/press/2025/0709"
+      },
+      "stage1": {
+        "verdict": "MISMATCH",
+        "tier": "T1",
+        "matched_source_id": "E04",
+        "mismatch_fields": [
+          "date"
+        ],
+        "note": "각주 6은 발행일을 2025-06-09로 적었으나 실제는 2025-07-09다. 출처 본문이 '2025년 7월 9일 공개하였다'고 적고 있고, 같은 문서 말미의 참고문헌 목록(body:44)도 2025-07-09로 적어 문서 안에서 각주와 참고문헌이 서로 어긋난다. 서지 한 항목(발행일)만 틀렸을 뿐 출처는 실재한다."
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "biblio_mismatch",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국 정부",
+            "source": "오렌지국 정부",
+            "match": true
+          },
+          "when": {
+            "claimed": "2026년 상반기 안",
+            "source": "2026년 상반기까지",
+            "match": true
+          },
+          "what": {
+            "claimed": "부문별 목표 재배분 로드맵 발표 계획",
+            "source": "부문별 목표를 재배분하는 수정 로드맵 마련 계획",
+            "match": true
+          },
+          "value": null,
+          "dataset": {
+            "claimed": "2030 NDC 이행점검 결과 향후 계획",
+            "source": "향후 계획",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "E04",
+            "page": 2,
+            "line": 16,
+            "quote": "정부는 2026년 상반기까지 부문별 목표를 재배분하는 수정 로드맵을 마련할 계획이다"
+          },
+          {
+            "source_id": "E04",
+            "page": 1,
+            "line": 6,
+            "quote": "오렌지국 기후에너지부는 2025년 7월 9일"
+          }
+        ],
+        "absence_checked": [],
+        "note": "서지 오기와 별개로 주장 자체는 출처가 그대로 뒷받침한다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "오렌지국 기후에너지부 (2025), 2030 국가 온실가스 감축목표 이행점검 결과, 보도자료, 2025-07-09",
+        "tier": "T1",
+        "url": "https://www.moce.orange.go.kr/news/press/2025/0709",
+        "supports": "E04 1쪽: \"오렌지국 기후에너지부는 2025년 7월 9일 「2030 국가 온실가스 감축목표 이행점검 결과」를 공개하였다\". 각주 6의 발행일을 2025-07-09로 고쳐 참고문헌 목록과 맞춰야 한다."
+      }
+    }
+  ]
+}
