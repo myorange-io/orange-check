@@ -15,18 +15,18 @@
     }
   },
   "bench-02": {
-    "run": "run-c",
-    "score": 96.6,
+    "run": "run-d",
+    "score": 99.01,
     "formula_version": "1.2",
     "components": {
-      "extraction_f1": 0.9655,
-      "stage1_accuracy": 0.9762,
-      "stage2_accuracy": 0.9667,
-      "planted_recall": 1.0,
-      "precision_on_controls": 0.8462,
+      "extraction_f1": 1.0,
+      "stage1_accuracy": 1.0,
+      "stage2_accuracy": 1.0,
+      "planted_recall": 0.9412,
+      "precision_on_controls": 1.0,
       "pinpoint_validity": 1.0,
       "tier_accuracy": 1.0,
-      "pattern_accuracy": 0.9643
+      "pattern_accuracy": 0.9667
     }
   }
 }

@@ -734,9 +734,9 @@
       "slots": {
         "who": "산업 부문",
         "when": "2024년",
-        "what": "에너지 소비 증감률",
+        "what": "발전 손실을 포함한 에너지 소비 증감률",
         "value": "-1.9%",
-        "dataset": "발전 손실 포함 기준",
+        "dataset": "에너지총조사",
         "relation": "감소"
       },
       "expected": {
@@ -744,10 +744,10 @@
         "tier": "T1",
         "tier_violation": false,
         "stage2": "PARTIAL",
-        "pattern": "wrong_dataset",
-        "corrupted_slot": "dataset"
+        "pattern": "variable_name",
+        "corrupted_slot": "what"
       },
-      "rationale": "출처는 발전 손실을 포함하지 않는 최종에너지 기준이다(E02a). '발전 손실 포함'은 산정 기준이 다른 것이므로 DATASET 불일치로 본다. 대상 집단(산업 부문)은 그대로이므로 WHO가 아니다 — 겹쳐 보이지만 본문이 잘못한 것은 기준이다.",
+      "rationale": "출처는 발전 손실을 포함하지 않는 최종에너지 기준이다(E02a). 세는 대상 자체가 다르므로 WHAT 불일치다. 조사(에너지총조사)도 집단(산업 부문)도 그대로이니 DATASET은 어긋나지 않았다. 겹쳐 보이지만, 자료원이 아니라 지표가 바뀐 것이다.",
       "absence_evidence": [
         "발전 손실 포함"
       ]
