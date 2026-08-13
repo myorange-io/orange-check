@@ -75,8 +75,11 @@ def check_zip_layout() -> bool:
 def check_single_package() -> bool:
     """패키지는 하나여야 한다 — 플랫폼별로 갈라지면 반드시 어긋난다."""
     skills = ROOT / "dist" / "skills"
+    # 빈 폴더는 세지 않는다. macOS가 빌드 중에 "skills 2" 같은 빈 중복 폴더를
+    # 만들어 두는 일이 있는데, 그건 플랫폼별 분기가 생긴 것과는 다른 문제다.
     stray = [p.name for p in (ROOT / "dist").iterdir()
-             if p.is_dir() and p.name not in ("skills", "packages")]
+             if p.is_dir() and p.name not in ("skills", "packages")
+             and any(p.rglob("*"))]
     ok = skills.is_dir() and not stray
     print(f"  {'✓' if ok else '✗'} 패키지가 하나다 (플랫폼별 분기 없음)")
     if stray:
