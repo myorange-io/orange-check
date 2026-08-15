@@ -7,7 +7,7 @@ description:
 intro: |
   **출처가 존재한다 ≠ 그 출처가 본문 주장을 뒷받침한다.** 이 스킬은 뒤쪽만 본다.
   서지 실존은 다루지 않는다 — 그건 `orange-check`의 1단계다.
-fragments: [05-probe, 30-slots, 07-fast, 40-support, 50-cove, 55-selfcheck]
+fragments: [05-probe, 30-slots, 07-fast, 40-support, 50-cove, 55-selfcheck, 65-judgment]
 references: [ref-report-contract, ref-pdf-retrieval]
 outro: |
   ## 입력
@@ -17,4 +17,5 @@ outro: |
 
   ## 산출물
 
-  각 인용에 `stage2`를 채운 `citations.json`. 판정은 슬롯 표에서 규칙으로 끌어낸다.
+  인용별 판단 파일(`judgment.json`). 슬롯 여섯 칸과 근거 위치, 부재로 확인한 말만 적는다.
+  판정과 오류 유형은 적지 않는다 — 슬롯 표에서 조립기가 끌어낸다.

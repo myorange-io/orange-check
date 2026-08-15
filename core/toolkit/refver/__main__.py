@@ -18,6 +18,7 @@ import json
 import os
 import shutil
 import sys
+from pathlib import Path
 
 from . import report as R
 from .doc import read_document, summarize
@@ -124,6 +125,36 @@ def cmd_audit(a) -> int:
     return {"PASS": 0, "REVIEW": 0, "FAIL": 1}[res["gate"]]
 
 
+def cmd_assemble(a) -> int:
+    """판단 파일 → 계약 리포트. 인용문·판정·패턴은 여기서 만든다."""
+    from .assemble import assemble, AssembleError
+    jud = json.load(open(a.judgment, encoding="utf-8"))
+    cits = json.load(open(a.citations, encoding="utf-8"))
+    run = None
+    if a.run:
+        # 못 한 일을 밝히지 않은 리포트는 무엇을 했다는 말도 믿기 어렵다.
+        # 파일 경로로도, JSON 문자열로도 받는다.
+        run = json.loads(Path(a.run).read_text(encoding="utf-8")
+                         if Path(a.run).is_file() else a.run)
+    try:
+        rep = assemble(jud, cits, a.corpus, a.document, run=run)
+    except AssembleError as e:
+        print(f"조립을 멈춘다 — {e}", file=sys.stderr)
+        return 1
+    errs = R.validate(rep)
+    if errs:
+        print(f"조립한 리포트가 계약을 어긴다 {len(errs)}건:", file=sys.stderr)
+        for e in errs:
+            print(f"  - {e}", file=sys.stderr)
+        return 1
+    out = a.out or "report.json"
+    Path(out).write_text(json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
+    n = len(rep["citations"])
+    ev = sum(len((c.get("stage2") or {}).get("evidence") or []) for c in rep["citations"])
+    print(f"{out} — 인용 {n}건 · 근거 {ev}건 (원문에서 뽑음) · 계약 통과")
+    return 0
+
+
 def cmd_validate(a) -> int:
     errs = R.validate(R.load(a.report))
     if errs:
@@ -206,6 +237,17 @@ def main(argv=None) -> int:
     s.add_argument("--document", help="검증 대상 원문서 — 전수 대조에 쓴다")
     s.add_argument("--json", action="store_true")
     s.set_defaults(fn=cmd_audit)
+
+    s = sub.add_parser("assemble",
+                       help="판단 파일 → 계약 리포트 (인용문·판정·패턴을 기계가 만든다)")
+    s.add_argument("judgment", help="인용별 슬롯·근거 위치·부재어를 담은 판단 파일")
+    s.add_argument("--citations", required=True, help="0단계가 만든 인용 목록")
+    s.add_argument("--corpus", required=True, help="출처 원문 PDF 폴더")
+    s.add_argument("--document", help="검증 대상 원문서")
+    s.add_argument("--run", help="실행 환경 기록 — probe 결과 JSON 파일이나 문자열. "
+                                 "못 한 일은 degraded_reasons 에 남긴다")
+    s.add_argument("-o", "--out")
+    s.set_defaults(fn=cmd_assemble)
 
     s = sub.add_parser("validate", help="리포트 계약 검사")
     s.add_argument("report")

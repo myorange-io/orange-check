@@ -17,10 +17,11 @@
 ### 2-2. 쪽·행 핀포인트 (의무)
 
 ```python
-from refver.pdf import page_lines, find, occurrences
-pages = page_lines("출처.pdf")
+from refver.pdf import page_lines, find, count
+pages = page_lines("출처.pdf")     # {쪽 번호: [줄, ...]} — 쪽은 1부터. 목록이 아니다
 find(pages, "확인할 문장")          # [{'page': 12, 'line': 8, ...}]
-occurrences(pages, "저소득")        # 0 이면 그 출처는 저소득을 다루지 않는다
+count(pages, "저소득")             # 0 이면 그 출처는 저소득을 다루지 않는다
+count(pages, "5.8%")               # 수치는 자릿수 경계를 지켜 센다 (58.1% 는 안 센다)
 ```
 
 셸이 있으면 `python3 -m refver find <pdf> "문장"` · `count <pdf> 저소득 …` · `grep <pdf> '[0-9]+\.[0-9]%'`.
