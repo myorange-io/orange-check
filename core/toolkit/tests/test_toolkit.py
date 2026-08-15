@@ -270,6 +270,49 @@ def test_pdf():
     check(occurrences(p1, "월평균 가구소득") == 1, "존재 확인: '월평균 가구소득' 1회")
 
 
+def test_resolve():
+    """왕복을 줄이는 일괄 조회. 잘못된 신호를 주지 않는 것이 핵심이다."""
+    print("\n일괄 조회(resolve)")
+    corpus = os.path.normpath(os.path.join(
+        os.path.dirname(os.path.dirname(HERE)), "..", "benchmark", "corpus.bench-02"))
+    doc = os.path.normpath(os.path.join(
+        os.path.dirname(os.path.dirname(HERE)), "..", "benchmark", "docs", "bench-02.hwpx"))
+    if not os.path.isdir(corpus):
+        print("  · bench-02 코퍼스가 없어 건너뜀")
+        return
+    from refver.resolve import batch_lookup, count_number, key_tokens, resolve
+    from refver.pdf import page_lines
+
+    nums, terms = key_tokens("2023년 총배출량은 전년 대비 5.8% 감소하였다.")
+    check("5.8%" in nums, f"수치를 뽑는다 {nums}")
+    check(not any(t.startswith("202") for t in nums if len(t) == 4),
+          "연도는 단서에서 뺀다 — 어디에나 있어 변별력이 없다")
+
+    # % 유무를 함께 세지 않으면 표에서 온 정상 인용을 '없는 수치'로 몬다
+    pg = page_lines(os.path.join(corpus, "E02.pdf"))
+    check(count_number(pg, "8.1%") > 0,
+          "본문의 '8.1%'를 표의 '8.1'과 이어 센다")
+
+    cits = [
+        {"id": "A", "claim": "2023년 총배출량은 전년보다 5.8% 줄었다.", "source_id": "E01"},
+        {"id": "B", "claim": "발전 부문 배출량은 2023년 181.4백만 톤까지 떨어졌다.",
+         "source_id": "E01"},
+        {"id": "C", "claim": "무언가 주장한다.", "source_id": "없는출처"},
+    ]
+    r = resolve(cits, corpus, doc)
+    by = {x["id"]: x for x in r["citations"]}
+    check(by["A"]["probe"]["numbers_in_claim"].get("5.8%", 0) > 0,
+          "출처에 있는 수치는 찾아낸다")
+    check(by["B"]["probe"]["numbers_in_claim"].get("181.4") == 0,
+          "출처에 없는 수치는 0으로 알린다 — 수치 오류 후보")
+    check(by["C"]["source_in_corpus"] is False, "코퍼스에 없는 출처를 알린다")
+    check(bool(by["A"]["probe"]["candidates"]), "근거 후보 줄을 돌려준다")
+
+    got = batch_lookup([{"source_id": "E03", "terms": ["전기요금", "예비력"]}], corpus)
+    check(got and got[0]["counts"]["전기요금"] == 0 and got[0]["counts"]["예비력"] > 0,
+          "일괄 검색이 있는 말과 없는 말을 가른다")
+
+
 def test_report():
     print("\n리포트 계약")
     rep = R.new_report("bench-01.docx", "test")
@@ -389,6 +432,7 @@ def main() -> int:
     test_doctype_safety()
     test_hwpx_roundtrip()
     test_docx()
+    test_resolve()
     test_pdf()
     test_report()
     test_judge()
