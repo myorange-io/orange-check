@@ -15,7 +15,7 @@ from __future__ import annotations
 import os
 import re
 
-from .pdf import find, norm, occurrences, page_lines, repeated_lines
+from .pdf import count, find, norm, occurrences, page_lines, repeated_lines
 from .report import SLOTS, validate
 
 # 규칙표 — core/methodology/30-slots.md 와 같은 내용이다.
@@ -160,7 +160,9 @@ def mechanical_audit(report: dict, corpus: str | None = None,
                     continue
                 if path not in cache:
                     cache[path] = page_lines(path)
-                n = occurrences(cache[path], t)
+                # 수치는 자릿수 경계를 지켜 센다. 15.8%를 보고 5.8%가
+                # 있다고 하면 심판이 없는 문제를 지어내게 된다.
+                n = count(cache[path], t)
                 if n:
                     flag(c.get("id"), "false_absence",
                          f"'{t}'가 0회라고 했으나 {sid}에 {n}회 나온다", "blocker")

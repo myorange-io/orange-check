@@ -16,7 +16,7 @@ import re
 import unicodedata
 from pathlib import Path
 
-from .pdf import find, norm, occurrences, page_lines, repeated_lines
+from .pdf import count_number, find, norm, occurrences, page_lines, repeated_lines
 
 # 숫자는 슬롯 대조의 핵심 단서다. 연도는 어느 문장에나 있어 변별력이 없으므로 뺀다.
 NUM = re.compile(r"\d[\d,]*\.?\d*%?")
@@ -29,19 +29,6 @@ STOP = {
     "대비", "기준", "경우", "다음", "이상", "이하", "정도", "가운데", "따르면",
     "the", "and", "for", "with", "that", "this", "from", "per", "cent", "was", "were",
 }
-
-
-def count_number(pages, n: str) -> int:
-    """수치를 셀 때 % 유무를 함께 본다.
-
-    본문은 "8.1%"라 쓰고 표는 "8.1"로 적는 일이 흔하다. % 를 붙인 채로만 찾으면
-    멀쩡한 인용을 "출처에 없는 수치"로 몰게 된다 — 잘못된 신호는 안 주느니만 못하다.
-    """
-    hits = occurrences(pages, n)
-    bare = n.rstrip("%")
-    if bare != n:
-        hits = max(hits, occurrences(pages, bare))
-    return hits
 
 
 def key_tokens(text: str) -> tuple[list[str], list[str]]:
@@ -134,11 +121,14 @@ def probe_source(corpus: Corpus, sid: str, claim: str, max_hits: int = 6) -> dic
         if len(out) >= max_hits:
             break
 
+    # 부재 증거는 여기서 주지 않는다. 낱말을 기계로 자르면 "모자랐다" "쌓인"
+    # 같은 활용형 조각이 나오는데, 그런 것은 출처에 당연히 없다. 그 목록을 그대로
+    # 부재 증거로 옮겨 적으면 없는 문제를 지어내게 된다 — 실제로 그래서 치명
+    # 지적이 8건 났다. 부재는 골라서 물어야 한다: lookup 의 terms 를 써라.
     return {
         "source_id": sid,
         "pages": len(pages),
         "numbers_in_claim": {n: count_number(pages, n) for n in nums},
-        "terms_absent": [t for t in terms[:12] if occurrences(pages, t) == 0],
         "candidates": out,
     }
 
@@ -215,7 +205,8 @@ def batch_lookup(queries: list[dict], corpus_dir: str) -> list[dict]:
             r["hits"] = find(pages, q["quote"], corpus.skip(sid))
             r["quote"] = q["quote"]
         if q.get("terms"):
-            r["counts"] = {t: occurrences(pages, t) for t in q["terms"]}
+            from .pdf import count
+            r["counts"] = {t: count(pages, t) for t in q["terms"]}
             r["absent"] = [t for t, n in r["counts"].items() if n == 0]
         out.append(r)
     return out

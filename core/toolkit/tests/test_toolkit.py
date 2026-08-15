@@ -280,8 +280,8 @@ def test_resolve():
     if not os.path.isdir(corpus):
         print("  · bench-02 코퍼스가 없어 건너뜀")
         return
-    from refver.resolve import batch_lookup, count_number, key_tokens, resolve
-    from refver.pdf import page_lines
+    from refver.resolve import batch_lookup, key_tokens, resolve
+    from refver.pdf import count, count_number, page_lines
 
     nums, terms = key_tokens("2023년 총배출량은 전년 대비 5.8% 감소하였다.")
     check("5.8%" in nums, f"수치를 뽑는다 {nums}")
@@ -292,6 +292,22 @@ def test_resolve():
     pg = page_lines(os.path.join(corpus, "E02.pdf"))
     check(count_number(pg, "8.1%") > 0,
           "본문의 '8.1%'를 표의 '8.1'과 이어 센다")
+
+    # 58.1%는 8.1%가 아니다. 경계를 안 보면 "다른 출처에도 이 수치가 있다"는
+    # 거짓 신호가 나가고 멀쩡한 인용이 자료원 조작으로 뒤집힌다 — 실제로 그럴 뻔했다.
+    e06 = page_lines(os.path.join(corpus, "E06.pdf"))
+    check(count_number(e06, "8.1%") == 0,
+          "58.1% 안의 8.1%를 세지 않는다 — 자릿수 경계를 지킨다")
+    check(count_number(e06, "9.6%") == 0, "29.6% 안의 9.6%도 세지 않는다")
+    check(count_number(e06, "58.1%") > 0, "제 값은 그대로 센다")
+
+    # 표는 공백을 지우면 24.1 26.0 이 24.126.0 으로 붙는다. 원래 줄에서 세야 한다.
+    e05 = page_lines(os.path.join(corpus, "E05.pdf"))   # 'Nuclear 24.1 26.0'
+    check(count_number(e05, "24.1") == 1, "표에서 옆 칸에 붙은 수치도 찾아낸다")
+
+    # 심판의 부재 검사도 같은 경계를 쓴다. 말은 부분일치, 수치는 경계.
+    check(count(e06, "8.1%") == 0 and count(e06, "renewable") > 0,
+          "count 가 수치와 말을 알맞게 가른다")
 
     cits = [
         {"id": "A", "claim": "2023년 총배출량은 전년보다 5.8% 줄었다.", "source_id": "E01"},
@@ -307,6 +323,9 @@ def test_resolve():
           "출처에 없는 수치는 0으로 알린다 — 수치 오류 후보")
     check(by["C"]["source_in_corpus"] is False, "코퍼스에 없는 출처를 알린다")
     check(bool(by["A"]["probe"]["candidates"]), "근거 후보 줄을 돌려준다")
+    check("terms_absent" not in by["A"]["probe"],
+          "부재 낱말 목록은 주지 않는다 — 활용형 조각을 그대로 옮기면 "
+          "없는 문제를 지어내게 된다")
 
     got = batch_lookup([{"source_id": "E03", "terms": ["전기요금", "예비력"]}], corpus)
     check(got and got[0]["counts"]["전기요금"] == 0 and got[0]["counts"]["예비력"] > 0,
