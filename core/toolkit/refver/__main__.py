@@ -5,6 +5,8 @@
   python3 -m refver find  <pdf> <문구>          쪽·행 핀포인트(쪽 경계도 넘어 찾음)
   python3 -m refver count <pdf> <문구>...       전수 검색 — 0회도 증거다
   python3 -m refver grep  <pdf> <정규식>        수치·표현 훑기
+  python3 -m refver resolve <citations.json>   인용 전부의 조회를 한 번에 (왕복 줄이기)
+  python3 -m refver lookup  <queries.json>     검색 여러 건을 한 번에
   python3 -m refver audit <report.json>        심판의 기계 점검
   python3 -m refver validate <report.json>     리포트 계약 위반 확인
   python3 -m refver render   <report.json>     사람이 읽는 마크다운 생성
@@ -20,7 +22,7 @@ import sys
 from . import report as R
 from .doc import read_document, summarize
 from .hwp import kordoc_available, read_hangul, rhwp_capabilities, rhwp_path, rhwp_to_pdf
-from .pdf import available_backend, find, grep, occurrences, page_lines, repeated_lines
+from .pdf import available_backend, count, find, grep, page_lines, repeated_lines
 
 
 def _dump(obj) -> None:
@@ -86,7 +88,7 @@ def cmd_find(a) -> int:
 
 def cmd_count(a) -> int:
     pages = page_lines(a.pdf)
-    out = {t: occurrences(pages, t) for t in a.terms}
+    out = {t: count(pages, t) for t in a.terms}   # 수치는 자릿수 경계를 지켜 센다
     _dump({"pdf": a.pdf, "pages": len(pages), "counts": out,
            "absent": [t for t, n in out.items() if n == 0]})
     return 0
@@ -94,6 +96,21 @@ def cmd_count(a) -> int:
 
 def cmd_grep(a) -> int:
     _dump(grep(page_lines(a.pdf), a.pattern, a.context))
+    return 0
+
+
+def cmd_resolve(a) -> int:
+    from .resolve import resolve
+    data = json.loads(open(a.citations, encoding="utf-8").read())
+    cits = data.get("citations") if isinstance(data, dict) else data
+    _dump(resolve(cits, a.corpus, a.document, cross_check=not a.no_cross_check))
+    return 0
+
+
+def cmd_lookup(a) -> int:
+    from .resolve import batch_lookup
+    qs = json.loads(open(a.queries, encoding="utf-8").read())
+    _dump(batch_lookup(qs if isinstance(qs, list) else qs.get("queries", []), a.corpus))
     return 0
 
 
@@ -168,6 +185,20 @@ def main(argv=None) -> int:
     s.add_argument("pattern")
     s.add_argument("-C", "--context", type=int, default=0)
     s.set_defaults(fn=cmd_grep)
+
+    s = sub.add_parser("resolve",
+                       help="인용 전부의 기계 조회를 한 번에 — 왕복 횟수를 줄인다")
+    s.add_argument("citations", help="citations.json (또는 report.json)")
+    s.add_argument("--corpus", required=True, help="출처 원문 폴더")
+    s.add_argument("--document", help="원문서 — 주장이 축자로 있는지 확인한다")
+    s.add_argument("--no-cross-check", action="store_true",
+                   help="같은 수치가 다른 출처에 있는지 훑지 않는다(코퍼스가 클 때)")
+    s.set_defaults(fn=cmd_resolve)
+
+    s = sub.add_parser("lookup", help="검색 여러 건을 한 번에")
+    s.add_argument("queries", help='[{"source_id","quote","terms"}] JSON')
+    s.add_argument("--corpus", required=True)
+    s.set_defaults(fn=cmd_lookup)
 
     s = sub.add_parser("audit", help="심판의 기계 점검 — 지어낸 근거·근거 없는 판정·누락")
     s.add_argument("report")

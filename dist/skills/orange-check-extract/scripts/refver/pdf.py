@@ -106,9 +106,49 @@ def find(pages: dict[int, list[str]], needle: str,
 
 
 def occurrences(pages: dict[int, list[str]], needle: str) -> int:
-    """전수 검색. 0회라는 사실도 증거가 된다 — 과확장 판정의 근거."""
+    """전수 검색. 0회라는 사실도 증거가 된다 — 과확장 판정의 근거.
+
+    수치를 셀 때는 이 함수 말고 `count_number`를 써라. 여기서는 58.1%가 8.1%를
+    품은 것으로 세어진다.
+    """
     flat, _ = flat_index(pages)
     return flat.count(norm(needle))
+
+
+# 숫자로만 이루어진 검색어인가. 이런 것은 자릿수 경계를 지켜 세야 한다.
+NUMERIC = re.compile(r"[\d,]+(?:\.\d+)?%?$")
+
+
+def count_number(pages: dict[int, list[str]], needle: str) -> int:
+    """수치를 자릿수 경계를 지켜 센다.
+
+    두 가지를 지킨다.
+
+    첫째, **58.1%는 8.1%가 아니다.** 경계를 안 보면 "이 수치가 다른 출처에도
+    있다"는 거짓 신호가 나오고, 멀쩡한 인용이 자료원 조작으로 뒤집힌다. 실제로
+    한 번 그럴 뻔했다.
+
+    둘째, **본문은 8.1%라 쓰고 표는 8.1로 적는다.** % 유무는 같은 값으로 본다.
+
+    공백을 지운 문자열이 아니라 원래 줄에서 센다. 표의 `24.1 26.0`은 공백을
+    지우면 `24.126.0`이 되어 경계를 볼 수가 없다. 수치는 줄바꿈을 넘지 않는다.
+    """
+    bare = (needle or "").strip().rstrip("%")
+    if not bare:
+        return 0
+    forms = {bare, bare.replace(",", "")}
+    best = 0
+    for f in forms:
+        rx = re.compile(r"(?<![\d.,])" + re.escape(f) + r"%?(?![\d.,]*\d)")
+        n = sum(len(rx.findall(line)) for lines in pages.values() for line in lines)
+        best = max(best, n)
+    return best
+
+
+def count(pages: dict[int, list[str]], needle: str) -> int:
+    """검색어에 맞는 방식으로 센다. 수치면 경계를 지키고, 말이면 부분일치."""
+    t = (needle or "").strip()
+    return count_number(pages, t) if NUMERIC.match(t) else occurrences(pages, t)
 
 
 def grep(pages: dict[int, list[str]], pattern: str, context: int = 0) -> list[dict]:
