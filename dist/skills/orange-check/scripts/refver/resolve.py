@@ -16,7 +16,7 @@ import re
 import unicodedata
 from pathlib import Path
 
-from .pdf import count_number, find, norm, occurrences, page_lines, repeated_lines
+from .pdf import count, count_number, find, norm, page_lines, repeated_lines
 
 # 숫자는 슬롯 대조의 핵심 단서다. 연도는 어느 문장에나 있어 변별력이 없으므로 뺀다.
 NUM = re.compile(r"\d[\d,]*\.?\d*%?")
@@ -77,65 +77,55 @@ class Corpus:
         return sorted(p.stem for p in self.root.glob("*.pdf"))
 
 
-def probe_source(corpus: Corpus, sid: str, claim: str, max_hits: int = 6) -> dict:
-    """주장의 단서를 출처에서 찾아 후보 근거 줄을 돌려준다.
+def probe_source(corpus: Corpus, sid: str, claim: str, max_lines: int = 4) -> dict:
+    """주장의 수치가 출처 어디에 어떤 모습으로 있는지 돌려준다.
 
-    슬롯을 채우려면 결국 "이 수치가 출처 어디에 있나"와 "출처는 그걸 뭐라 부르나"를
-    알아야 한다. 그 두 가지를 여기서 미리 뽑아 둔다.
+    **횟수만 주면 안 된다.** "24.1이 1회 나온다"는 맞는 말이지만, 그게 탄소가격이
+    아니라 같은 표의 원자력 행이면 정반대의 결론이 나온다. 실측에서 이 함정에 두 번
+    걸렸다. 그래서 횟수와 함께 **그 수치가 놓인 줄을 그대로** 보여준다.
+    `Nuclear 24.1 26.0`을 보면 원자력 행이라는 것이 바로 보인다.
+
+    낱말로 근거 줄을 추려 주는 일은 하지 않는다. 한국어 주장을 기계로 자르면 "부문"
+    "에서" 같은 조각이 나와 엉뚱한 줄을 물어 온다. 실측에서 묶음 담당들이 그 목록을
+    죄다 무시하고 PDF를 통째로 열었다 — 출처가 1~5쪽이면 그게 낫다.
+
+    부재 증거도 여기서 주지 않는다. 활용형 조각을 부재 증거로 옮겨 적으면 없는 문제를
+    지어내게 된다. 부재는 골라서 물어야 한다: `lookup`의 `terms`를 써라.
     """
     pages = corpus.pages(sid)
     if pages is None:
         return {"source_id": sid, "error": "출처 원문을 찾을 수 없다"}
 
-    nums, terms = key_tokens(claim)
+    nums, _ = key_tokens(claim)
     skip = corpus.skip(sid)
-    hits: list[dict] = []
-    seen: set[tuple[int, int]] = set()
-
-    for token in [n.rstrip("%") for n in nums] + terms[:12]:
-        for h in find(pages, token, skip)[:3]:
-            key = (h["page"], h["line"])
-            if key in seen:
-                continue
-            seen.add(key)
-            line = pages[h["page"]][h["line"] - 1].strip()
-            hits.append({"token": token, "page": h["page"], "line": h["line"], "text": line})
-            if len(hits) >= max_hits * 3:
+    found: dict[str, dict] = {}
+    for n in nums:
+        bare = n.rstrip("%")
+        where = []
+        for pno in sorted(pages):
+            for i, line in enumerate(pages[pno], 1):
+                if line.strip() in skip:
+                    continue
+                if count_number({pno: [line]}, bare):
+                    where.append({"page": pno, "line": i, "text": line.strip()[:120]})
+                    if len(where) >= max_lines:
+                        break
+            if len(where) >= max_lines:
                 break
+        found[n] = {"count": count_number(pages, bare), "where": where}
 
-    # 여러 단서가 함께 걸린 줄이 진짜 근거일 가능성이 높다
-    weight: dict[tuple[int, int], int] = {}
-    for h in hits:
-        weight[(h["page"], h["line"])] = weight.get((h["page"], h["line"]), 0) + 1
-    best = sorted(hits, key=lambda h: (-weight[(h["page"], h["line"])], h["page"], h["line"]))
-
-    out, taken = [], set()
-    for h in best:
-        k = (h["page"], h["line"])
-        if k in taken:
-            continue
-        taken.add(k)
-        out.append({"page": h["page"], "line": h["line"], "text": h["text"],
-                    "matched": sorted({x["token"] for x in hits
-                                       if (x["page"], x["line"]) == k})})
-        if len(out) >= max_hits:
-            break
-
-    # 부재 증거는 여기서 주지 않는다. 낱말을 기계로 자르면 "모자랐다" "쌓인"
-    # 같은 활용형 조각이 나오는데, 그런 것은 출처에 당연히 없다. 그 목록을 그대로
-    # 부재 증거로 옮겨 적으면 없는 문제를 지어내게 된다 — 실제로 그래서 치명
-    # 지적이 8건 났다. 부재는 골라서 물어야 한다: lookup 의 terms 를 써라.
-    return {
-        "source_id": sid,
-        "pages": len(pages),
-        "numbers_in_claim": {n: count_number(pages, n) for n in nums},
-        "candidates": out,
-    }
+    return {"source_id": sid, "pages": len(pages), "numbers_in_claim": found}
 
 
 def resolve(citations: list[dict], corpus_dir: str, document: str | None = None,
             cross_check: bool = True) -> dict:
-    """인용 목록을 받아 기계로 확인 가능한 모든 것을 한 번에 돌려준다."""
+    """인용 목록을 받아 기계로 확인 가능한 모든 것을 한 번에 돌려준다.
+
+    받는 것: `[{"id": ..., "claim": "본문이 쓴 문장", "source_id": "E01"}, ...]`
+    `source_id`가 없으면 아무것도 조회할 수 없다. `cites` 나 `stage1.matched_source_id`
+    로 적어도 된다. 셋 다 없으면 그 사실을 `warning`에 담아 알린다 — 조용히 빈 결과를
+    돌려주면 왕복을 한 번 통째로 버리게 된다. 실제로 그런 일이 있었다.
+    """
     corpus = Corpus(corpus_dir)
     known = set(corpus.ids())
 
@@ -179,15 +169,23 @@ def resolve(citations: list[dict], corpus_dir: str, document: str | None = None,
                     row["same_numbers_in_other_sources"] = elsewhere
         rows.append(row)
 
-    return {
+    out = {
         "corpus": str(corpus_dir),
         "sources": sorted(known),
         "document": document,
         "citations": rows,
-        "note": ("여기까지는 기계가 찾은 것이다. 어느 후보가 진짜 근거인지, 슬롯이 맞는지는 "
-                 "읽고 판단해야 한다. same_numbers_in_other_sources 가 있으면 자료원을 "
-                 "잘못 붙였거나 2차 출처를 인용한 것일 수 있으니 1차를 확인하라."),
+        "note": ("기계는 그 수치가 출처에 있다는 것까지만 안다. 그게 같은 것을 가리키는지는 "
+                 "where 의 줄을 읽어 확인하라 — 표에서 옆 행의 값이 우연히 같을 수 있다. "
+                 "same_numbers_in_other_sources 가 있으면 자료원을 잘못 붙였거나 2차 출처를 "
+                 "인용한 것일 수 있으니 1차를 확인하라."),
     }
+    missing = [r["id"] for r in rows if not r["source_id"]]
+    if missing:
+        out["warning"] = (
+            f"{len(missing)}건에 source_id 가 없어 아무것도 조회하지 못했다: "
+            f"{missing[:8]}. 인용마다 source_id 를 넣어 다시 부르라."
+        )
+    return out
 
 
 def batch_lookup(queries: list[dict], corpus_dir: str) -> list[dict]:
@@ -205,7 +203,6 @@ def batch_lookup(queries: list[dict], corpus_dir: str) -> list[dict]:
             r["hits"] = find(pages, q["quote"], corpus.skip(sid))
             r["quote"] = q["quote"]
         if q.get("terms"):
-            from .pdf import count
             r["counts"] = {t: count(pages, t) for t in q["terms"]}
             r["absent"] = [t for t, n in r["counts"].items() if n == 0]
         out.append(r)

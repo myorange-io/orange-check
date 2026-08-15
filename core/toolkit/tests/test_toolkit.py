@@ -317,15 +317,26 @@ def test_resolve():
     ]
     r = resolve(cits, corpus, doc)
     by = {x["id"]: x for x in r["citations"]}
-    check(by["A"]["probe"]["numbers_in_claim"].get("5.8%", 0) > 0,
+    check(by["A"]["probe"]["numbers_in_claim"]["5.8%"]["count"] > 0,
           "출처에 있는 수치는 찾아낸다")
-    check(by["B"]["probe"]["numbers_in_claim"].get("181.4") == 0,
+    check(by["B"]["probe"]["numbers_in_claim"]["181.4"]["count"] == 0,
           "출처에 없는 수치는 0으로 알린다 — 수치 오류 후보")
     check(by["C"]["source_in_corpus"] is False, "코퍼스에 없는 출처를 알린다")
-    check(bool(by["A"]["probe"]["candidates"]), "근거 후보 줄을 돌려준다")
     check("terms_absent" not in by["A"]["probe"],
           "부재 낱말 목록은 주지 않는다 — 활용형 조각을 그대로 옮기면 "
           "없는 문제를 지어내게 된다")
+    check("candidates" not in by["A"]["probe"],
+          "낱말로 추린 근거 후보도 주지 않는다 — 조사 조각이 엉뚱한 줄을 물어 온다")
+
+    # 횟수만 주면 표의 옆 행에 걸린다. 수치가 놓인 줄을 함께 보여준다.
+    where = by["A"]["probe"]["numbers_in_claim"]["5.8%"]["where"]
+    check(bool(where) and "5.8" in where[0]["text"],
+          f"수치가 놓인 줄을 그대로 보여준다 — {where[0]['text'][:40]!r}")
+
+    # source_id 를 빠뜨리면 조용히 빈 결과를 주지 말고 그렇다고 말해야 한다
+    r2 = resolve([{"id": "X", "claim": "무언가 5.8% 줄었다."}], corpus)
+    check("warning" in r2 and "source_id" in r2["warning"],
+          "source_id 가 없으면 조용히 넘어가지 않고 알린다")
 
     got = batch_lookup([{"source_id": "E03", "terms": ["전기요금", "예비력"]}], corpus)
     check(got and got[0]["counts"]["전기요금"] == 0 and got[0]["counts"]["예비력"] > 0,
