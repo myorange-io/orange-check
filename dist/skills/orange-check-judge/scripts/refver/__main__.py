@@ -22,7 +22,7 @@ import sys
 from . import report as R
 from .doc import read_document, summarize
 from .hwp import kordoc_available, read_hangul, rhwp_capabilities, rhwp_path, rhwp_to_pdf
-from .pdf import available_backend, find, grep, occurrences, page_lines, repeated_lines
+from .pdf import available_backend, count, find, grep, page_lines, repeated_lines
 
 
 def _dump(obj) -> None:
@@ -88,7 +88,7 @@ def cmd_find(a) -> int:
 
 def cmd_count(a) -> int:
     pages = page_lines(a.pdf)
-    out = {t: occurrences(pages, t) for t in a.terms}
+    out = {t: count(pages, t) for t in a.terms}   # 수치는 자릿수 경계를 지켜 센다
     _dump({"pdf": a.pdf, "pages": len(pages), "counts": out,
            "absent": [t for t, n in out.items() if n == 0]})
     return 0
