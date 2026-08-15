@@ -5,3 +5,9 @@ __pycache__/
 # 실행 중 만들어지는 것
 .DS_Store
 *.egg-info/
+
+# 스킬이 안내하는 임시 입력 파일 이름. 저장소 루트에 그 이름의 파일이
+# 추적되고 있으면 스킬을 돌릴 때마다 덮어쓴다.
+/citations.json
+/queries.json
+
