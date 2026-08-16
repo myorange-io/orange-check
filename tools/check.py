@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 BENCH = ROOT / "benchmark"
 RUNS = BENCH / "runs"
 BASELINE = RUNS / "baseline.json"
-BENCHES = ("bench-01", "bench-02")
+BENCHES = ("bench-01", "bench-02", "bench-03")
 
 # 기준선 대비 이만큼 넘게 떨어지면 회귀로 본다. 모델 출력에는 실행마다 흔들림이 있다.
 TOLERANCE = 2.0

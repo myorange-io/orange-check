@@ -135,9 +135,20 @@ class PdfWriter:
         self.y += 2.6
 
     def title(self, text: str, subtitle: str = "") -> None:
-        self._raw(text, self.font, FS_TITLE)
+        """표제와 부제. 둘 다 넘치면 접는다.
+
+        접지 않으면 폭을 넘는 만큼이 **조용히 잘려 나간다.** 부제에는 발행처와
+        발행일이 들어가므로, 잘리면 PDF의 서지가 매니페스트와 달라진다.
+        영문 출처처럼 부제가 긴 경우에 실제로 `2025-06`이 `2025`로 잘렸다.
+        """
+        width = PAGE_W - 2 * MARGIN_X
+        for ln in wrap(text, self.font, FS_TITLE, width):
+            self._ensure()
+            self._raw(ln, self.font, FS_TITLE)
         if subtitle:
-            self._raw(subtitle, self.font, FS_BODY, color=(0.3, 0.3, 0.3))
+            for ln in wrap(subtitle, self.font, FS_BODY, width):
+                self._ensure()
+                self._raw(ln, self.font, FS_BODY, color=(0.3, 0.3, 0.3))
         self.y += 10.0
 
     def table(self, caption: str, rows: list[list[str]]) -> None:
@@ -648,6 +659,18 @@ def main() -> int:
     page_cache: dict[str, dict[int, list[str]]] = {}
 
     for src in spec["sources"]:
+        if src.get("no_pdf"):
+            # 매니페스트에는 있는데 원문을 구할 수 없는 출처. 실제 검증에서 흔하다 —
+            # 기관 사이트가 요청을 막거나 회원 전용이거나 발간물이 내려간 경우다.
+            # 검증자는 여기서 판정을 지어내지 말고 근거 부족으로 남겨야 한다.
+            manifest["sources"].append({
+                "id": src["id"], "file": None, "tier": src["tier"],
+                "kind": src["kind"], "pages": None,
+                "note": src.get("unavailable_note") or "원문을 제공하지 않는다",
+                "meta": src["meta"],
+            })
+            print(f"  {src['id']}  원문 없음 (매니페스트에만 존재)")
+            continue
         pf = prose_dir / f"{src['id']}.json"
         if not pf.exists():
             fail(f"{src['id']}: 산문 파일 없음 ({pf})")
