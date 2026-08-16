@@ -154,6 +154,9 @@ def resolve(citations: list[dict], corpus_dir: str, document: str | None = None,
     """
     corpus = Corpus(corpus_dir)
     known = set(corpus.ids())
+    # 매니페스트에는 있으나 원문이 없는 출처. 교차확인에서 통째로 빠지므로 그 사실을
+    # 밝혀야 한다. `path` 로 보면 PDF를 열지 않고도 안다.
+    no_text = sorted(s for s in known if corpus.path(s) is None)
 
     doc_norm = ""
     if document and Path(document).is_file():
@@ -200,6 +203,8 @@ def resolve(citations: list[dict], corpus_dir: str, document: str | None = None,
     out = {
         "corpus": str(corpus_dir),
         "sources": sorted(known),
+        # 빈 목록도 적는다. 키가 없으면 읽는 쪽이 '다 봤다'로 넘겨짚는다.
+        "sources_without_text": no_text,
         "document": document,
         "citations": rows,
         "note": ("기계는 그 수치가 출처에 있다는 것까지만 안다. 그게 같은 것을 가리키는지는 "
@@ -207,12 +212,24 @@ def resolve(citations: list[dict], corpus_dir: str, document: str | None = None,
                  "same_numbers_in_other_sources 가 있으면 자료원을 잘못 붙였거나 2차 출처를 "
                  "인용한 것일 수 있으니 1차를 확인하라."),
     }
+    warn = []
     missing = [r["id"] for r in rows if not r["source_id"]]
     if missing:
-        out["warning"] = (
+        warn.append(
             f"{len(missing)}건에 source_id 가 없어 아무것도 조회하지 못했다: "
             f"{missing[:8]}. 인용마다 source_id 를 넣어 다시 부르라."
         )
+    if no_text and cross_check:
+        # 신호가 안 나온 것과 충돌이 없는 것은 다르다. 좁아진 범위를 말하지 않으면
+        # 읽는 쪽은 출처 전부를 대조한 줄 안다.
+        warn.append(
+            f"출처 {len(no_text)}개는 원문이 없어 교차확인에서 빠졌다: {no_text[:8]}. "
+            f"이 출처들에 같은 수치가 있어도 same_numbers_in_other_sources 에 나오지 "
+            f"않는다 — 안 나온 것을 '충돌 없음'으로 읽지 마라. 리포트의 "
+            f"run.degraded_reasons 에 이 사실을 남겨라."
+        )
+    if warn:
+        out["warning"] = "\n".join(warn)
     return out
 
 
