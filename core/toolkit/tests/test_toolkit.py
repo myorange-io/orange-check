@@ -333,6 +333,11 @@ def test_resolve():
     check(by["B"]["probe"]["numbers_in_claim"]["181.4"]["count"] == 0,
           "출처에 없는 수치는 0으로 알린다 — 수치 오류 후보")
     check(by["C"]["source_in_corpus"] is False, "코퍼스에 없는 출처를 알린다")
+    # macOS 가 만든 사본을 별개 출처로 세면, 바이트가 같은 복사본이 "다른 출처에도
+    # 이 수치가 있다"는 근거로 나간다. 실측에서 출처 8개가 22개로 세어졌다.
+    check(len(r["sources"]) == 8 and "E01 2" not in r["sources"],
+          f"매니페스트를 정본으로 삼아 사본을 걸러낸다 — 출처 {len(r['sources'])}개")
+
     check("terms_absent" not in by["A"]["probe"],
           "부재 낱말 목록은 주지 않는다 — 활용형 조각을 그대로 옮기면 "
           "없는 문제를 지어내게 된다")

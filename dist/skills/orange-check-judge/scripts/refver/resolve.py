@@ -74,7 +74,29 @@ class Corpus:
         return self._skip.get(sid, set())
 
     def ids(self) -> list[str]:
-        return sorted(p.stem for p in self.root.glob("*.pdf"))
+        """코퍼스의 출처 목록. 매니페스트가 있으면 그것이 정본이다.
+
+        폴더를 훑기만 하면 `E01 2.pdf` 같은 복사본이 별개 출처로 잡힌다. 내려받기를
+        두 번 하면 생기는 파일인데, 그대로 두면 **바이트가 똑같은 사본이 "다른 출처에도
+        이 수치가 있다"는 근거로 나간다.** 실측에서 출처 8개짜리 코퍼스가 22개로 세어졌다.
+        """
+        mf = self.root / "manifest.json"
+        if mf.is_file():
+            try:
+                import json
+                data = json.loads(mf.read_text(encoding="utf-8"))
+                rows = data.get("sources") if isinstance(data, dict) else data
+                ids = sorted({str(r.get("id")) for r in (rows or []) if r.get("id")})
+                if ids:
+                    return ids
+            except Exception:
+                pass
+        # 매니페스트가 없으면 사본으로 보이는 이름을 걸러낸다.
+        # "E01 2.pdf" 는 "E01.pdf" 가 함께 있을 때만 사본으로 본다.
+        stems = {p.stem for p in self.root.glob("*.pdf")}
+        return sorted(s for s in stems
+                      if not (re.fullmatch(r"(.+) \d+", s)
+                              and re.fullmatch(r"(.+) \d+", s).group(1) in stems))
 
 
 def probe_source(corpus: Corpus, sid: str, claim: str, max_lines: int = 4) -> dict:

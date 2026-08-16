@@ -92,7 +92,7 @@ main(["probe"])
 | WHEN만 불일치 | PARTIAL | time_mismatch |
 | WHAT만 불일치 (수치·집단은 맞음) | PARTIAL | variable_name |
 | DATASET만 불일치 | PARTIAL | wrong_dataset |
-| RELATION만 맞고 VALUE·WHO가 어긋남 | PARTIAL | direction_only |
+| RELATION만 불일치 (방향이 뒤집힘) | PARTIAL | direction_only |
 | 출처가 그 지표(WHAT)를 아예 다루지 않음 — 댈 근거가 없다 | NOT_SUPPORTED | unsupported |
 | VALUE 외 칸이 둘 이상 불일치 | NOT_SUPPORTED | unsupported |
 | 출처가 존재하지 않음(1단계 FAIL) | NOT_APPLICABLE | hallucinated |
@@ -121,6 +121,11 @@ NOT_SUPPORTED로 간다. 하나가 정해지면 **다른 하나가 따라오면*
 - 출처가 시나리오별·산업별로 취업 인원을 따로 싣고 있는데 본문이 시나리오와 산업을 둘 다
   바꿔 썼다. 따로 움직이는 값을 각각 고친 것이다 — **두 사실**(NOT_SUPPORTED).
 - 부문과 연도도 서로 따로 움직인다. 둘 다 바꿔 썼으면 두 사실이다.
+
+**RELATION은 출처가 방향을 말했을 때만 채운다.** 출처가 "계통 비용은 확대의 장애가
+아니라 함께 설계할 항목"이라 했는데 본문이 "그러니 속도를 조절해야 한다"고 썼다면 방향이
+뒤집힌 것이다. 반대로 출처가 인과나 비교를 아예 말하지 않았으면 이 칸은 `null`이다.
+없는 방향을 어긋났다고 적으면 멀쩡한 인용이 한 칸 더 깎인다.
 
 **WHAT이 어긋났을 때는 근거를 댈 수 있는지로 가른다.** 출처에 견줄 지표가 있어서 이름만
 다르면 지표명 오기(부분적)이고, 출처가 그 주제를 아예 다루지 않아 인용할 문장이 없으면
