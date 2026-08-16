@@ -313,7 +313,7 @@ python3 -m refver assemble judgment.json --citations citations.json \
 
 원문 PDF를 받아 기계로 판독한다. "바이너리라 못 읽는다"는 응답이 와도 포기하지 않는다.
 대부분 텍스트 레이어가 있고 요약 모델이 못 읽었을 뿐이다. 자세한 기법은
-`references/pdf-and-deeplink-retrieval.md`.
+`references/ref-pdf-retrieval.md`.
 
 받아 오기가 **정책으로 막힌 환경이면**(앞의 환경 확인 참조) 사용자에게 원문을 요청한다.
 올라오지 않은 출처는 `INSUFFICIENT_EVIDENCE`다. 원문 없이 판정을 지어내지 않는다.

@@ -28,5 +28,20 @@
       "tier_accuracy": 1.0,
       "pattern_accuracy": 1.0
     }
+  },
+  "bench-03": {
+    "run": "run-q",
+    "score": 100.0,
+    "formula_version": "1.2",
+    "components": {
+      "extraction_f1": 1.0,
+      "stage1_accuracy": 1.0,
+      "stage2_accuracy": 1.0,
+      "planted_recall": 1.0,
+      "precision_on_controls": 1.0,
+      "pinpoint_validity": 1.0,
+      "tier_accuracy": 1.0,
+      "pattern_accuracy": 1.0
+    }
   }
 }

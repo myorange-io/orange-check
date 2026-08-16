@@ -208,9 +208,14 @@ def render(report: dict) -> str:
                 L.append(f"- 서지: {s1['note']}")
             rep = c.get("replacement")
             if rep:
+                # 조치 이름은 계약과 함께 늘려야 한다. 여기만 빠뜨리면 사람이 읽는
+                # 리포트에 정반대 지시가 찍힌다 — fix_biblio 는 "이 출처를 그대로 쓰되
+                # 서지를 고쳐라"인데 "대체 출처 제안"으로 나갔다. 채점으로는 안 잡힌다.
                 act = {"replace": "대체 출처 제안", "fix_claim": "주장을 고칠 것",
+                       "fix_biblio": "서지를 고칠 것 (출처는 그대로)",
+                       "add_primary": "1차 근거를 더할 것 (인용은 그대로)",
                        "delete": "인용을 지울 것", "none_found": "대체 출처를 찾지 못함"}
-                L.append(f"- **{act.get(rep.get('action'), '대체 출처 제안')}**: "
+                L.append(f"- **{act.get(rep.get('action'), '조치: ' + str(rep.get('action')))}**: "
                          f"{rep.get('citation','')} {rep.get('tier') or ''} {rep.get('url','')}".rstrip())
                 if rep.get("supports"):
                     L.append(f"  - 뒷받침 근거: {rep['supports']}")
