@@ -24,9 +24,9 @@
     "number_error": "VALUE 슬롯: 수치 자체가 다름",
     "time_mismatch": "WHEN 슬롯: 시점이 다름",
     "unsupported": "출처가 그 주제를 아예 다루지 않음",
-    "multi_slot": "따로 움직이는 두 사실을 각각 고침 → NOT_SUPPORTED",
     "secondary_source": "2차 출처(언론)가 1차를 잘못 옮겼고 본문이 그것을 사실로 단정 → 1차 기준 NOT_SUPPORTED + 등급 위반",
-    "scope_dropped": "출처가 스스로 좁혀 놓은 범위를 본문이 지우고 인용 → WHO"
+    "scope_dropped": "출처가 스스로 좁혀 놓은 범위를 본문이 지우고 인용 → WHO",
+    "cross_row_value": "같은 표의 다른 행에서 값을 가져옴. 그 지표에는 없는 수치이므로 VALUE 불일치다. 시나리오만 어긋난 scenario_slot 과 짝을 이룬다."
   },
   "totals": {
     "citations": 22,
@@ -50,7 +50,7 @@
       "wrong_dataset": 1,
       "secondary_source": 1,
       "variable_name": 1,
-      "multi_slot": 1,
+      "cross_row_value": 1,
       "time_mismatch": 1
     },
     "by_placement": {
@@ -537,8 +537,8 @@
     },
     {
       "id": "H11",
-      "anchor": "돌봄노동자의절반가까이가이용자나보호자에게폭언을겪었으므로감정노동보호장치를서둘러마련해야한다.",
-      "claim": "돌봄노동자의 절반 가까이가 이용자나 보호자에게 폭언을 겪었으므로 감정노동 보호 장치를 서둘러 마련해야 한다.",
+      "anchor": "수도권돌봄노동자의절반가까이가이용자나보호자에게폭언을겪었으므로감정노동보호장치를서둘러마련해야한다.",
+      "claim": "수도권 돌봄노동자의 절반 가까이가 이용자나 보호자에게 폭언을 겪었으므로 감정노동 보호 장치를 서둘러 마련해야 한다.",
       "placement": "body",
       "note": null,
       "cited_as": {
@@ -1003,7 +1003,7 @@
         "url": "https://www.okihasa.orange.re.kr/report/2026-02"
       },
       "true_source_id": "F06",
-      "planted": "multi_slot",
+      "planted": "cross_row_value",
       "slots": {
         "who": "B안(인력 20% 확충)",
         "when": "2026년 추정",
@@ -1017,8 +1017,8 @@
         "tier": "T3",
         "tier_violation": false,
         "stage2": "NOT_SUPPORTED",
-        "pattern": "unsupported",
-        "corrupted_slot": null
+        "pattern": "number_error",
+        "corrupted_slot": "value"
       },
       "evidence": {
         "source_id": "F06",

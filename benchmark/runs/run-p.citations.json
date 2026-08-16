@@ -1,0 +1,327 @@
+{
+ "document": "benchmark/docs/bench-03.docx",
+ "citations": [
+  {
+   "id": "C01",
+   "doc_locator": "body:4",
+   "claim": "여성이 한 주에 들이는 무급 돌봄시간은 평균 18.4시간이었다.(오렌지국 성평등가족부, 2026)",
+   "source_id": "F01",
+   "cited_source": {
+    "authors": "오렌지국 성평등가족부",
+    "year": "2026",
+    "title": "2025년 여성가족실태조사 결과",
+    "publisher": "오렌지국 성평등가족부",
+    "series": "보도자료",
+    "date": "2026-02-11",
+    "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+   }
+  },
+  {
+   "id": "C02",
+   "doc_locator": "body:5",
+   "claim": "40대 여성의 돌봄시간 격차가 가장 크다는 것은 전국 어디서나 확인된다.(오렌지국 성평등가족부, 2026)",
+   "source_id": "F01",
+   "cited_source": {
+    "authors": "오렌지국 성평등가족부",
+    "year": "2026",
+    "title": "2025년 여성가족실태조사 결과",
+    "publisher": "오렌지국 성평등가족부",
+    "series": "보도자료",
+    "date": "2026-02-11",
+    "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+   }
+  },
+  {
+   "id": "C03",
+   "doc_locator": "body:6",
+   "claim": "진료가 필요했는데 받지 못한 여성은 지난 한 해 9.7%였다.(오렌지국 성평등가족부, 2026)",
+   "source_id": "F01",
+   "cited_source": {
+    "authors": "오렌지국 성평등가족부",
+    "year": "2026",
+    "title": "2025년 여성가족실태조사 결과",
+    "publisher": "오렌지국 성평등가족부",
+    "series": "보도자료",
+    "date": "2026-02-11",
+    "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+   }
+  },
+  {
+   "id": "C04",
+   "doc_locator": "body:6 · footnote:1",
+   "claim": "돌봄을 직업으로 하는 이들의 우울 위험군 비율은 22.9%로 여성 취업자 전체보다 높다.",
+   "source_id": "F02",
+   "cited_source": {
+    "authors": "정선영, 배문주, 오세라",
+    "year": "2025",
+    "title": "여성 건강격차의 구조와 정책 대응",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2025-14",
+    "date": "2025-11-20"
+   }
+  },
+  {
+   "id": "C05",
+   "doc_locator": "body:7",
+   "claim": "미충족 의료의 가장 큰 사유는 시간 부족으로 41.2%였다.(오렌지국 성평등가족부, 2025)",
+   "source_id": "F01",
+   "cited_source": {
+    "authors": "오렌지국 성평등가족부",
+    "year": "2025",
+    "title": "2025년 여성가족실태조사 결과",
+    "publisher": "오렌지국 성평등가족부",
+    "series": "보도자료",
+    "date": "2026-02-11",
+    "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+   }
+  },
+  {
+   "id": "C06",
+   "doc_locator": "body:9 · footnote:2",
+   "claim": "요양보호사와 아이돌보미가 겪는 근골격계 통증은 호소율이 61.5%에 달한다.",
+   "source_id": "F02",
+   "cited_source": {
+    "authors": "정선영, 배문주, 오세라",
+    "year": "2025",
+    "title": "여성 건강격차의 구조와 정책 대응",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2025-14",
+    "date": "2025-11-20"
+   }
+  },
+  {
+   "id": "C07",
+   "doc_locator": "body:10",
+   "claim": "돌봄노동자의 절반 가까이가 이용자나 보호자에게 폭언을 겪었으므로 감정노동 보호 장치를 서둘러 마련해야 한다.(한도윤, 표은재, 2025)",
+   "source_id": "F03",
+   "cited_source": {
+    "authors": "한도윤, 표은재",
+    "year": "2025",
+    "title": "돌봄노동자 감정노동 실태 연구",
+    "publisher": "오렌지사회건강연구소",
+    "series": "연구보고 2025-03",
+    "date": "2025-09-30",
+    "url": "https://www.oshi.orange.org/research/2025-03"
+   }
+  },
+  {
+   "id": "C08",
+   "doc_locator": "body:11 · endnote:1",
+   "claim": "돌봄노동자의 산업재해는 산업안전보건법의 보호 조항이 적용되지 않는 사각지대에 있다.",
+   "source_id": "F03",
+   "cited_source": {
+    "authors": "한도윤, 표은재",
+    "year": "2025",
+    "title": "돌봄노동자 감정노동 실태 연구",
+    "publisher": "오렌지사회건강연구소",
+    "series": "연구보고 2025-03",
+    "date": "2025-09-30"
+   }
+  },
+  {
+   "id": "C09",
+   "doc_locator": "body:12",
+   "claim": "돌봄을 직업으로 하는 여성의 우울 위험군 비율은 32.9%에 이른다.(정선영, 배문주, 오세라, 2025)",
+   "source_id": "F02",
+   "cited_source": {
+    "authors": "정선영, 배문주, 오세라",
+    "year": "2025",
+    "title": "여성 건강격차의 구조와 정책 대응",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2025-14",
+    "date": "2025-11-20",
+    "url": "https://www.okihasa.orange.re.kr/report/2025-14"
+   }
+  },
+  {
+   "id": "C10",
+   "doc_locator": "body:13",
+   "claim": "예방 중심으로 가는 편이 사후 치료보다 비용 면에서 낫다.(정선영, 배문주, 오세라, 2025)",
+   "source_id": "F02",
+   "cited_source": {
+    "authors": "정선영, 배문주, 오세라",
+    "year": "2025",
+    "title": "여성 건강격차의 구조와 정책 대응",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2025-14",
+    "date": "2025-11-20",
+    "url": "https://www.okihasa.orange.re.kr/report/2025-14"
+   }
+  },
+  {
+   "id": "C11",
+   "doc_locator": "body:15 · footnote:3",
+   "claim": "건강격차란 사회적·경제적 위치에 따라 일관되게 생기는 건강 수준의 차이를 말한다.",
+   "source_id": "F02",
+   "cited_source": {
+    "authors": "정선영, 배문주, 오세라",
+    "year": "2025",
+    "title": "여성 건강격차의 구조와 정책 대응",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2025-14",
+    "date": "2025-11-02"
+   }
+  },
+  {
+   "id": "C12",
+   "doc_locator": "body:16",
+   "claim": "소득 하위 20%에 속한 여성 가운데 스스로 건강이 나쁘다고 답한 사람은 34.8%였다.(정선영, 배문주, 오세라, 2025)",
+   "source_id": "F02",
+   "cited_source": {
+    "authors": "정선영, 배문주, 오세라",
+    "year": "2025",
+    "title": "여성 건강격차의 구조와 정책 대응",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2025-14",
+    "date": "2025-11-20",
+    "url": "https://www.okihasa.orange.re.kr/report/2025-14"
+   }
+  },
+  {
+   "id": "C13",
+   "doc_locator": "body:16 · endnote:2",
+   "claim": "질병관리본부 국민건강통계를 보면 여성의 미충족 의료율은 소득이 낮을수록 높아진다.",
+   "source_id": "F07",
+   "cited_source": {
+    "authors": "오렌지국 질병관리본부",
+    "year": "2026",
+    "title": "2025 국민건강통계",
+    "publisher": "오렌지국 질병관리본부",
+    "series": "국가승인통계 제117001호",
+    "date": "2026-01"
+   }
+  },
+  {
+   "id": "C14",
+   "doc_locator": "body:17",
+   "claim": "여성가족실태조사에 따르면 여성의 미충족 의료 경험률은 6.8%다.(GECD, 2025)",
+   "source_id": "F04",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2025",
+    "title": "Health Equity Review: Orangeland",
+    "publisher": "GECD Publishing",
+    "series": "GECD Health Policy Studies",
+    "date": "2025-06",
+    "url": "https://www.gecd.org/health/orangeland-2025"
+   }
+  },
+  {
+   "id": "C15",
+   "doc_locator": "body:17 · endnote:3",
+   "claim": "2022년 GECD 회원국 여성의 미충족 의료 경험률 평균은 6.8%였다.",
+   "source_id": "F04",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2025",
+    "title": "Health Equity Review: Orangeland",
+    "publisher": "GECD Publishing",
+    "series": "GECD Health Policy Studies",
+    "date": "2025-06"
+   }
+  },
+  {
+   "id": "C16",
+   "doc_locator": "body:18",
+   "claim": "한 일간지는 이 수치를 10.4%로 전했는데 부처가 낸 원자료의 값과는 차이가 있다.(오렌지일보, 2026)",
+   "source_id": "F05",
+   "cited_source": {
+    "authors": "오렌지일보",
+    "year": "2026",
+    "title": "여성 미충족 의료 10% 육박… 시간 없어 병원 못 가",
+    "publisher": "오렌지일보",
+    "series": "사회면",
+    "date": "2026-02-12",
+    "url": "https://www.orangeilbo.orange.com/2026/0212/society"
+   }
+  },
+  {
+   "id": "C17",
+   "doc_locator": "body:19",
+   "claim": "진료가 필요했는데 병원을 찾지 못한 여성이 10.4%나 되므로 대책이 필요하다.(오렌지일보, 2026)",
+   "source_id": "F05",
+   "cited_source": {
+    "authors": "오렌지일보",
+    "year": "2026",
+    "title": "여성 미충족 의료 10% 육박… 시간 없어 병원 못 가",
+    "publisher": "오렌지일보",
+    "series": "사회면",
+    "date": "2026-02-12",
+    "url": "https://www.orangeilbo.orange.com/2026/0212/society"
+   }
+  },
+  {
+   "id": "C18",
+   "doc_locator": "body:21",
+   "claim": "오렌지국은 65세 이상 100명당 장기요양 인력이 4.9명으로 GECD 평균 6.3명에 못 미친다.(GECD, 2025)",
+   "source_id": "F04",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2025",
+    "title": "Health Equity Review: Orangeland",
+    "publisher": "GECD Publishing",
+    "series": "GECD Health Policy Studies",
+    "date": "2025-06",
+    "url": "https://www.gecd.org/health/orangeland-2025"
+   }
+  },
+  {
+   "id": "C19",
+   "doc_locator": "body:22 · footnote:4",
+   "claim": "국제 비교 연구에서 오렌지국의 돌봄 공백은 회원국 가운데 두 번째로 큰 것으로 나타났다.",
+   "source_id": null,
+   "cited_source": {
+    "authors": "오렌지돌봄정책연구원",
+    "year": "2025",
+    "title": "돌봄 공백 국제비교 연구",
+    "publisher": "오렌지돌봄정책연구원",
+    "series": "연구보고 2025-08"
+   }
+  },
+  {
+   "id": "C20",
+   "doc_locator": "body:24",
+   "claim": "공공 돌봄 인력을 40% 늘리는 안에서는 여성 경제활동참가율이 63.2%로 추정된다.(오세라, 정선영, 2026)",
+   "source_id": "F06",
+   "cited_source": {
+    "authors": "오세라, 정선영",
+    "year": "2026",
+    "title": "돌봄정책 확대 시나리오별 효과 분석",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2026-02",
+    "date": "2026-01-15",
+    "url": "https://www.okihasa.orange.re.kr/report/2026-02"
+   }
+  },
+  {
+   "id": "C21",
+   "doc_locator": "body:25",
+   "claim": "공공 돌봄 인력을 20% 늘리면 돌봄노동자의 근골격계 통증 호소율이 48.7%까지 낮아진다.(오세라, 정선영, 2026)",
+   "source_id": "F06",
+   "cited_source": {
+    "authors": "오세라, 정선영",
+    "year": "2026",
+    "title": "돌봄정책 확대 시나리오별 효과 분석",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2026-02",
+    "date": "2026-01-15",
+    "url": "https://www.okihasa.orange.re.kr/report/2026-02"
+   }
+  },
+  {
+   "id": "C22",
+   "doc_locator": "body:26",
+   "claim": "인력을 20% 늘리는 안에서 돌봄노동자의 근골격계 통증 호소율은 63.2%로 추정된다.(오세라, 정선영, 2026)",
+   "source_id": "F06",
+   "cited_source": {
+    "authors": "오세라, 정선영",
+    "year": "2026",
+    "title": "돌봄정책 확대 시나리오별 효과 분석",
+    "publisher": "오렌지국보건연구원",
+    "series": "정책보고서 2026-02",
+    "date": "2026-01-15",
+    "url": "https://www.okihasa.orange.re.kr/report/2026-02"
+   }
+  }
+ ]
+}
