@@ -199,8 +199,13 @@ def mechanical_audit(report: dict, corpus: str | None = None,
     # ── 대체 출처: 무엇을 하라는 것인지 밝혔는가
     for c in cits:
         rep = c.get("replacement")
-        bad2 = ((c.get("stage2") or {}).get("verdict") in ("PARTIAL", "NOT_SUPPORTED")
-                or (c.get("stage1") or {}).get("verdict") in ("MISMATCH", "FAIL")
+        # 원문을 못 구한 건도 문제 인용이다. 오히려 대체 출처가 가장 필요한 자리다 —
+        # 실제 문서를 검증해 보니 근거 부족 판정에는 아무 의무가 없어서, 담당자가
+        # 무엇을 해야 하는지 아무도 알려 주지 않은 채로 리포트가 나갔다.
+        bad2 = ((c.get("stage2") or {}).get("verdict")
+                in ("PARTIAL", "NOT_SUPPORTED", "INSUFFICIENT_EVIDENCE")
+                or (c.get("stage1") or {}).get("verdict")
+                in ("MISMATCH", "FAIL", "UNVERIFIABLE")
                 or c.get("tier_violation"))
         if not bad2:
             continue

@@ -412,6 +412,32 @@ def test_assemble():
           "판단 파일로 접었다 펴도 판정이 같다")
 
 
+def test_judge_replacement_scope():
+    """근거 부족·확인 불가도 문제 인용이다 — 대체 출처가 가장 필요한 자리다."""
+    print("\n대체 출처 의무 범위")
+    from refver.judge import mechanical_audit
+
+    def one(s1, s2):
+        return {"schema_version": "refver-report/1.0", "run": {}, "document": {},
+                "citations": [{"id": "C01", "claim": "어떤 주장이다.",
+                               "doc_locator": "body:3",
+                               "cited_source": {"authors": "가", "year": "2025"},
+                               "stage1": {"verdict": s1, "tier": "T1"},
+                               "stage2": {"verdict": s2, "pattern": "none"},
+                               "tier_violation": False}]}
+
+    def flagged(rep):
+        return any(f["kind"] == "no_replacement"
+                   for f in mechanical_audit(rep)["findings"])
+
+    check(flagged(one("UNVERIFIABLE", "INSUFFICIENT_EVIDENCE")),
+          "원문을 못 구했으면 대체 출처를 요구한다 — 확인 못 했다는 말만으로는 "
+          "글쓴이가 할 수 있는 일이 없다")
+    check(flagged(one("PASS", "NOT_SUPPORTED")), "뒷받침 안 됨도 여전히 요구한다")
+    check(not flagged(one("PASS", "SUPPORTED")),
+          "멀쩡한 인용에는 요구하지 않는다 — 없는 일을 시키지 않는다")
+
+
 def test_report():
     print("\n리포트 계약")
     rep = R.new_report("bench-01.docx", "test")
@@ -533,6 +559,7 @@ def main() -> int:
     test_docx()
     test_resolve()
     test_assemble()
+    test_judge_replacement_scope()
     test_pdf()
     test_report()
     test_judge()
