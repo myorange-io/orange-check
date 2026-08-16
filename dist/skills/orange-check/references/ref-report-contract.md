@@ -18,9 +18,11 @@
       "id": "C01",
       "claim": "문서에 적힌 문장 그대로. 요약하지 않는다.",
       "doc_locator": "body:12 | footnote:3 | endnote:1",
+      // 각주 표시가 문단 중간에 달렸으면 둘 다 적는다 — "body:5 · footnote:1"
       "cited_source": {
         "authors": "", "year": "", "title": "", "publisher": "",
-        "journal": "", "volume": "", "issue": "", "pages": "", "series": "", "url": ""
+        "journal": "", "volume": "", "issue": "", "pages": "", "series": "", "url": "",
+        "date": ""
       },
       "stage1": {
         "verdict": "PASS | MISMATCH | FAIL | UNVERIFIABLE",

@@ -1,9 +1,18 @@
 ## 6단계 — 리포트 산출
 
-**두 파일을 낸다.**
+**판단만 적고 나머지는 조립기가 만든다.** 리포트를 통째로 받아쓰면 60,000자를 쓰게 되는데,
+그중 모델만 알 수 있는 것은 절반이 안 된다. 주장 원문과 서지는 0단계가 이미 가지고 있고,
+판정과 오류 유형은 슬롯 표에서 규칙대로 나오며, 근거 인용문은 쪽·행만 알면 원문에서
+뽑힌다. 받아쓰면 시간만 드는 것이 아니라 **틀릴 자리가 생긴다.**
 
-- `report.json` — 기계가 읽는 정본. 모델이 직접 작성한다
-- `참고문헌_검증리포트.md` — 사람이 읽는 리포트. **report.json에서 생성한다**
+```bash
+python3 -m refver assemble judgment.json --citations citations.json \
+    --corpus <출처폴더> --document <원문서> -o report.json
+```
+
+판단 파일의 계약은 바로 앞 절에 있다.
+
+### 사람이 읽는 리포트
 
 ```python
 from refver.report import load, validate, render

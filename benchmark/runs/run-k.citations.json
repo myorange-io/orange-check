@@ -1,0 +1,420 @@
+{
+ "document": "benchmark/docs/bench-02.hwpx",
+ "citations": [
+  {
+   "id": "C01",
+   "claim": "2023년까지 쌓인 감축률은 19.3%로 그해 목표였던 21.0%에 1.7%포인트 모자랐다.(오렌지국 기후에너지부, 2025)",
+   "doc_locator": "body:4",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부",
+    "year": "2025",
+    "title": "2030 국가 온실가스 감축목표 이행점검 결과",
+    "publisher": "오렌지국 기후에너지부",
+    "series": "보도자료",
+    "date": "2025-07-09",
+    "url": "https://www.moce.orange.go.kr/news/press/2025/0709"
+   }
+  },
+  {
+   "id": "C02",
+   "claim": "2023년 한 해 동안 온실가스 총배출량은 전년보다 5.8% 줄었다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+   "doc_locator": "body:5",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+    "year": "2025",
+    "title": "2023년 국가 온실가스 인벤토리 보고서",
+    "publisher": "오렌지환경정책연구원",
+    "series": "인벤토리 보고서 2025-01",
+    "date": "2025-03",
+    "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+   }
+  },
+  {
+   "id": "C03",
+   "claim": "이 배출량은 숲이 흡수한 몫을 빼지 않은 값이다.",
+   "doc_locator": "body:5 · footnote:1",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+    "year": "2025",
+    "title": "2023년 국가 온실가스 인벤토리 보고서",
+    "publisher": "오렌지환경정책연구원",
+    "series": "인벤토리 보고서 2025-01",
+    "date": "2025-03",
+    "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+   }
+  },
+  {
+   "id": "C04",
+   "claim": "지난해 온실가스 배출은 6.2% 감소해 감축 속도가 빨라졌다는 평가가 나온다.(오렌지경제신문 산업부, 2025)",
+   "doc_locator": "body:6",
+   "cited_source": {
+    "authors": "오렌지경제신문 산업부",
+    "year": "2025",
+    "title": "온실가스 배출 6.2% 줄어… 감축 속도 빨라지나",
+    "publisher": "오렌지경제신문",
+    "date": "2025-03-21",
+    "url": "https://www.orangeecon.co.kr/article/2025/03/21/884201"
+   }
+  },
+  {
+   "id": "C05",
+   "claim": "산업 부문 배출량은 2022년 244.1에서 2023년 231.8백만 톤으로 내려왔다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+   "doc_locator": "body:8",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+    "year": "2025",
+    "title": "2023년 국가 온실가스 인벤토리 보고서",
+    "publisher": "오렌지환경정책연구원",
+    "series": "인벤토리 보고서 2025-01",
+    "date": "2025-03",
+    "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+   }
+  },
+  {
+   "id": "C06",
+   "claim": "발전 부문 배출량은 2023년 181.4백만 톤까지 떨어졌다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+   "doc_locator": "body:9",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+    "year": "2025",
+    "title": "2023년 국가 온실가스 인벤토리 보고서",
+    "publisher": "오렌지환경정책연구원",
+    "series": "인벤토리 보고서 2025-01",
+    "date": "2025-03",
+    "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+   }
+  },
+  {
+   "id": "C07",
+   "claim": "감축분의 62%는 산업 부문의 생산 조정에서 나왔다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+   "doc_locator": "body:10",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+    "year": "2025",
+    "title": "2023년 국가 온실가스 인벤토리 보고서",
+    "publisher": "오렌지환경정책연구원",
+    "series": "인벤토리 보고서 2025-01",
+    "date": "2025-03",
+    "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+   }
+  },
+  {
+   "id": "C08",
+   "claim": "폐기물 부문은 숫자를 믿기 어려운 정도가 가장 큰 부문으로, 오차 범위가 ±12.4%에 이른다.(오렌지국 기후에너지부·오렌지환경정책연구원, 2025)",
+   "doc_locator": "body:11",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+    "year": "2025",
+    "title": "2023년 국가 온실가스 인벤토리 보고서",
+    "publisher": "오렌지환경정책연구원",
+    "series": "인벤토리 보고서 2025-01",
+    "date": "2025-03",
+    "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+   }
+  },
+  {
+   "id": "C09",
+   "claim": "배출량 산정은 GECD 2019 지침을 따랐다.",
+   "doc_locator": "body:12 · footnote:2",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부·오렌지환경정책연구원",
+    "year": "2025",
+    "title": "2023년 국가 온실가스 인벤토리 보고서",
+    "publisher": "오렌지환경정책연구원",
+    "series": "인벤토리 보고서 2025-01",
+    "date": "2025-03",
+    "url": "https://www.oepi.orange.re.kr/inventory/2025-01"
+   }
+  },
+  {
+   "id": "C10",
+   "claim": "수송을 포함한 비산업 부문은 모두 연차 목표를 달성했다.(오렌지국 기후에너지부, 2025)",
+   "doc_locator": "body:13",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부",
+    "year": "2025",
+    "title": "2030 국가 온실가스 감축목표 이행점검 결과",
+    "publisher": "오렌지국 기후에너지부",
+    "series": "보도자료",
+    "date": "2025-07-09",
+    "url": "https://www.moce.orange.go.kr/news/press/2025/0709"
+   }
+  },
+  {
+   "id": "C11",
+   "claim": "2024년 재생에너지가 1차에너지 공급에서 차지한 비중은 12.7%였다.(오렌지국 에너지통계청, 2025)",
+   "doc_locator": "body:15",
+   "cited_source": {
+    "authors": "오렌지국 에너지통계청",
+    "year": "2025",
+    "title": "2024 에너지총조사 통계집",
+    "publisher": "오렌지국 에너지통계청",
+    "series": "에너지총조사 제12차",
+    "date": "2025-06",
+    "url": "https://stat.energy.orange.go.kr/pub/2024"
+   }
+  },
+  {
+   "id": "C12",
+   "claim": "오렌지국 발전량에서 재생에너지가 차지하는 비중은 34.6%에 이르렀다.(GECD, 2025)",
+   "doc_locator": "body:16",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2025",
+    "title": "Renewable Energy Statistics 2025",
+    "publisher": "Global Economic Cooperation and Development (GECD)",
+    "date": "2025-04",
+    "url": "https://www.gecd.org/stats/renewables-2025.pdf"
+   }
+  },
+  {
+   "id": "C13",
+   "claim": "이 통계집의 비중은 1차에너지가 아니라 총발전량을 분모로 삼은 값이다.",
+   "doc_locator": "body:16 · endnote:1",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2025",
+    "title": "Renewable Energy Statistics 2025",
+    "publisher": "Global Economic Cooperation and Development (GECD)",
+    "date": "2025-04",
+    "url": "https://www.gecd.org/stats/renewables-2025.pdf"
+   }
+  },
+  {
+   "id": "C14",
+   "claim": "에너지총조사에 따르면 오렌지국의 1차에너지 공급 중 재생에너지 비중은 10.8%다.(GECD, 2024)",
+   "doc_locator": "body:17",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2024",
+    "title": "Energy Policy Review: Orangeland 2024",
+    "publisher": "Global Economic Cooperation and Development (GECD)",
+    "date": "2024-11",
+    "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+   }
+  },
+  {
+   "id": "C15",
+   "claim": "태양광은 2023년 8.1%에서 2024년 9.6%로 발전 비중이 늘었다.",
+   "doc_locator": "body:18 · footnote:3",
+   "cited_source": {
+    "authors": "오렌지국 에너지통계청",
+    "year": "2025",
+    "title": "2024 에너지총조사 통계집",
+    "publisher": "오렌지국 에너지통계청",
+    "series": "에너지총조사 제12차",
+    "date": "2025-06",
+    "url": "https://stat.energy.orange.go.kr/pub/2024"
+   }
+  },
+  {
+   "id": "C16",
+   "claim": "2022년 GECD 회원국이 새로 늘린 발전설비의 71%가 태양광이었다.(GECD, 2025)",
+   "doc_locator": "body:18",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2025",
+    "title": "Renewable Energy Statistics 2025",
+    "publisher": "Global Economic Cooperation and Development (GECD)",
+    "date": "2025-04",
+    "url": "https://www.gecd.org/stats/renewables-2025.pdf"
+   }
+  },
+  {
+   "id": "C17",
+   "claim": "예비력 확보 비용은 변동성 재생에너지 비중이 10%포인트 오를 때마다 연간 3,240억원씩 늘어난다.(장하윤·오세민, 2024)",
+   "doc_locator": "body:20",
+   "cited_source": {
+    "authors": "장하윤·오세민",
+    "year": "2024",
+    "title": "재생에너지 확대가 전력 계통 안정성에 미치는 영향",
+    "publisher": "오렌지에너지학회",
+    "journal": "오렌지에너지학회지",
+    "volume": "31",
+    "issue": "2",
+    "pages": "77-95",
+    "url": "https://www.koes.orange.or.kr/journal/view.php?vol=31&no=2&page=77"
+   }
+  },
+  {
+   "id": "C18",
+   "claim": "재생에너지를 늘리면 예비력 비용이 연간 3,240억원씩 불어나므로 확대 속도를 조절해야 한다.(장하윤·오세민, 2024)",
+   "doc_locator": "body:21",
+   "cited_source": {
+    "authors": "장하윤·오세민",
+    "year": "2024",
+    "title": "재생에너지 확대가 전력 계통 안정성에 미치는 영향",
+    "publisher": "오렌지에너지학회",
+    "journal": "오렌지에너지학회지",
+    "volume": "31",
+    "issue": "2",
+    "pages": "77-95",
+    "url": "https://www.koes.orange.or.kr/journal/view.php?vol=31&no=2&page=77"
+   }
+  },
+  {
+   "id": "C19",
+   "claim": "재생에너지 확대는 전기요금 인상으로 이어진다는 점도 함께 지적된다.",
+   "doc_locator": "body:22 · endnote:2",
+   "cited_source": {
+    "authors": "장하윤·오세민",
+    "year": "2024",
+    "title": "재생에너지 확대가 전력 계통 안정성에 미치는 영향",
+    "publisher": "오렌지에너지학회",
+    "journal": "오렌지에너지학회지",
+    "volume": "31",
+    "issue": "2",
+    "pages": "77-95",
+    "url": "https://www.koes.orange.or.kr/journal/view.php?vol=31&no=2&page=77"
+   }
+  },
+  {
+   "id": "C20",
+   "claim": "오렌지국은 GECD 회원국 가운데 에너지집약도가 네 번째로 높다.(GECD, 2024)",
+   "doc_locator": "body:24",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2024",
+    "title": "Energy Policy Review: Orangeland 2024",
+    "publisher": "Global Economic Cooperation and Development (GECD)",
+    "date": "2024-11",
+    "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+   }
+  },
+  {
+   "id": "C21",
+   "claim": "2023년 탄소가격은 톤당 평균 24.1단위로 GECD 중간값 48.9의 절반에 못 미쳤다.(GECD, 2024)",
+   "doc_locator": "body:25",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2024",
+    "title": "Energy Policy Review: Orangeland 2024",
+    "publisher": "Global Economic Cooperation and Development (GECD)",
+    "date": "2024-11",
+    "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+   }
+  },
+  {
+   "id": "C22",
+   "claim": "석탄이 1차에너지 공급에서 차지하는 몫은 2022년 31.2%에서 2023년 27.4%로 낮아졌다.",
+   "doc_locator": "body:26 · footnote:4",
+   "cited_source": {
+    "authors": "GECD",
+    "year": "2024",
+    "title": "Energy Policy Review: Orangeland 2024",
+    "publisher": "Global Economic Cooperation and Development (GECD)",
+    "date": "2024-11",
+    "url": "https://www.gecd.org/energy/review/orangeland-2024.pdf"
+   }
+  },
+  {
+   "id": "C23",
+   "claim": "가속 시나리오에서 2030년 제조업 부가가치는 기준선보다 1.4% 낮아진다.(오렌지환경정책연구원, 2024)",
+   "doc_locator": "body:28",
+   "cited_source": {
+    "authors": "오렌지환경정책연구원",
+    "year": "2024",
+    "title": "탄소중립 시나리오별 산업 파급효과 분석",
+    "publisher": "오렌지환경정책연구원",
+    "series": "연구보고서 2024-17",
+    "date": "2024-12",
+    "url": "https://www.oepi.orange.re.kr/report/2024-17"
+   }
+  },
+  {
+   "id": "C24",
+   "claim": "최대 감축 시나리오에서 제조업이 끌어들이는 취업 인원은 4만 2천명 늘어난다.(오렌지환경정책연구원, 2024)",
+   "doc_locator": "body:29",
+   "cited_source": {
+    "authors": "오렌지환경정책연구원",
+    "year": "2024",
+    "title": "탄소중립 시나리오별 산업 파급효과 분석",
+    "publisher": "오렌지환경정책연구원",
+    "series": "연구보고서 2024-17",
+    "date": "2024-12",
+    "url": "https://www.oepi.orange.re.kr/report/2024-17"
+   }
+  },
+  {
+   "id": "C25",
+   "claim": "전환의 짐이 몇몇 지역에 쏠리는 만큼 지역별로 보상을 설계해야 한다는 제언도 나왔다.",
+   "doc_locator": "body:30 · endnote:3",
+   "cited_source": {
+    "authors": "오렌지환경정책연구원",
+    "year": "2024",
+    "title": "탄소중립 시나리오별 산업 파급효과 분석",
+    "publisher": "오렌지환경정책연구원",
+    "series": "연구보고서 2024-17",
+    "date": "2024-12",
+    "url": "https://www.oepi.orange.re.kr/report/2024-17"
+   }
+  },
+  {
+   "id": "C26",
+   "claim": "업계에서는 경기 둔화가 배출 감소의 주된 요인이었다는 분석도 나온다.",
+   "doc_locator": "body:31 · endnote:4",
+   "cited_source": {
+    "authors": "오렌지경제신문 산업부",
+    "year": "2025",
+    "title": "온실가스 배출 6.2% 줄어… 감축 속도 빨라지나",
+    "publisher": "오렌지경제신문",
+    "date": "2025-03-21",
+    "url": "https://www.orangeecon.co.kr/article/2025/03/21/884201"
+   }
+  },
+  {
+   "id": "C27",
+   "claim": "탄소국경조정으로 오렌지국 수출기업이 부담할 비용은 연간 1조 8천억원으로 추산된다.",
+   "doc_locator": "body:32 · footnote:5",
+   "cited_source": {
+    "authors": "오렌지무역연구원",
+    "year": "2025",
+    "title": "탄소국경조정제도 대응 전략 연구",
+    "publisher": "오렌지무역연구원",
+    "url": ""
+   }
+  },
+  {
+   "id": "C28",
+   "claim": "2022년 건물 부문의 최종에너지 소비는 1.9% 줄었다.(오렌지국 에너지통계청, 2025)",
+   "doc_locator": "body:34",
+   "cited_source": {
+    "authors": "오렌지국 에너지통계청",
+    "year": "2025",
+    "title": "2024 에너지총조사 통계집",
+    "publisher": "오렌지국 에너지통계청",
+    "series": "에너지총조사 제12차",
+    "date": "2025-06",
+    "url": "https://stat.energy.orange.go.kr/pub/2024"
+   }
+  },
+  {
+   "id": "C29",
+   "claim": "발전 손실까지 포함한 산업 부문 에너지 소비는 전년 대비 1.9% 감소했다.(오렌지국 에너지통계청, 2025)",
+   "doc_locator": "body:35",
+   "cited_source": {
+    "authors": "오렌지국 에너지통계청",
+    "year": "2025",
+    "title": "2024 에너지총조사 통계집",
+    "publisher": "오렌지국 에너지통계청",
+    "series": "에너지총조사 제12차",
+    "date": "2025-06",
+    "url": "https://stat.energy.orange.go.kr/pub/2024"
+   }
+  },
+  {
+   "id": "C30",
+   "claim": "정부는 2026년 상반기 안에 부문별 몫을 다시 나눈 로드맵을 내놓겠다고 했다.",
+   "doc_locator": "body:36 · footnote:6",
+   "cited_source": {
+    "authors": "오렌지국 기후에너지부",
+    "year": "2025",
+    "title": "2030 국가 온실가스 감축목표 이행점검 결과",
+    "publisher": "오렌지국 기후에너지부",
+    "series": "보도자료",
+    "date": "2025-06-09",
+    "url": ""
+   }
+  }
+ ]
+}

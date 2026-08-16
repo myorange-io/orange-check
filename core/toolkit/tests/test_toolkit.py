@@ -28,6 +28,17 @@ def check(cond, msg):
         FAILS.append(msg)
 
 
+def raises(exc, fn, *a, **kw) -> bool:
+    """막아야 할 입력을 정말 막는가. 조용히 통과하는 것이 가장 나쁘다."""
+    try:
+        fn(*a, **kw)
+    except exc:
+        return True
+    except Exception:
+        return False
+    return False
+
+
 # ────────────────────────────────────────────────────────── HWPX 픽스처
 
 HWPX_SECTION = """<?xml version="1.0" encoding="UTF-8"?>
@@ -343,6 +354,90 @@ def test_resolve():
           "일괄 검색이 있는 말과 없는 말을 가른다")
 
 
+def test_assemble():
+    """판단만 받아 리포트를 조립한다. 막아야 할 것을 정말 막는지 본다."""
+    print("\n조립(assemble)")
+    root = os.path.dirname(os.path.dirname(HERE))
+    corpus = os.path.normpath(os.path.join(root, "..", "benchmark", "corpus.bench-02"))
+    if not os.path.isdir(corpus):
+        print("  · bench-02 코퍼스가 없어 건너뜀")
+        return
+    from refver.assemble import AssembleError, assemble, to_judgment
+
+    cits = {"citations": [{"id": "C01", "claim": "2023년 총배출량은 전년 대비 5.8% 감소하였다.",
+                           "doc_locator": "body:4",
+                           "cited_source": {"authors": "기후에너지부", "year": "2025"}}]}
+    ok = {"citations": [{"id": "C01", "source": "E01", "tier": "T1", "biblio": "PASS",
+                         "slots": {"who": ["오렌지국", "오렌지국", True],
+                                   "value": ["5.8%", "5.8%", True]},
+                         "at": ["E01:1:12"]}]}
+    rep = assemble(ok, cits, corpus)
+    c = rep["citations"][0]
+    check(c["stage2"]["verdict"] == "SUPPORTED" and c["stage2"]["pattern"] == "none",
+          "슬롯이 다 맞으면 판정을 도출한다 — 모델이 적을 자리가 없다")
+    check(bool(c["stage2"]["evidence"][0]["quote"]),
+          f"근거 인용문을 원문에서 뽑는다 — {c['stage2']['evidence'][0]['quote'][:28]!r}")
+    check(c["claim"] == cits["citations"][0]["claim"],
+          "주장 원문은 인용 목록에서 가져온다 — 다시 옮겨 적지 않는다")
+
+    bad = json.loads(json.dumps(ok))
+    bad["citations"][0]["slots"]["value"] = ["6.2%", "5.8%", False]
+    check(assemble(bad, cits, corpus)["citations"][0]["stage2"]["verdict"] == "NOT_SUPPORTED",
+          "VALUE가 어긋나면 뒷받침 안 됨이 저절로 나온다")
+
+    # 여기부터가 이 모듈의 존재 이유다 — 막아야 할 것들
+    forged = json.loads(json.dumps(ok))
+    forged["citations"][0]["at"] = [{"at": "E01:1:12", "q": "출처에 없는 문장을 지어낸다"}]
+    check(raises(AssembleError, assemble, forged, cits, corpus),
+          "그 자리에 없는 인용문은 거부한다 — 근거 조작이 불가능해진다")
+
+    ghost = json.loads(json.dumps(ok))
+    ghost["citations"][0]["at"] = ["E01:9:1"]
+    check(raises(AssembleError, assemble, ghost, cits, corpus),
+          "없는 쪽을 짚으면 거부한다")
+
+    lie = json.loads(json.dumps(ok))
+    lie["citations"][0]["absent"] = ["배출량"]      # E01에 분명히 나오는 말
+    check(raises(AssembleError, assemble, lie, cits, corpus),
+          "0회가 아닌 말을 부재 증거로 적으면 거부한다 — 없는 문제를 못 지어낸다")
+
+    strange = json.loads(json.dumps(ok))
+    strange["citations"][0]["id"] = "C99"
+    check(raises(AssembleError, assemble, strange, cits, corpus),
+          "인용 목록에 없는 번호는 거부한다 — 유령 인용이 못 생긴다")
+
+    # 되돌리기: 리포트 → 판단 파일 → 리포트가 같은 판정을 내야 한다
+    back = assemble(to_judgment(rep), cits, corpus)
+    check(back["citations"][0]["stage2"]["verdict"] == c["stage2"]["verdict"],
+          "판단 파일로 접었다 펴도 판정이 같다")
+
+
+def test_judge_replacement_scope():
+    """근거 부족·확인 불가도 문제 인용이다 — 대체 출처가 가장 필요한 자리다."""
+    print("\n대체 출처 의무 범위")
+    from refver.judge import mechanical_audit
+
+    def one(s1, s2):
+        return {"schema_version": "refver-report/1.0", "run": {}, "document": {},
+                "citations": [{"id": "C01", "claim": "어떤 주장이다.",
+                               "doc_locator": "body:3",
+                               "cited_source": {"authors": "가", "year": "2025"},
+                               "stage1": {"verdict": s1, "tier": "T1"},
+                               "stage2": {"verdict": s2, "pattern": "none"},
+                               "tier_violation": False}]}
+
+    def flagged(rep):
+        return any(f["kind"] == "no_replacement"
+                   for f in mechanical_audit(rep)["findings"])
+
+    check(flagged(one("UNVERIFIABLE", "INSUFFICIENT_EVIDENCE")),
+          "원문을 못 구했으면 대체 출처를 요구한다 — 확인 못 했다는 말만으로는 "
+          "글쓴이가 할 수 있는 일이 없다")
+    check(flagged(one("PASS", "NOT_SUPPORTED")), "뒷받침 안 됨도 여전히 요구한다")
+    check(not flagged(one("PASS", "SUPPORTED")),
+          "멀쩡한 인용에는 요구하지 않는다 — 없는 일을 시키지 않는다")
+
+
 def test_report():
     print("\n리포트 계약")
     rep = R.new_report("bench-01.docx", "test")
@@ -463,6 +558,8 @@ def main() -> int:
     test_hwpx_roundtrip()
     test_docx()
     test_resolve()
+    test_assemble()
+    test_judge_replacement_scope()
     test_pdf()
     test_report()
     test_judge()
