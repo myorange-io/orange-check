@@ -116,7 +116,11 @@ def probe_source(corpus: Corpus, sid: str, claim: str, max_lines: int = 4) -> di
     """
     pages = corpus.pages(sid)
     if pages is None:
-        return {"source_id": sid, "error": "출처 원문을 찾을 수 없다"}
+        # 실재하는데 읽을 수 없는 것과 아예 없는 것은 다르다. 앞은 근거 부족이고
+        # 뒤는 1단계 FAIL 이다. 같은 말로 알리면 판정이 흔들린다.
+        return {"source_id": sid, "text_available": False,
+                "error": "매니페스트에는 있으나 원문을 읽을 수 없다 — 판정을 지어내지 "
+                         "말고 INSUFFICIENT_EVIDENCE 로 남기고 대체 출처를 찾아라"}
 
     nums, _ = key_tokens(claim)
     skip = corpus.skip(sid)
@@ -184,6 +188,8 @@ def resolve(citations: list[dict], corpus_dir: str, document: str | None = None,
                         if other == sid:
                             continue
                         pg = corpus.pages(other)
+                        if pg is None:
+                            continue    # 매니페스트에는 있으나 원문이 없는 출처
                         got = [n for n in nums if count_number(pg, n)]
                         if len(got) >= 2:
                             elsewhere[other] = got

@@ -214,9 +214,17 @@ def mechanical_audit(report: dict, corpus: str | None = None,
                  "문제 인용인데 대체 출처도, 어떻게 하라는 말도 없다", "minor")
             continue
         act = rep.get("action")
-        if act not in ("replace", "fix_claim", "delete", "none_found"):
+        if act not in ("replace", "fix_claim", "fix_biblio", "add_primary",
+                       "delete", "none_found"):
             flag(c.get("id"), "replacement_action_missing",
                  f"replacement.action이 없거나 알 수 없다: {act}", "minor")
+        elif act == "fix_biblio" and not rep.get("citation"):
+            flag(c.get("id"), "replacement_incomplete",
+                 "action=fix_biblio인데 고친 서지가 비었다 — 무엇을 어떻게 고치라는 "
+                 "말인지 알 수 없다", "minor")
+        elif act == "add_primary" and not rep.get("citation"):
+            flag(c.get("id"), "replacement_incomplete",
+                 "action=add_primary인데 더할 1차 출처가 비었다", "minor")
         elif act == "replace" and not (rep.get("citation") and rep.get("supports")):
             flag(c.get("id"), "replacement_incomplete",
                  "action=replace인데 어느 출처가 무엇으로 뒷받침하는지 비었다", "minor")

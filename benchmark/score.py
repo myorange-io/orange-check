@@ -38,7 +38,11 @@ WEIGHTS = {
 # 튜플이어야 한다. 집합을 순회하면 프로세스마다 순서가 달라져
 # 같은 입력에 다른 파일이 나오고, 회귀 게이트가 그것을 변경으로 잡는다.
 STAGE1 = ("PASS", "MISMATCH", "FAIL")
-STAGE2 = ("SUPPORTED", "PARTIAL", "NOT_SUPPORTED", "NOT_APPLICABLE")
+# 원문을 끝내 못 구한 경우가 INSUFFICIENT_EVIDENCE 다. 리포트 계약은 예전부터
+# 허용했는데 채점기가 몰라서, "모른다고 답한 것"을 스키마 위반으로 0점 처리했다.
+# 모른다고 말하는 것은 지어내는 것보다 나은 답이므로 채점 대상이어야 한다.
+STAGE2 = ("SUPPORTED", "PARTIAL", "NOT_SUPPORTED", "NOT_APPLICABLE",
+          "INSUFFICIENT_EVIDENCE")
 PATTERNS = (
     "none", "hallucinated", "biblio_mismatch", "overreach", "variable_name",
     "wrong_dataset", "number_error", "time_mismatch", "direction_only",

@@ -1,0 +1,1389 @@
+{
+  "schema_version": "refver-report/1.0",
+  "run": {
+    "platform_profile": "claude-code",
+    "capabilities_observed": {
+      "pdf_backend": "pymupdf",
+      "subagents": false
+    },
+    "degraded": false,
+    "degraded_reasons": [],
+    "generated_at": "2026-08-16T08:27:41+00:00"
+  },
+  "document": {
+    "filename": "benchmark/docs/bench-03.docx"
+  },
+  "citations": [
+    {
+      "id": "C01",
+      "claim": "여성이 한 주에 들이는 무급 돌봄시간은 평균 18.4시간이었다.(오렌지국 성평등가족부, 2026)",
+      "doc_locator": "body:4",
+      "cited_source": {
+        "authors": "오렌지국 성평등가족부",
+        "year": "2026",
+        "title": "2025년 여성가족실태조사 결과",
+        "publisher": "오렌지국 성평등가족부",
+        "series": "보도자료",
+        "date": "2026-02-11",
+        "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "F01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "여성",
+            "source": "여성(만 19세 이상, 전국 1만 2천 명)",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "한 주에 들이는 무급 돌봄시간",
+            "source": "주당 평균 무급 돌봄시간",
+            "match": true
+          },
+          "value": {
+            "claimed": "평균 18.4시간",
+            "source": "18.4시간",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "여성가족실태조사",
+            "source": "여성가족실태조사",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F01",
+            "page": 1,
+            "line": 15,
+            "quote": "가족을 돌보는 데 들이는 시간은 성별에 따라 크게 갈렸다. 여성의 주당 평균 무급 돌봄시간은 18.4시간으로 남성의 6.1시간보다 세 배 가까이 길었다."
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C02",
+      "claim": "40대 여성의 돌봄시간 격차가 가장 크다는 것은 전국 어디서나 확인된다.(오렌지국 성평등가족부, 2026)",
+      "doc_locator": "body:5",
+      "cited_source": {
+        "authors": "오렌지국 성평등가족부",
+        "year": "2026",
+        "title": "2025년 여성가족실태조사 결과",
+        "publisher": "오렌지국 성평등가족부",
+        "series": "보도자료",
+        "date": "2026-02-11",
+        "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "F01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "overreach",
+        "slots": {
+          "who": {
+            "claimed": "전국 어디서나(읍면 포함 전 지역)",
+            "source": "읍면 지역으로 일반화하기 어려움 — 지역별 추정에는 쓰지 않는 것을 원칙으로 함",
+            "match": false
+          },
+          "when": null,
+          "what": {
+            "claimed": "돌봄시간 격차가 가장 큰 연령대",
+            "source": "돌봄시간 격차가 가장 크게 나타난 연령대",
+            "match": true
+          },
+          "value": {
+            "claimed": "40대",
+            "source": "40대",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "여성가족실태조사",
+            "source": "여성가족실태조사",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F01",
+            "page": 1,
+            "line": 20,
+            "quote": "돌봄시간 격차는 40대에서 가장 크게 나타났으며 이 결과는 표본 설계상 읍면 지 역으로 일반화하기 어렵다. 읍면 표본이 층당 최소 규모에 미치지 못해 지역별 추 정에는 쓰지 않는 것을 원칙으로 하였다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처가 스스로 범위를 좁혀 놓았다 — '이 결과는 표본 설계상 읍면 지역으로 일반화하기 어렵다'. 본문은 그 단서를 떼고 '전국 어디서나 확인된다'로 넓혔다. 값(40대)과 지표는 그대로 있으므로 어긋난 칸은 WHO 하나다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F01 1쪽 20~22행이 '읍면 표본이 층당 최소 규모에 미치지 못해 지역별 추정에는 쓰지 않는 것을 원칙으로 하였다'고 못 박았다. '전국 어디서나 확인된다'를 빼고 '40대에서 가장 크게 나타났다(단, 읍면 지역으로는 일반화할 수 없음)'로 고친다."
+      }
+    },
+    {
+      "id": "C03",
+      "claim": "진료가 필요했는데 받지 못한 여성은 지난 한 해 9.7%였다.(오렌지국 성평등가족부, 2026)",
+      "doc_locator": "body:6",
+      "cited_source": {
+        "authors": "오렌지국 성평등가족부",
+        "year": "2026",
+        "title": "2025년 여성가족실태조사 결과",
+        "publisher": "오렌지국 성평등가족부",
+        "series": "보도자료",
+        "date": "2026-02-11",
+        "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "F01",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "여성",
+            "source": "여성",
+            "match": true
+          },
+          "when": {
+            "claimed": "지난 한 해",
+            "source": "지난 1년간",
+            "match": true
+          },
+          "what": {
+            "claimed": "진료가 필요했는데 받지 못한 비율(미충족 의료)",
+            "source": "병원 진료가 필요했으나 받지 못한 여성의 비율",
+            "match": true
+          },
+          "value": {
+            "claimed": "9.7%",
+            "source": "9.7%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "여성가족실태조사",
+            "source": "여성가족실태조사",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F01",
+            "page": 1,
+            "line": 24,
+            "quote": "돌봄 부담은 건강관리를 뒤로 미루는 결과로 이어졌다. 지난 1년간 병원 진료 가 필요했으나 받지 못한 여성의 비율은 9.7%였다. 이 값은 남성 6.4%보다 높으며, 미취학 자녀가 있는 가구에서 13.8%로 가장 높았다."
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C04",
+      "claim": "돌봄을 직업으로 하는 이들의 우울 위험군 비율은 22.9%로 여성 취업자 전체보다 높다.",
+      "doc_locator": "body:6 · footnote:1",
+      "cited_source": {
+        "authors": "정선영, 배문주, 오세라",
+        "year": "2025",
+        "title": "여성 건강격차의 구조와 정책 대응",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2025-14",
+        "date": "2025-11-20"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "돌봄을 직업으로 하는 이들",
+            "source": "돌봄노동자(요양보호사·아이돌보미)",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "우울 위험군 비율",
+            "source": "우울 위험군 비율",
+            "match": true
+          },
+          "value": {
+            "claimed": "22.9%",
+            "source": "22.9%",
+            "match": true
+          },
+          "dataset": null,
+          "relation": {
+            "claimed": "여성 취업자 전체보다 높다",
+            "source": "전체 여성 취업자 14.1%보다 높았다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "F02",
+            "page": 1,
+            "line": 24,
+            "quote": "정신건강 지표에서도 차이가 나타났다. 돌봄노동자의 우울 위험군 비율은 22.9%로 전체 여성 취업자 14.1%보다 높았다. 근속 3년 이상"
+          }
+        ],
+        "absence_checked": [],
+        "note": "각주 1은 문단 끝이 아니라 이 문장 뒤(123자 지점)에 달려 있다. 같은 문단 앞 문장의 괄호 인용(성평등가족부)과는 다른 출처다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C05",
+      "claim": "미충족 의료의 가장 큰 사유는 시간 부족으로 41.2%였다.(오렌지국 성평등가족부, 2025)",
+      "doc_locator": "body:7",
+      "cited_source": {
+        "authors": "오렌지국 성평등가족부",
+        "year": "2025",
+        "title": "2025년 여성가족실태조사 결과",
+        "publisher": "오렌지국 성평등가족부",
+        "series": "보도자료",
+        "date": "2026-02-11",
+        "url": "https://www.mogef.orange.go.kr/news/2026-0211"
+      },
+      "stage1": {
+        "verdict": "MISMATCH",
+        "tier": "T1",
+        "matched_source_id": "F01",
+        "mismatch_fields": [
+          "year"
+        ],
+        "note": "참고문헌 목록이 같은 보도자료를 두 번 싣고 한쪽에 (2025)를 달았다. 발간연도는 2026-02-11이므로 2026이 맞다. '2025년 여성가족실태조사'의 2025는 조사연도이자 제목의 일부이지 서지의 연도 항목이 아니다."
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "biblio_mismatch",
+        "slots": {
+          "who": {
+            "claimed": "미충족 의료를 겪은 여성",
+            "source": "미충족 의료를 겪은 여성",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "미충족 의료의 사유 중 시간 부족 비율",
+            "source": "미충족 의료의 사유로 '시간이 없어서'의 비율",
+            "match": true
+          },
+          "value": {
+            "claimed": "41.2%",
+            "source": "41.2%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "여성가족실태조사",
+            "source": "여성가족실태조사",
+            "match": true
+          },
+          "relation": {
+            "claimed": "가장 큰 사유",
+            "source": "가장 많았고(비용 부담 27.5%가 뒤)",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "F01",
+            "page": 1,
+            "line": 27,
+            "quote": "왜 가지 못했는지도 함께 물었다. 미충족 의료의 사유로는 시간이 없어서가 41.2%로 가장 많았고 비용 부담이 27.5%로 뒤를 이었다. 증상이 가벼워 보여서가 18.9%, 의료기관이 멀어서가 7.1%로 나타났다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "수치·지표·자료원은 원문과 그대로 맞다. 틀린 것은 서지의 연도 한 칸뿐이므로 2단계는 SUPPORTED다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_biblio",
+        "citation": "오렌지국 성평등가족부 (2026), 2025년 여성가족실태조사 결과, 보도자료, 오렌지국 성평등가족부, 2026-02-11",
+        "tier": "T1",
+        "url": "https://www.mogef.orange.go.kr/news/2026-0211",
+        "supports": "출처도 주장도 그대로 두고 연도만 2025 → 2026으로 고친다. 참고문헌 목록의 중복 항목(2025년판)은 지우고 2026년판 하나로 합친다."
+      }
+    },
+    {
+      "id": "C06",
+      "claim": "요양보호사와 아이돌보미가 겪는 근골격계 통증은 호소율이 61.5%에 달한다.",
+      "doc_locator": "body:9 · footnote:2",
+      "cited_source": {
+        "authors": "정선영, 배문주, 오세라",
+        "year": "2025",
+        "title": "여성 건강격차의 구조와 정책 대응",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2025-14",
+        "date": "2025-11-20"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "요양보호사와 아이돌보미",
+            "source": "요양보호사와 아이돌보미를 합한 돌봄노동자",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "근골격계 통증 호소율",
+            "source": "근골격계 통증 호소율",
+            "match": true
+          },
+          "value": {
+            "claimed": "61.5%",
+            "source": "61.5%",
+            "match": true
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F02",
+            "page": 1,
+            "line": 21,
+            "quote": "돌봄을 직업으로 삼은 이들의 건강은 별도로 살펴야 한다. 요양보호사와 아이돌 보미를 합한 돌봄노동자의 근골격계 통증 호소율은 61.5%였다. 부위별로는 어깨 42.8%, 허리 39.6%, 손목 31.2% 순이었다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "각주 2는 문단 끝이 아니라 이 문장 뒤(77자 지점)에 달려 있다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C07",
+      "claim": "수도권 돌봄노동자의 절반 가까이가 이용자나 보호자에게 폭언을 겪었으므로 감정노동 보호 장치를 서둘러 마련해야 한다.(한도윤, 표은재, 2025)",
+      "doc_locator": "body:10",
+      "cited_source": {
+        "authors": "한도윤, 표은재",
+        "year": "2025",
+        "title": "돌봄노동자 감정노동 실태 연구",
+        "publisher": "오렌지사회건강연구소",
+        "series": "연구보고 2025-03",
+        "date": "2025-09-30",
+        "url": "https://www.oshi.orange.org/research/2025-03"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T4",
+        "matched_source_id": "F03",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "tier_violation",
+        "slots": {
+          "who": {
+            "claimed": "수도권 돌봄노동자",
+            "source": "수도권 3개 지자체 돌봄노동자 412명",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "이용자·보호자에게 폭언을 겪은 비율",
+            "source": "이용자나 보호자로부터 폭언을 겪은 적이 있다고 답한 비율",
+            "match": true
+          },
+          "value": {
+            "claimed": "절반 가까이",
+            "source": "47.3%",
+            "match": true
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F03",
+            "page": 1,
+            "line": 12,
+            "quote": "응답자들이 겪은 일을 물었다. 이용자나 보호자로부터 폭언을 겪은 적이 있다고 답한 돌봄노동자는 47.3%였다. 신체적 위협을 겪은 경우도 12.6%에 이르 렀으며, 겪고도 기관에 알리지 않았다는 응답이 그중 58.9%였다."
+          },
+          {
+            "source_id": "F03",
+            "page": 1,
+            "line": 6,
+            "quote": "잘 잡히지 않는다. 이 연구는 수도권 3개 지자체 돌봄노동자 412명을 대상으로 하였으므로 전국 수치로 읽어서는 안 된다. 표본은 기관 협조를 통해 모집하였고 확률표본이 아니다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "본문이 '수도권'이라는 범위를 지켰으므로 출처가 명시한 제한(전국 수치로 읽어서는 안 된다)은 넘지 않았고, 47.3%는 '절반 가까이'와 맞다. 문제는 등급이다 — 오렌지사회건강연구소는 민간 비영리 연구소(T4)인데 본문은 이 인용에서 '감정노동 보호 장치를 서둘러 마련해야 한다'는 결론을 끌어내 핵심 주장의 단독 근거로 썼다. 다만 표본이 확률표본이 아니라는 점(F03 1쪽 7~8행)은 인용할 때 함께 밝혀야 한다."
+      },
+      "tier_violation": true,
+      "replacement": {
+        "action": "none_found",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "T4 단독 근거이므로 삭제가 아니라 1차 근거 보강이 맞는 조치다. 그런데 매니페스트 7개 출처를 모두 열어 보니 돌봄노동자 폭언·감정노동을 다룬 T1~T3 자료가 없다. F02(오렌지국보건연구원, T3)는 돌봄노동자의 근골격계 통증과 우울 위험군은 싣고 있으나 폭언·감정노동 수치는 없고, F01·F04·F05·F06에도 없다. 보강 근거를 찾을 때까지는 F03을 인용하되 '수도권 3개 지자체 412명 비확률표본'이라는 조건을 본문에 함께 적는다."
+      }
+    },
+    {
+      "id": "C08",
+      "claim": "돌봄노동자의 산업재해는 산업안전보건법의 보호 조항이 적용되지 않는 사각지대에 있다.",
+      "doc_locator": "body:11 · endnote:1",
+      "cited_source": {
+        "authors": "한도윤, 표은재",
+        "year": "2025",
+        "title": "돌봄노동자 감정노동 실태 연구",
+        "publisher": "오렌지사회건강연구소",
+        "series": "연구보고 2025-03",
+        "date": "2025-09-30"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T4",
+        "matched_source_id": "F03",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "variable_name",
+        "slots": {
+          "who": {
+            "claimed": "돌봄노동자",
+            "source": "돌봄노동자",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "산업재해에 대한 산업안전보건법 보호 조항의 적용 사각지대",
+            "source": "감정노동에 대한 산업안전보건법 '고객응대근로자' 보호 조항의 적용 사각지대",
+            "match": false
+          },
+          "value": null,
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F03",
+            "page": 1,
+            "line": 18,
+            "quote": "법이 없는 것은 아니지만 이들에게 닿지 않는다. 돌봄노동자의 감정노동은 산업 안전보건법의 고객응대근로자 보호 조항이 명확히 적용되지 않는 사각지대에 있다. 이용자의 가정이 곧 작업장이라는 점, 사용자와 이용자가 분리되어 있다는 점이 겹 치기 때문이다."
+          }
+        ],
+        "absence_checked": [
+          "산업재해",
+          "재해"
+        ],
+        "note": "미주 1은 문단 끝이 아니라 이 문장 뒤(69자 지점)에 달려 있다. 출처는 사각지대라고 말한 대상이 '감정노동'이고 조항도 '고객응대근로자 보호 조항'인데 본문은 이를 '산업재해'로 바꿔 적었다. F03 전문에 '산업재해'도 '재해'도 0회다. 다만 출처에 견줄 문장(같은 법의 같은 사각지대 구조)이 있으므로 무관이 아니라 지표명 오기다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F03 1쪽 18~19행은 '돌봄노동자의 감정노동은 산업안전보건법의 고객응대근로자 보호 조항이 명확히 적용되지 않는 사각지대에 있다'고 적었다. '산업재해'를 '감정노동'으로, '보호 조항'을 '고객응대근로자 보호 조항'으로 고치고 '명확히'라는 한정도 살린다. 산업재해 사각지대를 말하려면 별도의 근거가 필요하다."
+      }
+    },
+    {
+      "id": "C09",
+      "claim": "돌봄을 직업으로 하는 여성의 우울 위험군 비율은 32.9%에 이른다.(정선영, 배문주, 오세라, 2025)",
+      "doc_locator": "body:12",
+      "cited_source": {
+        "authors": "정선영, 배문주, 오세라",
+        "year": "2025",
+        "title": "여성 건강격차의 구조와 정책 대응",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2025-14",
+        "date": "2025-11-20",
+        "url": "https://www.okihasa.orange.re.kr/report/2025-14"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "slots": {
+          "who": {
+            "claimed": "돌봄을 직업으로 하는 여성",
+            "source": "돌봄노동자",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "우울 위험군 비율",
+            "source": "우울 위험군 비율",
+            "match": true
+          },
+          "value": {
+            "claimed": "32.9%",
+            "source": "22.9%",
+            "match": false
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F02",
+            "page": 1,
+            "line": 24,
+            "quote": "정신건강 지표에서도 차이가 나타났다. 돌봄노동자의 우울 위험군 비율은 22.9%로 전체 여성 취업자 14.1%보다 높았다. 근속 3년 이상 집단에서 26.4%로 더 높아, 노출 기간이 길수록 위험이 커지는 양상을 보였다"
+          }
+        ],
+        "absence_checked": [
+          "32.9%"
+        ],
+        "note": "F02 전문에 32.9%는 0회다. 같은 지표의 값은 22.9%(전체 여성 취업자 14.1%)이고, 근속 3년 이상 집단이 26.4%다. 앞의 C04는 같은 출처에서 22.9%를 옳게 인용했는데 여기서만 앞자리가 3으로 바뀌었다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F02 1쪽 24~26행: '돌봄노동자의 우울 위험군 비율은 22.9%로 전체 여성 취업자 14.1%보다 높았다. 근속 3년 이상 집단에서 26.4%로 더 높아…'. 32.9% → 22.9%로 고친다. '근속이 길수록 위험이 커진다'는 뒷문장은 26.4% 수치로 뒷받침된다."
+      }
+    },
+    {
+      "id": "C10",
+      "claim": "예방 중심으로 가는 편이 사후 치료보다 비용 면에서 낫다.(정선영, 배문주, 오세라, 2025)",
+      "doc_locator": "body:13",
+      "cited_source": {
+        "authors": "정선영, 배문주, 오세라",
+        "year": "2025",
+        "title": "여성 건강격차의 구조와 정책 대응",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2025-14",
+        "date": "2025-11-20",
+        "url": "https://www.okihasa.orange.re.kr/report/2025-14"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "overreach",
+        "slots": {
+          "who": {
+            "claimed": "조건 없이 일반적으로",
+            "source": "국외 분석에 한함 — 국내 자료로는 아직 확인되지 않음",
+            "match": false
+          },
+          "when": null,
+          "what": {
+            "claimed": "예방 중심 접근의 비용 우위",
+            "source": "예방 중심 접근의 비용 효과",
+            "match": true
+          },
+          "value": null,
+          "dataset": null,
+          "relation": {
+            "claimed": "예방 중심이 사후 치료보다 비용 면에서 낫다",
+            "source": "예방 중심의 접근이 사후 치료보다 비용 효과가 크다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "F02",
+            "page": 1,
+            "line": 29,
+            "quote": "격차를 줄이려면 치료 접근성만이 아니라 그 앞 단계를 함께 보아야 한다. 예 방 중심의 접근이 사후 치료보다 비용 효과가 크다는 분석도 있으나 국내 자료로는 아직 확인되지 않았다. 국내에서 이를 검증하려면 최소 5년 이상의 추적 자료가 필요하다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "출처는 '…분석도 있으나 국내 자료로는 아직 확인되지 않았다'고 조건을 붙였고 '국내에서 이를 검증하려면 최소 5년 이상의 추적 자료가 필요하다'고 덧붙였다. 본문은 그 조건을 떼고 '이견이 적다'며 단정했다. 방향이 뒤집힌 것이 아니라 출처가 보증한 범위 밖으로 넓힌 것이므로 RELATION이 아니라 WHO다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F02 1쪽 29~32행을 그대로 살려 '예방 중심 접근이 사후 치료보다 비용 효과가 크다는 분석이 있으나 국내 자료로는 아직 확인되지 않았다'로 고친다. 단정하려면 국내 추적 자료에 근거한 별도 출처가 필요하다."
+      }
+    },
+    {
+      "id": "C11",
+      "claim": "건강격차란 사회적·경제적 위치에 따라 일관되게 생기는 건강 수준의 차이를 말한다.",
+      "doc_locator": "body:15 · footnote:3",
+      "cited_source": {
+        "authors": "정선영, 배문주, 오세라",
+        "year": "2025",
+        "title": "여성 건강격차의 구조와 정책 대응",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2025-14",
+        "date": "2025-11-02"
+      },
+      "stage1": {
+        "verdict": "MISMATCH",
+        "tier": "T3",
+        "matched_source_id": "F02",
+        "mismatch_fields": [
+          "date"
+        ],
+        "note": "각주 3의 발행일이 2025-11-02로 적혀 있으나 실제 발행일은 2025-11-20이다. 같은 보고서를 인용한 각주 1·2와 본문 참고문헌은 모두 2025-11-20으로 적혀 있어 각주 3만 자릿수가 뒤바뀌었다."
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "biblio_mismatch",
+        "slots": {
+          "who": null,
+          "when": null,
+          "what": {
+            "claimed": "건강격차의 정의 — 사회적·경제적 위치에 따라 일관되게 생기는 건강 수준의 차이",
+            "source": "건강격차 — 사회경제적 지위에 따라 체계적으로 나타나는 건강 수준의 차이",
+            "match": true
+          },
+          "value": null,
+          "dataset": null,
+          "relation": {
+            "claimed": "우연한 개인차와 달리 방향과 크기가 일정하게 관찰되므로 정책의 대상이 된다",
+            "source": "우연히 생긴 개인차와 달리 격차는 방향과 크기가 일정하게 관찰되며, 정책으로 줄일 수 있다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "F02",
+            "page": 1,
+            "line": 5,
+            "quote": "건강은 개인의 선택만으로 설명되지 않는다. 이 보고서에서 건강격차란 사회경제 적 지위에 따라 체계적으로 나타나는 건강 수준의 차이를 뜻한다. 우연히 생긴 개 인차와 달리 격차는 방향과 크기가 일정하게 관찰되며, 정책으로 줄일 수 있다는 점에서 다르다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "각주 3은 문단 끝이 아니라 첫 문장 뒤(45자 지점)에 달려 있다. '사회적·경제적 위치'와 '사회경제적 지위', '일관되게'와 '체계적으로'는 같은 것을 쉬운 말로 옮긴 것이므로 지표명 오기가 아니다. 틀린 것은 각주의 발행일 한 칸뿐이다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_biblio",
+        "citation": "정선영, 배문주, 오세라 (2025), 여성 건강격차의 구조와 정책 대응, 정책보고서 2025-14, 오렌지국보건연구원, 2025-11-20",
+        "tier": "T3",
+        "url": "https://www.okihasa.orange.re.kr/report/2025-14",
+        "supports": "출처를 갈아 끼울 일이 아니다. 각주 3의 발행일만 2025-11-02 → 2025-11-20으로 고치면 각주 1·2 및 참고문헌 목록과 일치한다."
+      }
+    },
+    {
+      "id": "C12",
+      "claim": "소득 하위 20%에 속한 여성 가운데 스스로 건강이 나쁘다고 답한 사람은 34.8%였다.(정선영, 배문주, 오세라, 2025)",
+      "doc_locator": "body:16",
+      "cited_source": {
+        "authors": "정선영, 배문주, 오세라",
+        "year": "2025",
+        "title": "여성 건강격차의 구조와 정책 대응",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2025-14",
+        "date": "2025-11-20",
+        "url": "https://www.okihasa.orange.re.kr/report/2025-14"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F02",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "소득 하위 20%에 속한 여성",
+            "source": "소득 1분위 여성(가구 균등화 처분가능소득 5분위 구분의 최하위)",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "스스로 건강이 나쁘다고 답한 비율",
+            "source": "주관적 건강 부정 응답률",
+            "match": true
+          },
+          "value": {
+            "claimed": "34.8%",
+            "source": "34.8%",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "여성 건강격차의 구조와 정책 대응",
+            "source": "여성가족실태조사 원자료 + 건강보험 청구자료 연계",
+            "match": true
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F02",
+            "page": 1,
+            "line": 13,
+            "quote": "스스로 매기는 건강 평가에서 계층 차이가 뚜렷했다. 소득 1분위 여성의 주관 적 건강 부정 응답률은 34.8%로 5분위 12.3%의 세 배에 가까웠다. 2분 위 28.1%, 3분위 21.5%, 4분위 16.7%로 계단 모양의 기울기가 나"
+          },
+          {
+            "source_id": "F02",
+            "page": 1,
+            "line": 9,
+            "quote": "연구진은 여성가족실태조사 원자료와 건강보험 청구자료를 연계하여 분석하였다. 소득은 가구 균등화 처분가능소득 기준 5분위로 나누었고, 취업 상태와 돌봄 부담 을 보정 변수로 넣었다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "5분위 구분의 1분위가 곧 하위 20%이므로 WHO는 일치한다. '스스로 건강이 나쁘다고 답한 비율'은 '주관적 건강 부정 응답률'을 쉬운 말로 옮긴 것이지 다른 지표가 아니다. 뒷문장 '상위 계층과 견주면 세 배에 가깝다'도 5분위 12.3%와 맞는다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C13",
+      "claim": "질병관리본부 국민건강통계를 보면 여성의 미충족 의료율은 소득이 낮을수록 높아진다.",
+      "doc_locator": "body:16 · endnote:2",
+      "cited_source": {
+        "authors": "오렌지국 질병관리본부",
+        "year": "2026",
+        "title": "2025 국민건강통계",
+        "publisher": "오렌지국 질병관리본부",
+        "series": "국가승인통계 제117001호",
+        "date": "2026-01"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T1",
+        "matched_source_id": "F07",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "INSUFFICIENT_EVIDENCE",
+        "pattern": "none",
+        "slots": null,
+        "evidence": [],
+        "absence_checked": [],
+        "note": "미주 2는 문단 끝(155자 지점)에 달려 있고, 같은 문단 앞 문장의 괄호 인용(정선영 외)과는 다른 출처다. 서지는 매니페스트의 F07과 저자·연도·제목·발행처·계열·발행일이 모두 일치하므로 실재는 확인되나(1단계 PASS·T1), 발간기관이 직접 요청을 차단해 원문을 판독할 수 없다. 원문 없이 소득 기울기의 방향·크기를 확인할 수 없으므로 판정을 지어내지 않고 근거 부족으로 남긴다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "none_found",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "접근 가능한 판본이나 같은 값을 실은 다른 발간물을 찾았으나 없었다. 매니페스트 7개 출처를 모두 열어 확인한 결과: F01(성평등가족부)은 여성 미충족 의료 9.7%와 사유별 분포는 싣되 소득계층별 분해가 없고, F02는 소득 5분위별 기울기를 싣되 지표가 주관적 건강 부정 응답률(1분위 34.8% → 5분위 12.3%)과 만성질환 유병률(47.2% → 38.4%)이어서 미충족 의료율이 아니며, F04(GECD)는 미충족 의료를 다루되 소득계층별 분해가 없다. 다음 할 일: 질병관리본부에 2025 국민건강통계 원문 또는 해당 통계표를 직접 요청하고, 받기 전까지는 이 문장을 근거 없는 서술로 두지 말고 F02의 소득 기울기(다른 지표임을 밝히고)로 바꿔 쓰거나 삭제한다."
+      }
+    },
+    {
+      "id": "C14",
+      "claim": "여성가족실태조사에 따르면 여성의 미충족 의료 경험률은 6.8%다.(GECD, 2025)",
+      "doc_locator": "body:17",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2025",
+        "title": "Health Equity Review: Orangeland",
+        "publisher": "GECD Publishing",
+        "series": "GECD Health Policy Studies",
+        "date": "2025-06",
+        "url": "https://www.gecd.org/health/orangeland-2025"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "F04",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "wrong_dataset",
+        "slots": {
+          "who": null,
+          "when": null,
+          "what": {
+            "claimed": "미충족 의료 경험률",
+            "source": "unmet medical need(미충족 의료)",
+            "match": true
+          },
+          "value": {
+            "claimed": "6.8%",
+            "source": "6.8 per cent",
+            "match": true
+          },
+          "dataset": {
+            "claimed": "여성가족실태조사",
+            "source": "GECD 회원국 제출자료·GECD Health Statistics database",
+            "match": false
+          },
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F04",
+            "page": 1,
+            "line": 23,
+            "quote": "summary indicator of access barriers. Across GECD members the share of women reporting unmet medical need averaged 6.8 per cent in 2024. Reported reasons differ markedly:"
+          },
+          {
+            "source_id": "F01",
+            "page": 1,
+            "line": 24,
+            "quote": "돌봄 부담은 건강관리를 뒤로 미루는 결과로 이어졌다. 지난 1년간 병원 진료 가 필요했으나 받지 못한 여성의 비율은 9.7%였다. 이 값은 남성 6.4%보다 높으며, 미취학 자녀가 있는 가구에서 13.8%로 가장 높았다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "6.8%는 GECD 회원국 평균이지 여성가족실태조사의 값이 아니다. 인용 표기는 (GECD, 2025)로 옳게 달렸는데 문장이 그 수치를 '여성가족실태조사에 따르면'으로 귀속했다. 묻지 않은 출처를 직접 열어 대조했더니 F01(여성가족실태조사) 1쪽 24~26행의 실제 값은 9.7%로 전혀 다르다. 집단(오렌지국 여성 ↔ GECD 회원국 여성)도 함께 어긋나 보이지만, 자료원을 GECD로 바로잡으면 집단은 따라오므로 한 사실이다 — 수치의 출처를 엉뚱한 조사에 귀속한 것이므로 DATASET 하나만 표시한다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F04 1쪽 23~26행: 'Across GECD members the share of women reporting unmet medical need averaged 6.8 per cent in 2024.' 문장을 '2024년 GECD 회원국 여성의 미충족 의료 경험률 평균은 6.8%'로 고친다. 오렌지국 여성의 값을 쓰려면 F01 1쪽 24~26행의 9.7%를 인용해야 한다."
+      }
+    },
+    {
+      "id": "C15",
+      "claim": "2022년 GECD 회원국 여성의 미충족 의료 경험률 평균은 6.8%였다.",
+      "doc_locator": "body:17 · endnote:3",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2025",
+        "title": "Health Equity Review: Orangeland",
+        "publisher": "GECD Publishing",
+        "series": "GECD Health Policy Studies",
+        "date": "2025-06"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "F04",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "time_mismatch",
+        "slots": {
+          "who": {
+            "claimed": "GECD 회원국 여성",
+            "source": "women across GECD members",
+            "match": true
+          },
+          "when": {
+            "claimed": "2022년",
+            "source": "2024년",
+            "match": false
+          },
+          "what": {
+            "claimed": "미충족 의료 경험률 평균",
+            "source": "share of women reporting unmet medical need, averaged",
+            "match": true
+          },
+          "value": {
+            "claimed": "6.8%",
+            "source": "6.8 per cent",
+            "match": true
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F04",
+            "page": 1,
+            "line": 23,
+            "quote": "summary indicator of access barriers. Across GECD members the share of women reporting unmet medical need averaged 6.8 per cent in 2024. Reported reasons differ markedly:"
+          },
+          {
+            "source_id": "F04",
+            "page": 1,
+            "line": 16,
+            "quote": "The review covers the period 2020 to 2024 and draws on the GECD Health Statistics database, supplemented by national household surveys where comparable items exist."
+          }
+        ],
+        "absence_checked": [
+          "2022"
+        ],
+        "note": "미주 3은 문단 끝(113자 지점)에 달려 있다. 출처는 같은 문장에서 기준연도를 2024로 밝혔고, 검토 대상 기간도 2020~2024다. F04 전문에 '2022'는 0회다. 집단·지표·수치는 모두 맞고 어긋난 칸은 WHEN 하나다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F04 1쪽 23~26행이 'averaged 6.8 per cent in 2024'라고 적었고 1쪽 16~20행이 검토 기간을 2020~2024로 밝혔다. '2022년'을 '2024년'으로 고친다. 아울러 F04 1쪽 29~33행은 회원국별 회상기간이 달라 몇 %포인트까지 흔들릴 수 있다고 밝혔으므로, 국제 비교로 쓸 때 그 단서를 함께 적는 편이 낫다."
+      }
+    },
+    {
+      "id": "C16",
+      "claim": "한 일간지는 이 수치를 10.4%로 전했는데 부처가 낸 원자료의 값과는 차이가 있다.(오렌지일보, 2026)",
+      "doc_locator": "body:18",
+      "cited_source": {
+        "authors": "오렌지일보",
+        "year": "2026",
+        "title": "여성 미충족 의료 10% 육박… 시간 없어 병원 못 가",
+        "publisher": "오렌지일보",
+        "series": "사회면",
+        "date": "2026-02-12",
+        "url": "https://www.orangeilbo.orange.com/2026/0212/society"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T4",
+        "matched_source_id": "F05",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "병원에 가야 했지만 가지 못한 여성",
+            "source": "병원에 가야 했지만 가지 못한 여성",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "일간지가 보도한 미충족 의료 비율",
+            "source": "일간지가 보도한 미충족 의료 비율",
+            "match": true
+          },
+          "value": {
+            "claimed": "10.4%",
+            "source": "10.4%",
+            "match": true
+          },
+          "dataset": null,
+          "relation": {
+            "claimed": "부처가 낸 원자료의 값과는 차이가 있다",
+            "source": "F05는 10.4%, 1차 자료 F01은 9.7% — 실제로 다르다",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "F05",
+            "page": 1,
+            "line": 5,
+            "quote": "성평등가족부가 어제 내놓은 조사에서 병원에 가야 했지만 가지 못한 여성이 10.4%로 나타났다. 부처는 이번 조사에 미충족 의료 문항을 처음 넣었다고 밝 혔다."
+          },
+          {
+            "source_id": "F01",
+            "page": 1,
+            "line": 24,
+            "quote": "돌봄 부담은 건강관리를 뒤로 미루는 결과로 이어졌다. 지난 1년간 병원 진료 가 필요했으나 받지 못한 여성의 비율은 9.7%였다. 이 값은 남성 6.4%보다 높으며, 미취학 자녀가 있는 가구에서 13.8%로 가장 높았다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "여기서는 언론 보도 자체가 서술 대상이다. 본문은 10.4%를 사실로 채택하지 않고 '일간지가 그렇게 전했다'고만 적은 뒤 1차 자료와 다르다고 밝혔다. 1차 자료 F01의 값이 9.7%임을 직접 열어 확인했고 0.7%포인트 차이도 맞다. 기사가 전한 것을 견해로만 옮기고 결론을 끌어내지 않았으므로 등급 위반이 아니다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C17",
+      "claim": "진료가 필요했는데 병원을 찾지 못한 여성이 10.4%나 되므로 대책이 필요하다.(오렌지일보, 2026)",
+      "doc_locator": "body:19",
+      "cited_source": {
+        "authors": "오렌지일보",
+        "year": "2026",
+        "title": "여성 미충족 의료 10% 육박… 시간 없어 병원 못 가",
+        "publisher": "오렌지일보",
+        "series": "사회면",
+        "date": "2026-02-12",
+        "url": "https://www.orangeilbo.orange.com/2026/0212/society"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T4",
+        "matched_source_id": "F05",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "slots": {
+          "who": {
+            "claimed": "여성",
+            "source": "여성",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "진료가 필요했는데 받지 못한 비율(미충족 의료)",
+            "source": "병원 진료가 필요했으나 받지 못한 여성의 비율",
+            "match": true
+          },
+          "value": {
+            "claimed": "10.4%",
+            "source": "9.7% (1차 자료 F01)",
+            "match": false
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F01",
+            "page": 1,
+            "line": 24,
+            "quote": "돌봄 부담은 건강관리를 뒤로 미루는 결과로 이어졌다. 지난 1년간 병원 진료 가 필요했으나 받지 못한 여성의 비율은 9.7%였다. 이 값은 남성 6.4%보다 높으며, 미취학 자녀가 있는 가구에서 13.8%로 가장 높았다."
+          },
+          {
+            "source_id": "F05",
+            "page": 1,
+            "line": 5,
+            "quote": "성평등가족부가 어제 내놓은 조사에서 병원에 가야 했지만 가지 못한 여성이 10.4%로 나타났다. 부처는 이번 조사에 미충족 의료 문항을 처음 넣었다고 밝 혔다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "바로 앞 문단(C16)에서 10.4%가 1차 자료와 다르다고 스스로 적어 놓고, 이 문단에서는 그 10.4%를 사실로 삼아 '대책이 필요하다'는 결론을 끌어냈다. 판정 기준은 1차 자료다 — F01 1쪽 24~26행의 값은 9.7%이고, F05에는 9.7%가 0회, F01에는 10.4%가 0회다. 인용한 문장이 F05에 그대로 있더라도 1차와 다르므로 VALUE 불일치이고, 1차 자료가 따로 있는데 T4 언론을 근거로 삼았으므로 등급 위반도 함께 선다. (absence_checked에는 적지 않았다 — 이 건의 근거 출처가 F01·F05 둘이라 한쪽에서 0회인 말이 다른 쪽에는 있기 때문이다.)"
+      },
+      "tier_violation": true,
+      "replacement": {
+        "action": "replace",
+        "citation": "오렌지국 성평등가족부 (2026), 2025년 여성가족실태조사 결과, 보도자료, 오렌지국 성평등가족부, 2026-02-11",
+        "tier": "T1",
+        "url": "https://www.mogef.orange.go.kr/news/2026-0211",
+        "supports": "F01 1쪽 24~26행: '지난 1년간 병원 진료가 필요했으나 받지 못한 여성의 비율은 9.7%였다. 이 값은 남성 6.4%보다 높으며, 미취학 자녀가 있는 가구에서 13.8%로 가장 높았다.' 언론 인용을 1차 보도자료로 바꾸고 수치도 10.4% → 9.7%로 고친다. '열 명 중 한 명'이라는 표현도 함께 손봐야 한다."
+      }
+    },
+    {
+      "id": "C18",
+      "claim": "오렌지국은 65세 이상 100명당 장기요양 인력이 4.9명으로 GECD 평균 6.3명에 못 미친다.(GECD, 2025)",
+      "doc_locator": "body:21",
+      "cited_source": {
+        "authors": "GECD",
+        "year": "2025",
+        "title": "Health Equity Review: Orangeland",
+        "publisher": "GECD Publishing",
+        "series": "GECD Health Policy Studies",
+        "date": "2025-06",
+        "url": "https://www.gecd.org/health/orangeland-2025"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T2",
+        "matched_source_id": "F04",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "오렌지국",
+            "source": "Orangeland",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "65세 이상 100명당 장기요양 인력",
+            "source": "long-term care workers per 100 people aged 65 and over",
+            "match": true
+          },
+          "value": {
+            "claimed": "4.9명 / GECD 평균 6.3명",
+            "source": "4.9 / GECD average of 6.3",
+            "match": true
+          },
+          "dataset": null,
+          "relation": {
+            "claimed": "GECD 평균에 못 미친다",
+            "source": "below the GECD average",
+            "match": true
+          }
+        },
+        "evidence": [
+          {
+            "source_id": "F04",
+            "page": 1,
+            "line": 36,
+            "quote": "constraint on care quality. Orangeland reports 4.9 long-term care workers per 100 people aged 65 and over, below the GECD average of 6.3. Only four members report a lower density."
+          }
+        ],
+        "absence_checked": [],
+        "note": ""
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C19",
+      "claim": "국제 비교 연구에서 오렌지국의 돌봄 공백은 회원국 가운데 두 번째로 큰 것으로 나타났다.",
+      "doc_locator": "body:22 · footnote:4",
+      "cited_source": {
+        "authors": "오렌지돌봄정책연구원",
+        "year": "2025",
+        "title": "돌봄 공백 국제비교 연구",
+        "publisher": "오렌지돌봄정책연구원",
+        "series": "연구보고 2025-08"
+      },
+      "stage1": {
+        "verdict": "FAIL",
+        "tier": null,
+        "matched_source_id": null,
+        "mismatch_fields": [],
+        "note": "각주 4의 '오렌지돌봄정책연구원 (2025), 돌봄 공백 국제비교 연구, 연구보고 2025-08'은 매니페스트에 없다. 발행 주체(오렌지돌봄정책연구원)도, 보고서도 이 닫힌 세계에 존재하지 않는다. 본문 참고문헌 목록에도 실려 있지 않아 각주에만 등장한다."
+      },
+      "stage2": {
+        "verdict": "NOT_APPLICABLE",
+        "pattern": "hallucinated",
+        "slots": null,
+        "evidence": [],
+        "absence_checked": [],
+        "note": "존재하지 않는 출처이므로 2단계 판정 대상이 아니다. 주장 자체('돌봄 공백이 회원국 가운데 두 번째로 크다')도 코퍼스 어디에서도 확인되지 않는다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "none_found",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "이 주장을 받칠 국제비교 자료를 코퍼스 전체에서 찾았으나 없었다. 가장 가까운 것은 F04(GECD, 2025, T2)인데, 그것은 '돌봄 공백'이 아니라 장기요양 인력 밀도를 다루며 오렌지국 4.9명 대 평균 6.3명, 'Only four members report a lower density'(1쪽 39~40행)라고만 적었다 — 두 번째가 아니라 아래에서 다섯 번째다. F04 전문에 'care gap'도 'second'도 0회다. 각주 4를 지우고, 인력 밀도 순위를 말하려면 F04의 문장으로 주장을 다시 쓴다."
+      }
+    },
+    {
+      "id": "C20",
+      "claim": "공공 돌봄 인력을 40% 늘리는 안에서는 여성 경제활동참가율이 63.2%로 추정된다.(오세라, 정선영, 2026)",
+      "doc_locator": "body:24",
+      "cited_source": {
+        "authors": "오세라, 정선영",
+        "year": "2026",
+        "title": "돌봄정책 확대 시나리오별 효과 분석",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2026-02",
+        "date": "2026-01-15",
+        "url": "https://www.okihasa.orange.re.kr/report/2026-02"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F06",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "SUPPORTED",
+        "pattern": "none",
+        "slots": {
+          "who": {
+            "claimed": "공공 돌봄 인력을 40% 늘리는 안",
+            "source": "C안 = 공공 돌봄 인력 40% 확충",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "여성 경제활동참가율",
+            "source": "여성 경제활동참가율",
+            "match": true
+          },
+          "value": {
+            "claimed": "63.2%",
+            "source": "63.2 (C안)",
+            "match": true
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F06",
+            "page": 1,
+            "line": 14,
+            "quote": "돌봄을 맡던 이들의 경제활동에도 변화가 예상된다. 여성 경제활동참가율은 A안 58.9, B안 61.4, C안 63.2로 높아지는 것으로 추정되었다. 효과는 40대에서 가장 크게 나타났다."
+          },
+          {
+            "source_id": "F06",
+            "page": 1,
+            "line": 5,
+            "quote": "이 분석은 공공 돌봄 인력 확충 수준을 달리했을 때 나타나는 효과를 시나리오 별로 비교한다. A안은 현행 유지, B안은 공공 돌봄 인력 20% 확충, C안은 40% 확충을 가정하였다. 각 시나리오는 재정 소요와 인력 수급 가능성을 함께 고려하여 설정하였다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "시나리오(C안=40% 확충)와 지표 행(여성 경제활동참가율)이 모두 맞다."
+      },
+      "tier_violation": false
+    },
+    {
+      "id": "C21",
+      "claim": "공공 돌봄 인력을 20% 늘리면 돌봄노동자의 근골격계 통증 호소율이 48.7%까지 낮아진다.(오세라, 정선영, 2026)",
+      "doc_locator": "body:25",
+      "cited_source": {
+        "authors": "오세라, 정선영",
+        "year": "2026",
+        "title": "돌봄정책 확대 시나리오별 효과 분석",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2026-02",
+        "date": "2026-01-15",
+        "url": "https://www.okihasa.orange.re.kr/report/2026-02"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F06",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "PARTIAL",
+        "pattern": "overreach",
+        "slots": {
+          "who": {
+            "claimed": "공공 돌봄 인력을 20% 늘리는 안(B안)",
+            "source": "48.7은 C안 = 40% 확충의 값",
+            "match": false
+          },
+          "when": null,
+          "what": {
+            "claimed": "돌봄노동자 근골격계 통증 호소율",
+            "source": "돌봄노동자 근골격계 통증 호소율",
+            "match": true
+          },
+          "value": {
+            "claimed": "48.7%",
+            "source": "48.7 (같은 행에 실제로 있는 값)",
+            "match": true
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F06",
+            "page": 1,
+            "line": 11,
+            "quote": "노동자 건강 지표부터 본다. 돌봄노동자 근골격계 통증 호소율은 A안 61.5 , B안 54.2, C안 48.7로 낮아지는 것으로 추정되었다. 인력이 늘면 1 인당 담당 이용자 수가 줄어드는 경로가 주된 설명이다."
+          },
+          {
+            "source_id": "F06",
+            "page": 1,
+            "line": 5,
+            "quote": "이 분석은 공공 돌봄 인력 확충 수준을 달리했을 때 나타나는 효과를 시나리오 별로 비교한다. A안은 현행 유지, B안은 공공 돌봄 인력 20% 확충, C안은 40% 확충을 가정하였다. 각 시나리오는 재정 소요와 인력 수급 가능성을 함께 고려하여 설정하였다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "지표 행은 맞고 시나리오 열만 어긋났다. 근골격계 통증 호소율 행은 A안 61.5, B안 54.2, C안 48.7이고 48.7은 C안(40% 확충)의 값인데 본문은 20% 확충(B안)이라고 적었다. 시나리오는 집단을 나눈 기준이 아니라 그 수치가 성립하는 조건이므로 어긋난 칸은 DATASET이 아니라 WHO다. 값 자체는 그 행에 실재하므로 VALUE는 일치로 둔다."
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F06 1쪽 11~13행: '돌봄노동자 근골격계 통증 호소율은 A안 61.5, B안 54.2, C안 48.7로 낮아지는 것으로 추정되었다.' 1쪽 5~8행이 B안=20% 확충, C안=40% 확충으로 정의한다. '20% 늘리면 48.7%'를 '20% 늘리면 54.2%' 또는 '40% 늘리면 48.7%'로 고친다."
+      }
+    },
+    {
+      "id": "C22",
+      "claim": "인력을 20% 늘리는 안에서 돌봄노동자의 근골격계 통증 호소율은 63.2%로 추정된다.(오세라, 정선영, 2026)",
+      "doc_locator": "body:26",
+      "cited_source": {
+        "authors": "오세라, 정선영",
+        "year": "2026",
+        "title": "돌봄정책 확대 시나리오별 효과 분석",
+        "publisher": "오렌지국보건연구원",
+        "series": "정책보고서 2026-02",
+        "date": "2026-01-15",
+        "url": "https://www.okihasa.orange.re.kr/report/2026-02"
+      },
+      "stage1": {
+        "verdict": "PASS",
+        "tier": "T3",
+        "matched_source_id": "F06",
+        "mismatch_fields": [],
+        "note": ""
+      },
+      "stage2": {
+        "verdict": "NOT_SUPPORTED",
+        "pattern": "number_error",
+        "slots": {
+          "who": {
+            "claimed": "인력을 20% 늘리는 안(B안)",
+            "source": "B안 = 공공 돌봄 인력 20% 확충",
+            "match": true
+          },
+          "when": null,
+          "what": {
+            "claimed": "돌봄노동자 근골격계 통증 호소율",
+            "source": "돌봄노동자 근골격계 통증 호소율",
+            "match": true
+          },
+          "value": {
+            "claimed": "63.2%",
+            "source": "54.2 (근골격계 통증 호소율 B안)",
+            "match": false
+          },
+          "dataset": null,
+          "relation": null
+        },
+        "evidence": [
+          {
+            "source_id": "F06",
+            "page": 1,
+            "line": 11,
+            "quote": "노동자 건강 지표부터 본다. 돌봄노동자 근골격계 통증 호소율은 A안 61.5 , B안 54.2, C안 48.7로 낮아지는 것으로 추정되었다. 인력이 늘면 1 인당 담당 이용자 수가 줄어드는 경로가 주된 설명이다."
+          },
+          {
+            "source_id": "F06",
+            "page": 1,
+            "line": 14,
+            "quote": "돌봄을 맡던 이들의 경제활동에도 변화가 예상된다. 여성 경제활동참가율은 A안 58.9, B안 61.4, C안 63.2로 높아지는 것으로 추정되었다. 효과는 40대에서 가장 크게 나타났다."
+          }
+        ],
+        "absence_checked": [],
+        "note": "여기서는 시나리오가 맞고 지표 행이 틀렸다. 63.2는 F06에 1회 나오지만 그 자리는 근골격계 통증 호소율 행(1쪽 11~13행)이 아니라 여성 경제활동참가율 행(1쪽 14~16행)의 C안 값이다. 근골격계 행에는 63.2가 아예 없으므로 조건을 잘못 붙인 것이 아니라 수치가 틀린 것이다 — 어긋난 칸은 WHO가 아니라 VALUE다. (63.2가 출처에 1회 존재하므로 absence_checked에는 적지 않는다. 계수만 보고 넘겼으면 통과시켰을 자리다.)"
+      },
+      "tier_violation": false,
+      "replacement": {
+        "action": "fix_claim",
+        "citation": "",
+        "tier": "",
+        "url": "",
+        "supports": "F06 1쪽 11~13행: 근골격계 통증 호소율은 A안 61.5, B안 54.2, C안 48.7이다. 20% 확충(B안)의 값은 54.2이므로 63.2% → 54.2%로 고친다. 63.2는 같은 보고서 1쪽 14~16행 여성 경제활동참가율 C안 값이니, 그 값을 쓰려면 지표와 시나리오를 함께 바꿔 적어야 한다."
+      }
+    }
+  ]
+}

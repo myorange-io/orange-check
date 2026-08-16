@@ -417,6 +417,28 @@ def test_assemble():
           "판단 파일로 접었다 펴도 판정이 같다")
 
 
+def test_render_actions():
+    """조치 이름이 계약과 어긋나면 사람이 읽는 리포트에 정반대 지시가 찍힌다."""
+    print("\n리포트 조치 이름")
+    rep = R.new_report("x.docx", "test")
+    acts = ("replace", "fix_claim", "fix_biblio", "add_primary", "delete", "none_found")
+    rep["citations"] = [{
+        "id": f"C{i:02d}", "claim": "어떤 주장이다.", "doc_locator": "body:1",
+        "cited_source": {"authors": "가", "year": "2025"},
+        "stage1": {"verdict": "PASS", "tier": "T1"},
+        "stage2": {"verdict": "PARTIAL", "pattern": "overreach",
+                   "slots": {"who": {"claimed": "가", "source": "나", "match": False}},
+                   "evidence": [{"source_id": "S01", "page": 1, "line": 1, "quote": "문장"}]},
+        "tier_violation": False,
+        "replacement": {"action": a, "citation": "기관, 2025, 제목", "supports": "근거"},
+    } for i, a in enumerate(acts, 1)]
+    md = R.render(rep)
+    check("서지를 고칠 것" in md, "fix_biblio 를 '서지를 고칠 것'으로 적는다")
+    check("1차 근거를 더할 것" in md, "add_primary 를 '1차 근거를 더할 것'으로 적는다")
+    check(md.count("대체 출처 제안") == 1,
+          "replace 하나에만 '대체 출처 제안'이 붙는다 — 모르는 조치를 그것으로 뭉뚱그리지 않는다")
+
+
 def test_judge_replacement_scope():
     """근거 부족·확인 불가도 문제 인용이다 — 대체 출처가 가장 필요한 자리다."""
     print("\n대체 출처 의무 범위")
@@ -564,6 +586,7 @@ def main() -> int:
     test_docx()
     test_resolve()
     test_assemble()
+    test_render_actions()
     test_judge_replacement_scope()
     test_pdf()
     test_report()
