@@ -15,7 +15,7 @@
     }
   },
   "bench-02": {
-    "run": "run-h",
+    "run": "run-n",
     "score": 100.0,
     "formula_version": "1.2",
     "components": {
