@@ -51,7 +51,7 @@
       },
       "tier_violation": false,
       "replacement": {
-        "action": "replace | fix_claim | fix_biblio | delete | none_found",
+        "action": "replace | fix_claim | fix_biblio | add_primary | delete | none_found",
         "citation": "기관, 연도, 제목", "tier": "T1",
         "url": "실제로 열어 본 URL", "supports": "이 출처의 어느 문장이 주장을 뒷받침하는가"
       }

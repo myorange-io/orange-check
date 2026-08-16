@@ -443,8 +443,10 @@ for e in validate(load("report.json")): print(e)
    "at": ["S01:2:14"],                  // 근거 위치. 여러 줄이면 "S01:2:14-16"
    "absent": ["저소득"],                 // 0회로 확인한 말만
    "note": "",
-   "fix": "replace", "fix_cite": "기관, 연도, 제목", "fix_url": "…",
-   "fix_supports": "이 출처의 어느 문장이 주장을 뒷받침하는가"}
+   "biblio_note": "",                   // 서지에 관해 남길 말 (stage1.note 가 된다)
+   "tier_violation": false,             // T4 를 핵심 주장의 단독 근거로 썼는가
+   "fix": "replace", "fix_cite": "기관, 연도, 제목", "fix_tier": "T1",
+   "fix_url": "…", "fix_supports": "이 출처의 어느 문장이 주장을 뒷받침하는가"}
 ]}
 ```
 
@@ -454,6 +456,20 @@ for e in validate(load("report.json")): print(e)
 
 인용문을 직접 적고 싶으면 `{"at": "S01:2:14", "q": "그 문장"}`으로 적는다. 그래도
 **그 자리에 정말 있는지 확인한 뒤에만** 들어간다.
+
+**원문을 끝내 못 구했으면 슬롯 대신 `verdict`를 적는다.**
+
+```json
+{"id": "C09", "source": "S07", "tier": "T1", "biblio": "PASS",
+ "verdict": "INSUFFICIENT_EVIDENCE",
+ "note": "매니페스트에는 있으나 원문을 구하지 못했다. 어디까지 찾았는지 적는다.",
+ "fix": "none_found", "fix_supports": "코퍼스 7종을 다 뒤졌으나 같은 값을 실은 것이 없다"}
+```
+
+이 칸은 **원문을 못 읽었을 때만** 쓴다. 읽고 판단한 인용에는 적지 않는다 — 판정은
+슬롯 표에서 나와야 하고, `verdict`를 직접 적으면 그 도출을 건너뛰게 된다.
+출처가 아예 존재하지 않는 경우는 이 칸이 아니라 `"biblio": "FAIL"`이다. 실재하는데
+못 읽는 것과 아예 없는 것은 다르다.
 
 ### 조립기가 막는 것
 
