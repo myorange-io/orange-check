@@ -359,6 +359,62 @@ def test_resolve():
           "일괄 검색이 있는 말과 없는 말을 가른다")
 
 
+def test_resolve_no_text():
+    """매니페스트에는 있는데 원문이 없는 출처 — 실재하지만 전문을 못 구한 경우다.
+
+    이 자리에서 `resolve` 가 통째로 죽었다. 원문 없는 출처의 `pages` 가 None 인데
+    그대로 교차확인에 넘겼다. 우회하려고 `--no-cross-check` 를 쓰면 자료원을 잘못
+    붙인 인용을 잡는 장치가 함께 꺼진다 — 검증이 조용히 약해진다.
+
+    **죽지 않는 것만으로는 모자라다.** 건너뛴 출처를 말하지 않으면 읽는 쪽은 출처
+    전부를 대조한 줄 안다. 신호가 안 나온 것과 충돌이 없는 것은 다르다.
+    """
+    print("\n원문 없는 출처(resolve)")
+    corpus = os.path.normpath(os.path.join(
+        os.path.dirname(os.path.dirname(HERE)), "..", "benchmark", "corpus.bench-03"))
+    if not os.path.isdir(corpus):
+        print("  · bench-03 코퍼스가 없어 건너뜀")
+        return
+    from refver.resolve import resolve
+
+    # F07 은 매니페스트에 "file": null 로 있다. F06 은 원문이 있고 수치가 둘이라
+    # 교차확인 루프가 실제로 돌면서 F07 을 만난다 — 죽던 경로가 바로 여기다.
+    cits = [
+        {"id": "A", "claim": "인력을 20% 늘리면 통증 호소율이 48.7%까지 낮아진다.",
+         "source_id": "F06"},
+        {"id": "B", "claim": "무언가 12.3% 늘고 45.6% 줄었다.", "source_id": "F07"},
+    ]
+    r = resolve(cits, corpus)              # 죽지 않는 것이 첫째 조건
+    by = {x["id"]: x for x in r["citations"]}
+
+    check("F07" in r["sources"], "매니페스트에 있으면 출처로 센다 — 원문이 없을 뿐이다")
+    check(r["sources_without_text"] == ["F07"],
+          f"원문 없는 출처를 적어 둔다 — {r['sources_without_text']}")
+    check(by["B"]["source_in_corpus"] is True,
+          "실재하는데 못 읽는 것은 코퍼스에 없는 것과 다르다 — 1단계 FAIL 이 아니다")
+    check(by["B"]["probe"].get("text_available") is False,
+          "못 읽는다는 것을 인용마다도 알린다")
+    check("warning" in r and "교차확인에서 빠졌다" in r["warning"],
+          "교차확인 범위가 좁아진 것을 말한다 — 안 나온 신호를 '충돌 없음'으로 "
+          "읽으면 자료원 오류를 놓친다")
+    check("degraded_reasons" in (r.get("warning") or ""),
+          "사람이 읽는 리포트까지 옮기라고 짚어 준다")
+
+    # 끈 줄 알고 껐으면 좁아졌다고 다시 말할 일이 아니다. 목록은 그대로 남긴다.
+    r2 = resolve(cits, corpus, cross_check=False)
+    check(r2["sources_without_text"] == ["F07"]
+          and "교차확인에서 빠졌다" not in (r2.get("warning") or ""),
+          "교차확인을 꺼 두면 좁아졌다는 경고는 안 낸다")
+
+    # 원문이 다 있으면 빈 목록이어야 한다. 키가 사라지면 읽는 쪽이 넘겨짚는다.
+    full = os.path.normpath(os.path.join(
+        os.path.dirname(os.path.dirname(HERE)), "..", "benchmark", "corpus.bench-02"))
+    if os.path.isdir(full):
+        r3 = resolve([{"id": "A", "claim": "총배출량이 5.8% 줄었다.", "source_id": "E01"}], full)
+        check(r3["sources_without_text"] == [] and "warning" not in r3,
+              "원문이 다 있으면 빈 목록으로 '다 봤다'를 분명히 한다")
+
+
 def test_assemble():
     """판단만 받아 리포트를 조립한다. 막아야 할 것을 정말 막는지 본다."""
     print("\n조립(assemble)")
@@ -585,6 +641,7 @@ def main() -> int:
     test_hwpx_roundtrip()
     test_docx()
     test_resolve()
+    test_resolve_no_text()
     test_assemble()
     test_render_actions()
     test_judge_replacement_scope()
