@@ -6,7 +6,7 @@
 # Orange Check: 참고문헌과 인용을 원문으로 검증하는 AI 스킬
 
 > 이미 써 놓은 문서의 인용을 하나씩 열어 봅니다. 출처가 실제로 있는지, 그 출처가 본문 주장을 정말 뒷받침하는지를 원문 쪽·줄까지 짚어 판정합니다.
-> Claude Code, Claude 앱(Cowork), OpenAI Codex, ChatGPT for Work에서 같은 방법으로 돌아갑니다.
+> Claude Code, Claude Cowork, Codex, ChatGPT for Work에서 같은 방법으로 돌아갑니다.
 
 ![Orange Check 한 장 요약: 문서에서 인용을 뽑고, 원문을 확보하고, 주장을 여섯 요소로 나눠 대조하고, CoVe로 다시 본 뒤 리포트를 낸다](docs/images/orange-check-overview.png)
 
@@ -102,7 +102,7 @@ HTML은 파일 하나에 다 들어 있어 그냥 열면 보이고, 브라우저
 정책에 따라 문서와 얼마든지 다를 수 있습니다. 미리 짐작해 박아 두기보다 그 자리에서
 확인하는 쪽이 정확합니다.
 
-| | Claude Code | Claude 앱 | Codex | ChatGPT for Work |
+| | Claude Code | Claude Cowork | Codex | ChatGPT for Work |
 |---|---|---|---|---|
 | 원문 PDF 자동 취득 | ○ | ○ | 샌드박스 설정에 따라 | ✗ 코드가 인터넷에 못 나감 |
 | 독립 재검증 | 서브에이전트 | 첫 판정 가리고 다시 보기 | 첫 판정 가리고 다시 보기 | 첫 판정 가리고 다시 보기 |
@@ -122,12 +122,12 @@ ChatGPT for Work에서는 스킬이 필요한 원문을 한 번에 모아서 요
 
 | 환경 | 받을 것 | 설치 |
 |---|---|---|
-| Claude 앱 (Cowork·claude.ai) | `orange-check.zip` | 스킬 업로드 |
+| Claude Cowork (claude.ai) | `orange-check.zip` | 스킬 업로드 |
 | Claude Code | `orange-check-all.zip` | 풀어서 `~/.claude/skills/`에 복사 |
-| OpenAI Codex | `orange-check-all.zip` | 풀어서 `~/.codex/skills/`에 복사 |
+| Codex | `orange-check-all.zip` | 풀어서 `~/.codex/skills/`에 복사 |
 | ChatGPT for Work | `orange-check-all.zip` | `SKILL.md`를 프로젝트 지침에 붙여넣기 |
 
-### Claude 앱 (Cowork · claude.ai · 데스크톱)
+### Claude Cowork (claude.ai · 데스크톱)
 
 1. 설정 → 기능 → **코드 실행 및 파일 생성**을 켭니다. (최초 1회)
 2. Cowork → 맞춤설정 → 스킬 → **＋** → **스킬 업로드**.
@@ -146,7 +146,7 @@ cp -R /tmp/oc/orange-check* ~/.claude/skills/
 설치하면 `/orange-check`으로 부를 수 있고, 하위 스킬은 `/orange-check-extract` 식입니다.
 프로젝트 한정으로 쓰려면 `.claude/skills/` 아래에 둡니다.
 
-### OpenAI Codex (CLI · IDE · 클라우드)
+### Codex (CLI · IDE · 클라우드)
 
 ```bash
 unzip orange-check-all.zip -d /tmp/oc && mkdir -p ~/.codex/skills
